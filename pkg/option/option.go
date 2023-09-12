@@ -1,13 +1,15 @@
 package option
 
-var None = Option[interface{}]{value: nil}
-
 type Option[T any] struct {
 	value *T
 }
 
 func New[T any](value T) Option[T] {
 	return Option[T]{value: &value}
+}
+
+func None[T any]() Option[T] {
+	return Option[T]{value: nil}
 }
 
 // Returns true if the option is a Some value.
@@ -66,26 +68,6 @@ func (self *Option[T]) UnwrapOrElse(f func() T) T {
 
 // TODO: UnwrapOrDefault
 
-// Returns None if the option is None, otherwise returns optb.
-// Arguments passed to and are eagerly evaluated; if you are passing the result of a function call, it is recommended to use and_then, which is lazily evaluated.
-func (self Option[T]) And(optb Option[any]) Option[any] {
-	if self.IsNone() {
-		return New[any](nil)
-	} else {
-		return optb
-	}
-}
-
-// Returns None if the option is None, otherwise calls f with the wrapped value and returns the result.
-// Some languages call this operation flatmap.
-func (self Option[T]) AndThen(f func(T) Option[any]) Option[any] {
-	if self.IsNone() {
-		return New[any](nil)
-	} else {
-		return f(*self.value)
-	}
-}
-
 // Maps an Option<T> to other Option<T> by applying a function to a contained value (if Some) or returns None (if None).
 func (self Option[T]) Map(f func(T) T) Option[T] {
 	if self.IsNone() {
@@ -111,5 +93,47 @@ func (self Option[T]) MapOrElse(defaultValue func() T, f func(T) T) T {
 		return defaultValue()
 	} else {
 		return f(*self.value)
+	}
+}
+
+// Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err).
+// Arguments passed to ok_or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use ok_or_else, which is lazily evaluated.
+// TODO ok_or
+
+// Transforms the Option<T> into a Result<T, E>, mapping Some(v) to Ok(v) and None to Err(err()).
+// TODO ok_or_else
+
+// TODO iter
+
+// Returns None if the option is None, otherwise returns optb.
+// Arguments passed to and are eagerly evaluated; if you are passing the result of a function call, it is recommended to use and_then, which is lazily evaluated.
+func (self Option[T]) And(optb Option[any]) Option[any] {
+	if self.IsNone() {
+		return New[any](nil)
+	} else {
+		return optb
+	}
+}
+
+// Returns None if the option is None, otherwise calls f with the wrapped value and returns the result.
+// Some languages call this operation flatmap.
+func (self Option[T]) AndThen(f func(T) Option[any]) Option[any] {
+	if self.IsNone() {
+		return New[any](nil)
+	} else {
+		return f(*self.value)
+	}
+}
+
+// Returns None if the option is None, otherwise calls predicate with the wrapped value and returns:
+// 1. Some(t) if predicate returns true (where t is the wrapped value), and
+// 2. None if predicate returns false.
+func (self Option[T]) Filter(predicate func(T) bool) Option[T] {
+	if self.IsNone() {
+		return self
+	} else if predicate(*self.value) {
+		return self
+	} else {
+		return None[T]()
 	}
 }
