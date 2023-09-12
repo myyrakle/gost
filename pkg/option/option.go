@@ -85,3 +85,31 @@ func (self Option[T]) AndThen(f func(T) Option[any]) Option[any] {
 		return f(*self.value)
 	}
 }
+
+// Maps an Option<T> to other Option<T> by applying a function to a contained value (if Some) or returns None (if None).
+func (self Option[T]) Map(f func(T) T) Option[T] {
+	if self.IsNone() {
+		return self
+	} else {
+		return New[T](f(*self.value))
+	}
+}
+
+// Returns the provided default result (if none), or applies a function to the contained value (if any).
+// Arguments passed to map_or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use map_or_else, which is lazily evaluated.
+func (self Option[T]) MapOr(defaultValue T, f func(T) T) T {
+	if self.IsNone() {
+		return defaultValue
+	} else {
+		return f(*self.value)
+	}
+}
+
+// Computes a default function result (if none), or applies a different function to the contained value (if any).
+func (self Option[T]) MapOrElse(defaultValue func() T, f func(T) T) T {
+	if self.IsNone() {
+		return defaultValue()
+	} else {
+		return f(*self.value)
+	}
+}
