@@ -167,3 +167,29 @@ func (self Option[T]) Xor(optb Option[T]) Option[T] {
 		return None[T]()
 	}
 }
+
+// Inserts value into the option, then returns a mutable reference to it.
+// If the option already contains a value, the old value is dropped.
+// See also Option::get_or_insert, which doesn’t update the value if the option already contains Some.
+func (self *Option[T]) Insert(value T) *T {
+	self.value = &value
+	return self.value
+}
+
+// Inserts value into the option if it is None, then returns a mutable reference to the contained value.
+// See also Option::insert, which updates the value even if the option already contains Some.
+func (self *Option[T]) GetOrInsert(value T) *T {
+	if self.IsNone() {
+		self.value = &value
+	}
+	return self.value
+}
+
+// Inserts a value computed from f into the option if it is None, then returns a mutable reference to the contained value.
+func (self *Option[T]) GetOrInsertWith(f func() T) *T {
+	if self.IsNone() {
+		value := f()
+		self.value = &value
+	}
+	return self.value
+}
