@@ -137,3 +137,33 @@ func (self Option[T]) Filter(predicate func(T) bool) Option[T] {
 		return None[T]()
 	}
 }
+
+// Returns the option if it contains a value, otherwise returns optb.
+// Arguments passed to or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use or_else, which is lazily evaluated.
+func (self Option[T]) Or(optb Option[T]) Option[T] {
+	if self.IsNone() {
+		return optb
+	} else {
+		return self
+	}
+}
+
+// Returns the option if it contains a value, otherwise calls f and returns the result.
+func (self Option[T]) OrElse(f func() Option[T]) Option[T] {
+	if self.IsNone() {
+		return f()
+	} else {
+		return self
+	}
+}
+
+// Returns Some if exactly one of self, optb is Some, otherwise returns None.
+func (self Option[T]) Xor(optb Option[T]) Option[T] {
+	if self.IsNone() {
+		return optb
+	} else if optb.IsNone() {
+		return self
+	} else {
+		return None[T]()
+	}
+}
