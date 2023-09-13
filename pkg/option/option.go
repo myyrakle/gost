@@ -193,3 +193,14 @@ func (self *Option[T]) GetOrInsertWith(f func() T) *T {
 	}
 	return self.value
 }
+
+// Takes the value out of the option, leaving a None in its place.
+func (self *Option[T]) Take() Option[T] {
+	if self.IsNone() {
+		return *self
+	} else {
+		value := *self.value
+		self.value = nil
+		return New[T](value)
+	}
+}
