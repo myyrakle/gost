@@ -22,6 +22,16 @@ func (self Vec[T]) Capacity() int {
 	return cap(self.data)
 }
 
+// Returns the number of elements in the vector, also referred to as its ‘length’.
+func (self Vec[T]) Len() int {
+	return len(self.data)
+}
+
+// Returns true if the vector contains no elements.
+func (self Vec[T]) IsEmpty() bool {
+	return self.Len() == 0
+}
+
 // Reserves capacity for at least additional more elements to be inserted in the given Vec<T>. The collection may reserve more space to speculatively avoid frequent reallocations. After calling reserve, capacity will be greater than or equal to self.len() + additional. Does nothing if capacity is already sufficient.
 func (self *Vec[T]) Reserve(additional int) {
 	if self.Capacity() < len(self.data)+additional {
