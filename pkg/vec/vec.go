@@ -1,5 +1,7 @@
 package vec
 
+import "github.com/myyrakle/gost/pkg/option"
+
 type Vec[T any] struct {
 	data []T
 }
@@ -27,7 +29,39 @@ func (self *Vec[T]) Reserve(additional int) {
 	}
 }
 
+// Appends an element to the back of a collection.
+func (self *Vec[T]) Push(value T) {
+	self.data = append(self.data, value)
+}
+
+// Removes the last element from a vector and returns it, or None if it is empty.
+func (self *Vec[T]) Pop() option.Option[T] {
+	if len(self.data) == 0 {
+		return option.None[T]()
+	} else {
+		value := self.data[len(self.data)-1]
+		self.data = self.data[:len(self.data)-1]
+		return option.Some[T](value)
+	}
+}
+
 // Extracts a slice containing the entire vector.
 func (self Vec[T]) AsSlice() []T {
 	return self.data
 }
+
+// Inserts an element at position index within the vector, shifting all elements after it to the right.
+func (self *Vec[T]) Insert(index int, value T) {
+	self.data = append(self.data, value)
+	copy(self.data[index+1:], self.data[index:])
+	self.data[index] = value
+}
+
+// // Removes and returns the element at position index within the vector, shifting all elements after it to the left.
+// func (self *Vec[T]) Remove(index int) T {
+// 	value := self.data[index]
+// 	copy(self.data[index:], self.data[index+1:])
+// 	self.data[len(self.data)-1] = nil
+// 	self.data = self.data[:len(self.data)-1]
+// 	return value
+// }
