@@ -61,6 +61,11 @@ func (self *Vec[T]) Append(other *Vec[T]) {
 	other.data = make([]T, 0)
 }
 
+// Clears the vector, removing all values.
+func (self *Vec[T]) Clear() {
+	self.data = make([]T, 0)
+}
+
 // Extracts a slice containing the entire vector.
 func (self Vec[T]) AsSlice() []T {
 	return self.data
