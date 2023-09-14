@@ -140,3 +140,23 @@ func (self Result[T]) UnwrapErr() error {
 		panic(self.ok)
 	}
 }
+
+// Returns res if the result is Ok, otherwise returns the Err value of self.
+// Arguments passed to and are eagerly evaluated; if you are passing the result of a function call, it is recommended to use and_then, which is lazily evaluated.
+func (self Result[T]) And(res Result[T]) Result[T] {
+	if self.IsOk() {
+		return res
+	} else {
+		return self
+	}
+}
+
+// Calls op if the result is Ok, otherwise returns the Err value of self.
+// This function can be used for control flow based on Result values.
+func (self Result[T]) AndThen(op func(T) Result[T]) Result[T] {
+	if self.IsOk() {
+		return op(*self.ok)
+	} else {
+		return self
+	}
+}
