@@ -1,5 +1,7 @@
 package result
 
+import "github.com/myyrakle/gost/pkg/option"
+
 type Result[T any] struct {
 	ok  *T
 	err error
@@ -30,5 +32,25 @@ func (self Result[T]) IsErrAnd(predicate func(error) bool) bool {
 		return predicate(self.err)
 	} else {
 		return false
+	}
+}
+
+// Converts from Result<T, E> to Option<T>.
+// Converts self into an Option<T>, consuming self, and discarding the error, if any.
+func (self Result[T]) Ok() option.Option[T] {
+	if self.IsOk() {
+		return option.New[T](*self.ok)
+	} else {
+		return option.None[T]()
+	}
+}
+
+// Converts from Result<T, E> to Option<E>.
+// Converts self into an Option<E>, consuming self, and discarding the success value, if any.
+func (self Result[T]) Err() option.Option[error] {
+	if self.IsErr() {
+		return option.New[error](self.err)
+	} else {
+		return option.None[error]()
 	}
 }
