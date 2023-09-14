@@ -26,3 +26,8 @@ func (self *Vec[T]) Reserve(additional int) {
 		self.data = append(self.data, make([]T, additional)...)
 	}
 }
+
+// Extracts a slice containing the entire vector.
+func (self Vec[T]) AsSlice() []T {
+	return self.data
+}
