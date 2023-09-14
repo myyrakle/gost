@@ -122,3 +122,21 @@ func (self Result[T]) Unwrap() T {
 		panic(self.err)
 	}
 }
+
+// Returns the contained Err value, consuming the self value.
+func (self Result[T]) ExpectErr(message string) error {
+	if self.IsErr() {
+		return self.err
+	} else {
+		panic(message)
+	}
+}
+
+// Returns the contained Err value, consuming the self value.
+func (self Result[T]) UnwrapErr() error {
+	if self.IsErr() {
+		return self.err
+	} else {
+		panic(self.ok)
+	}
+}
