@@ -160,3 +160,23 @@ func (self Result[T]) AndThen(op func(T) Result[T]) Result[T] {
 		return self
 	}
 }
+
+// Returns res if the result is Err, otherwise returns the Ok value of self.
+// Arguments passed to or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use or_else, which is lazily evaluated.
+func (self Result[T]) Or(res Result[T]) Result[T] {
+	if self.IsErr() {
+		return res
+	} else {
+		return self
+	}
+}
+
+// Calls op if the result is Err, otherwise returns the Ok value of self.
+// This function can be used for control flow based on result values.
+func (self Result[T]) OrElse(op func(error) Result[T]) Result[T] {
+	if self.IsErr() {
+		return op(self.err)
+	} else {
+		return self
+	}
+}
