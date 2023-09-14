@@ -4,7 +4,7 @@ type Option[T any] struct {
 	value *T
 }
 
-func New[T any](value T) Option[T] {
+func Some[T any](value T) Option[T] {
 	return Option[T]{value: &value}
 }
 
@@ -73,7 +73,7 @@ func (self Option[T]) Map(f func(T) T) Option[T] {
 	if self.IsNone() {
 		return self
 	} else {
-		return New[T](f(*self.value))
+		return Some[T](f(*self.value))
 	}
 }
 
@@ -109,7 +109,7 @@ func (self Option[T]) MapOrElse(defaultValue func() T, f func(T) T) T {
 // Arguments passed to and are eagerly evaluated; if you are passing the result of a function call, it is recommended to use and_then, which is lazily evaluated.
 func (self Option[T]) And(optb Option[any]) Option[any] {
 	if self.IsNone() {
-		return New[any](nil)
+		return Some[any](nil)
 	} else {
 		return optb
 	}
@@ -119,7 +119,7 @@ func (self Option[T]) And(optb Option[any]) Option[any] {
 // Some languages call this operation flatmap.
 func (self Option[T]) AndThen(f func(T) Option[any]) Option[any] {
 	if self.IsNone() {
-		return New[any](nil)
+		return Some[any](nil)
 	} else {
 		return f(*self.value)
 	}
@@ -201,7 +201,7 @@ func (self *Option[T]) Take() Option[T] {
 	} else {
 		value := *self.value
 		self.value = nil
-		return New[T](value)
+		return Some[T](value)
 	}
 }
 
@@ -212,6 +212,6 @@ func (self *Option[T]) Replace(value T) Option[T] {
 	} else {
 		oldValue := *self.value
 		self.value = &value
-		return New[T](oldValue)
+		return Some[T](oldValue)
 	}
 }
