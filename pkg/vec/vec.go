@@ -45,6 +45,12 @@ func (self *Vec[T]) Pop() option.Option[T] {
 	}
 }
 
+// Moves all the elements of other into self, leaving other empty.
+func (self *Vec[T]) Append(other *Vec[T]) {
+	self.data = append(self.data, other.data...)
+	other.data = make([]T, 0)
+}
+
 // Extracts a slice containing the entire vector.
 func (self Vec[T]) AsSlice() []T {
 	return self.data
