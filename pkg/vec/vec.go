@@ -149,3 +149,10 @@ func (self Vec[T]) GetUnchecked(index int) T {
 func (self *Vec[T]) Swap(a, b int) {
 	self.data[a], self.data[b] = self.data[b], self.data[a]
 }
+
+// Reverses the order of elements in the slice, in place.
+func (self *Vec[T]) Reverse() {
+	for i := 0; i < len(self.data)/2; i++ {
+		self.Swap(i, len(self.data)-1-i)
+	}
+}
