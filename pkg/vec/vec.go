@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/myyrakle/gost/pkg/option"
+	"github.com/myyrakle/gost/pkg/primitive"
 )
 
 type Vec[T any] struct {
@@ -32,7 +33,7 @@ func (self Vec[T]) Len() int {
 }
 
 // Returns true if the vector contains no elements.
-func (self Vec[T]) IsEmpty() bool {
+func (self Vec[T]) IsEmpty() primitive.Bool {
 	return self.Len() == 0
 }
 
@@ -83,7 +84,7 @@ func (self *Vec[T]) Insert(index int, value T) {
 }
 
 // Retains only the elements specified by the predicate.
-func (self *Vec[T]) Retain(predicate func(T) bool) {
+func (self *Vec[T]) Retain(predicate func(T) primitive.Bool) {
 	newData := make([]T, 0, len(self.data))
 	for _, value := range self.data {
 		if predicate(value) {
@@ -97,7 +98,7 @@ func (self *Vec[T]) Retain(predicate func(T) bool) {
 // If the vector is sorted, this removes all duplicates.
 func (self *Vec[T]) DedupByKey(key func(T) any) {
 	newData := make([]T, 0, len(self.data))
-	seen := make(map[interface{}]bool)
+	seen := make(map[interface{}]primitive.Bool)
 	for _, value := range self.data {
 		k := key(value)
 		if !seen[k] {
@@ -160,7 +161,7 @@ func (self *Vec[T]) Reverse() {
 // Returns true if the slice contains an element with the given value.
 // This operation is O(n).
 // Note that if you have a sorted slice, binary_search may be faster.
-func (self Vec[T]) Contains(value T) bool {
+func (self Vec[T]) Contains(value T) primitive.Bool {
 	for _, v := range self.data {
 		if reflect.DeepEqual(v, value) {
 			return true

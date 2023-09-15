@@ -1,5 +1,7 @@
 package option
 
+import "github.com/myyrakle/gost/pkg/primitive"
+
 type Option[T any] struct {
 	value *T
 }
@@ -13,12 +15,12 @@ func None[T any]() Option[T] {
 }
 
 // Returns true if the option is a Some value.
-func (self *Option[T]) IsSome() bool {
+func (self *Option[T]) IsSome() primitive.Bool {
 	return self.value != nil
 }
 
 // Returns true if the option is a Some and the value inside of it matches a predicate.
-func (self *Option[T]) IsSomeAnd(f func(T) bool) bool {
+func (self *Option[T]) IsSomeAnd(f func(T) primitive.Bool) primitive.Bool {
 	if self.IsNone() {
 		return false
 	} else {
@@ -27,7 +29,7 @@ func (self *Option[T]) IsSomeAnd(f func(T) bool) bool {
 }
 
 // Returns true if the option is a None value.
-func (self *Option[T]) IsNone() bool {
+func (self *Option[T]) IsNone() primitive.Bool {
 	return self.value == nil
 }
 
@@ -128,7 +130,7 @@ func (self Option[T]) AndThen(f func(T) Option[any]) Option[any] {
 // Returns None if the option is None, otherwise calls predicate with the wrapped value and returns:
 // 1. Some(t) if predicate returns true (where t is the wrapped value), and
 // 2. None if predicate returns false.
-func (self Option[T]) Filter(predicate func(T) bool) Option[T] {
+func (self Option[T]) Filter(predicate func(T) primitive.Bool) Option[T] {
 	if self.IsNone() {
 		return self
 	} else if predicate(*self.value) {
