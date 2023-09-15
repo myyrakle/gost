@@ -2,40 +2,40 @@ package trait
 
 // Add is a trait for types that support addition.
 type Add[T any] interface {
-	Add(T, T) T
+	Add(rhs T) T
 }
 
 // Sub is a trait for types that support subtraction.
 type Sub[T any] interface {
-	Sub(T, T) T
+	Sub(rhs T) T
 }
 
 // Mul is a trait for types that support multiplication.
 type Mul[T any] interface {
-	Mul(T, T) T
+	Mul(rhs T) T
 }
 
 // Div is a trait for types that support division.
 type Div[T any] interface {
-	Div(T, T) T
+	Div(rhs T) T
 }
 
 // The addition assignment operator +=.
-type AddAssign[Lhs any, Rhs any] interface {
-	AddAssign(Lhs, Rhs)
+type AddAssign[T any] interface {
+	AddAssign(rhs T)
 }
 
 // The subtraction assignment operator -=.
-type SubAssign[Lhs any, Rhs any] interface {
-	SubAssign(Lhs, Rhs)
+type SubAssign[T any] interface {
+	SubAssign(rhs T)
 }
 
 // The multiplication assignment operator *=.
-type MulAssign[Lhs any, Rhs any] interface {
-	MulAssign(Lhs, Rhs)
+type MulAssign[T any] interface {
+	MulAssign(rhs T)
 }
 
 // The division assignment operator /=.
-type DivAssign[Lhs any, Rhs any] interface {
-	DivAssign(Lhs, Rhs)
+type DivAssign[T any] interface {
+	DivAssign(rhs T)
 }
