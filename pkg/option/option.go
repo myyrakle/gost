@@ -43,13 +43,13 @@ func (self Option[T]) Expect(message string) T {
 // Returns the contained Some value, consuming the self value.
 // Because this function may panic, its use is generally discouraged.
 // Instead, prefer to use pattern matching and handle the None case explicitly, or call unwrap_or, unwrap_or_else, or unwrap_or_default.
-func (self *Option[T]) Unwrap() T {
+func (self Option[T]) Unwrap() T {
 	return *self.value
 }
 
 // Returns the contained Some value or a provided default.
 // Arguments passed to unwrap_or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use unwrap_or_else, which is lazily evaluated.
-func (self *Option[T]) UnwrapOr(value T) T {
+func (self Option[T]) UnwrapOr(value T) T {
 	if self.IsNone() {
 		return value
 	} else {
@@ -58,7 +58,7 @@ func (self *Option[T]) UnwrapOr(value T) T {
 }
 
 // Returns the contained Some value or computes it from a closure.
-func (self *Option[T]) UnwrapOrElse(f func() T) T {
+func (self Option[T]) UnwrapOrElse(f func() T) T {
 	if self.IsNone() {
 		return f()
 	} else {
