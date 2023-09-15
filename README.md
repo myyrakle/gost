@@ -4,6 +4,8 @@
 
 Experience the true taste of Rust in Go
 
+[document](https://pkg.go.dev/github.com/myyrakle/gost)
+
 ## Install
 
 ```
