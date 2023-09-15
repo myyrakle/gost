@@ -78,10 +78,13 @@ func (self *Vec[T]) Insert(index int, value T) {
 	self.data[index] = value
 }
 
-// Removes and returns the element at position index within the vector, shifting all elements after it to the left.
-func (self *Vec[T]) Remove(index int) T {
-	value := self.data[index]
-	copy(self.data[index:], self.data[index+1:])
-	self.data = self.data[:len(self.data)-1]
-	return value
+// Retains only the elements specified by the predicate.
+func (self *Vec[T]) Retain(predicate func(T) bool) {
+	newData := make([]T, 0, len(self.data))
+	for _, value := range self.data {
+		if predicate(value) {
+			newData = append(newData, value)
+		}
+	}
+	self.data = newData
 }
