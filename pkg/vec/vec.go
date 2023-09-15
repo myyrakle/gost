@@ -137,3 +137,9 @@ func (self Vec[T]) Get(index int) option.Option[T] {
 		return option.Some[T](self.data[index])
 	}
 }
+
+// Returns a reference to an element or subslice, without doing bounds checking.
+// For a safe alternative see get.
+func (self Vec[T]) GetUnchecked(index int) T {
+	return self.data[index]
+}
