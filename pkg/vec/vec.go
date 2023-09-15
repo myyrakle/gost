@@ -88,3 +88,18 @@ func (self *Vec[T]) Retain(predicate func(T) bool) {
 	}
 	self.data = newData
 }
+
+// Removes all but the first of consecutive elements in the vector that resolve to the same key.
+// If the vector is sorted, this removes all duplicates.
+func (self *Vec[T]) DedupByKey(key func(T) interface{}) {
+	newData := make([]T, 0, len(self.data))
+	seen := make(map[interface{}]bool)
+	for _, value := range self.data {
+		k := key(value)
+		if !seen[k] {
+			seen[k] = true
+			newData = append(newData, value)
+		}
+	}
+	self.data = newData
+}
