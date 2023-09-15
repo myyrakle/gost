@@ -1,4 +1,4 @@
-package vec
+package collection
 
 import (
 	"reflect"
