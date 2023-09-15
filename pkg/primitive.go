@@ -1,4 +1,4 @@
-package primitive
+package gost
 
 type Int int
 type Int8 int8

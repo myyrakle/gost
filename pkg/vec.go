@@ -1,10 +1,7 @@
-package collection
+package gost
 
 import (
 	"reflect"
-
-	"github.com/myyrakle/gost/pkg/option"
-	"github.com/myyrakle/gost/pkg/primitive"
 )
 
 type Vec[T any] struct {
@@ -18,27 +15,27 @@ func New[T any]() Vec[T] {
 }
 
 // Constructs a new, empty Vec<T> with at least the specified capacity.
-func WithCapacity[T any](capacity primitive.Int) Vec[T] {
+func WithCapacity[T any](capacity Int) Vec[T] {
 	return Vec[T]{data: make([]T, 0, capacity)}
 }
 
 // Returns the total number of elements the vector can hold without reallocating.
-func (self Vec[T]) Capacity() primitive.Int {
-	return primitive.Int(cap(self.data))
+func (self Vec[T]) Capacity() Int {
+	return Int(cap(self.data))
 }
 
 // Returns the number of elements in the vector, also referred to as its ‘length’.
-func (self Vec[T]) Len() primitive.Int {
-	return primitive.Int(len(self.data))
+func (self Vec[T]) Len() Int {
+	return Int(len(self.data))
 }
 
 // Returns true if the vector contains no elements.
-func (self Vec[T]) IsEmpty() primitive.Bool {
+func (self Vec[T]) IsEmpty() Bool {
 	return self.Len() == 0
 }
 
 // Reserves capacity for at least additional more elements to be inserted in the given Vec<T>. The collection may reserve more space to speculatively avoid frequent reallocations. After calling reserve, capacity will be greater than or equal to self.len() + additional. Does nothing if capacity is already sufficient.
-func (self *Vec[T]) Reserve(additional primitive.Int) {
+func (self *Vec[T]) Reserve(additional Int) {
 	if self.Capacity() < self.Len()+additional {
 		self.data = append(self.data, make([]T, additional)...)
 	}
@@ -50,17 +47,17 @@ func (self *Vec[T]) Push(value T) {
 }
 
 // Removes the last element from a vector and returns it, or None if it is empty.
-func (self *Vec[T]) Pop() option.Option[T] {
+func (self *Vec[T]) Pop() Option[T] {
 	if len(self.data) == 0 {
-		return option.None[T]()
+		return None[T]()
 	} else {
 		value := self.data[len(self.data)-1]
 		self.data = self.data[:len(self.data)-1]
-		return option.Some[T](value)
+		return Some[T](value)
 	}
 }
 
-// Moves all the elements of other primitive.Into self, leaving other empty.
+// Moves all the elements of other Into self, leaving other empty.
 func (self *Vec[T]) Append(other *Vec[T]) {
 	self.data = append(self.data, other.data...)
 	other.data = make([]T, 0)
@@ -77,14 +74,14 @@ func (self Vec[T]) AsSlice() []T {
 }
 
 // Inserts an element at position index within the vector, shifting all elements after it to the right.
-func (self *Vec[T]) Insert(index primitive.Int, value T) {
+func (self *Vec[T]) Insert(index Int, value T) {
 	self.data = append(self.data, value)
 	copy(self.data[index+1:], self.data[index:])
 	self.data[index] = value
 }
 
 // Retains only the elements specified by the predicate.
-func (self *Vec[T]) Retain(predicate func(T) primitive.Bool) {
+func (self *Vec[T]) Retain(predicate func(T) Bool) {
 	newData := make([]T, 0, len(self.data))
 	for _, value := range self.data {
 		if predicate(value) {
@@ -131,37 +128,37 @@ func (self *Vec[T]) Dedup() {
 // Returns a reference to an element or subslice depending on the type of index.
 // If given a position, returns a reference to the element at that position or None if out of bounds.
 // If given a range, returns the subslice corresponding to that range, or None if out of bounds.
-func (self Vec[T]) Get(index primitive.Int) option.Option[T] {
+func (self Vec[T]) Get(index Int) Option[T] {
 	if index < 0 || index >= self.Len() {
-		return option.None[T]()
+		return None[T]()
 	} else {
-		return option.Some[T](self.data[index])
+		return Some[T](self.data[index])
 	}
 }
 
 // Returns a reference to an element or subslice, without doing bounds checking.
 // For a safe alternative see get.
-func (self Vec[T]) GetUnchecked(index primitive.Int) T {
+func (self Vec[T]) GetUnchecked(index Int) T {
 	return self.data[index]
 }
 
 // Swaps two elements in the slice.
 // If a equals to b, it’s guaranteed that elements won’t change value.
-func (self *Vec[T]) Swap(a, b primitive.Int) {
+func (self *Vec[T]) Swap(a, b Int) {
 	self.data[a], self.data[b] = self.data[b], self.data[a]
 }
 
 // Reverses the order of elements in the slice, in place.
 func (self *Vec[T]) Reverse() {
 	for i := 0; i < len(self.data)/2; i++ {
-		self.Swap(primitive.Int(i), primitive.Int(len(self.data)-1-i))
+		self.Swap(Int(i), Int(len(self.data)-1-i))
 	}
 }
 
 // Returns true if the slice contains an element with the given value.
 // This operation is O(n).
 // Note that if you have a sorted slice, binary_search may be faster.
-func (self Vec[T]) Contains(value T) primitive.Bool {
+func (self Vec[T]) Contains(value T) Bool {
 	for _, v := range self.data {
 		if reflect.DeepEqual(v, value) {
 			return true
@@ -171,8 +168,8 @@ func (self Vec[T]) Contains(value T) primitive.Bool {
 }
 
 // Binary searches this slice for a given element. If the slice is not sorted, the returned result is unspecified and meaningless.
-// If the value is found then Result::Ok is returned, containing the index of the matching element. If there are multiple matches, then any one of the matches could be returned. The index is chosen deterministically, but is subject to change in future versions of Rust. If the value is not found then Result::Err is returned, containing the index where a matching element could be inserted while maprimitive.Intaining sorted order.
-// func (self Vec[T]) BinarySearch(value T) option.Option[primitive.Int] {
+// If the value is found then Result::Ok is returned, containing the index of the matching element. If there are multiple matches, then any one of the matches could be returned. The index is chosen deterministically, but is subject to change in future versions of Rust. If the value is not found then Result::Err is returned, containing the index where a matching element could be inserted while maIntaining sorted order.
+// func (self Vec[T]) BinarySearch(value T) Option[Int] {
 // 	low := 0
 // 	high := len(self.data) - 1
 
@@ -183,11 +180,11 @@ func (self Vec[T]) Contains(value T) primitive.Bool {
 // 		} else if self.data[mid] > value {
 // 			high = mid - 1
 // 		} else {
-// 			return option.Some[primitive.Int](mid)
+// 			return Some[Int](mid)
 // 		}
 // 	}
 
-// 	return option.None[primitive.Int]()
+// 	return None[Int]()
 // }
 
 // Fills self with elements by cloning value.
@@ -209,5 +206,5 @@ func (self *Vec[T]) FillWith(f func() T) {
 // When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
 // func (self *Vec[T]) Sort() {
 // 	// type check
-// 	sort.SliceStable(self.data, func(i, j primitive.Int) { return self.data[i] < self.data[j] })
+// 	sort.SliceStable(self.data, func(i, j Int) { return self.data[i] < self.data[j] })
 // }
