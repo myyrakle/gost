@@ -10,3 +10,7 @@ const OrderingGreater = primitive.Int(1)
 type Ord[T any] interface {
 	Cmp(rhs T) primitive.Int
 }
+
+type Eq[T any] interface {
+	Eq(rhs T) primitive.Bool
+}
