@@ -1,6 +1,10 @@
 package vec
 
-import "github.com/myyrakle/gost/pkg/option"
+import (
+	"reflect"
+
+	"github.com/myyrakle/gost/pkg/option"
+)
 
 type Vec[T any] struct {
 	data []T
@@ -91,7 +95,7 @@ func (self *Vec[T]) Retain(predicate func(T) bool) {
 
 // Removes all but the first of consecutive elements in the vector that resolve to the same key.
 // If the vector is sorted, this removes all duplicates.
-func (self *Vec[T]) DedupByKey(key func(T) interface{}) {
+func (self *Vec[T]) DedupByKey(key func(T) any) {
 	newData := make([]T, 0, len(self.data))
 	seen := make(map[interface{}]bool)
 	for _, value := range self.data {
@@ -102,4 +106,23 @@ func (self *Vec[T]) DedupByKey(key func(T) interface{}) {
 		}
 	}
 	self.data = newData
+}
+
+// Removes consecutive repeated elements in the vector according to the PartialEq trait implementation.
+// If the vector is sorted, this removes all duplicates.
+func (self *Vec[T]) Dedup() {
+	if len(self.data) <= 1 {
+		return
+	}
+
+	prev := 0
+
+	for i := 1; i < len(self.data); i++ {
+		if !reflect.DeepEqual(self.data[prev], self.data[i]) {
+			prev++
+			self.data[prev] = self.data[i]
+		}
+	}
+
+	self.data = self.data[:prev+1]
 }
