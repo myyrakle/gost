@@ -195,3 +195,10 @@ func (self *Vec[T]) Fill(value T) {
 		self.data[i] = value
 	}
 }
+
+// Fills self with elements returned by calling a closure repeatedly.
+func (self *Vec[T]) FillWith(f func() T) {
+	for i := 0; i < len(self.data); i++ {
+		self.data[i] = f()
+	}
+}
