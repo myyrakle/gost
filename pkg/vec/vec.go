@@ -168,3 +168,30 @@ func (self Vec[T]) Contains(value T) bool {
 	}
 	return false
 }
+
+// Binary searches this slice for a given element. If the slice is not sorted, the returned result is unspecified and meaningless.
+// If the value is found then Result::Ok is returned, containing the index of the matching element. If there are multiple matches, then any one of the matches could be returned. The index is chosen deterministically, but is subject to change in future versions of Rust. If the value is not found then Result::Err is returned, containing the index where a matching element could be inserted while maintaining sorted order.
+// func (self Vec[T]) BinarySearch(value T) option.Option[int] {
+// 	low := 0
+// 	high := len(self.data) - 1
+
+// 	for low <= high {
+// 		mid := (low + high) / 2
+// 		if self.data[mid] < value {
+// 			low = mid + 1
+// 		} else if self.data[mid] > value {
+// 			high = mid - 1
+// 		} else {
+// 			return option.Some[int](mid)
+// 		}
+// 	}
+
+// 	return option.None[int]()
+// }
+
+// Fills self with elements by cloning value.
+func (self *Vec[T]) Fill(value T) {
+	for i := 0; i < len(self.data); i++ {
+		self.data[i] = value
+	}
+}
