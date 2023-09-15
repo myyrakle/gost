@@ -156,3 +156,15 @@ func (self *Vec[T]) Reverse() {
 		self.Swap(i, len(self.data)-1-i)
 	}
 }
+
+// Returns true if the slice contains an element with the given value.
+// This operation is O(n).
+// Note that if you have a sorted slice, binary_search may be faster.
+func (self Vec[T]) Contains(value T) bool {
+	for _, v := range self.data {
+		if reflect.DeepEqual(v, value) {
+			return true
+		}
+	}
+	return false
+}
