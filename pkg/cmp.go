@@ -174,3 +174,67 @@ func (self Rune) Cmp(rhs Rune) Ordering {
 type Eq[T any] interface {
 	Eq(rhs T) Bool
 }
+
+func (self Int) Eq(rhs Int) Bool {
+	return self == rhs
+}
+
+func (self Int8) Eq(rhs Int8) Bool {
+	return self == rhs
+}
+
+func (self Int16) Eq(rhs Int16) Bool {
+	return self == rhs
+}
+
+func (self Int32) Eq(rhs Int32) Bool {
+	return self == rhs
+}
+
+func (self Int64) Eq(rhs Int64) Bool {
+	return self == rhs
+}
+
+func (self Uint) Eq(rhs Uint) Bool {
+	return self == rhs
+}
+
+func (self Uint8) Eq(rhs Uint8) Bool {
+	return self == rhs
+}
+
+func (self Uint16) Eq(rhs Uint16) Bool {
+	return self == rhs
+}
+
+func (self Uint32) Eq(rhs Uint32) Bool {
+	return self == rhs
+}
+
+func (self Uint64) Eq(rhs Uint64) Bool {
+	return self == rhs
+}
+
+func (self Float32) Eq(rhs Float32) Bool {
+	return self == rhs
+}
+
+func (self Float64) Eq(rhs Float64) Bool {
+	return self == rhs
+}
+
+func (self String) Eq(rhs String) Bool {
+	return self == rhs
+}
+
+func (self Bool) Eq(rhs Bool) Bool {
+	return self == rhs
+}
+
+func (self Byte) Eq(rhs Byte) Bool {
+	return self == rhs
+}
+
+func (self Rune) Eq(rhs Rune) Bool {
+	return self == rhs
+}
