@@ -143,3 +143,9 @@ func (self Vec[T]) Get(index int) option.Option[T] {
 func (self Vec[T]) GetUnchecked(index int) T {
 	return self.data[index]
 }
+
+// Swaps two elements in the slice.
+// If a equals to b, it’s guaranteed that elements won’t change value.
+func (self *Vec[T]) Swap(a, b int) {
+	self.data[a], self.data[b] = self.data[b], self.data[a]
+}
