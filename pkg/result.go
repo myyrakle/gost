@@ -1,9 +1,4 @@
-package result
-
-import (
-	"github.com/myyrakle/gost/pkg/option"
-	"github.com/myyrakle/gost/pkg/primitive"
-)
+package gost
 
 type Result[T any] struct {
 	ok  *T
@@ -19,12 +14,12 @@ func Err[T any](err error) Result[T] {
 }
 
 // Returns true if the result is Ok.
-func (self Result[T]) IsOk() primitive.Bool {
+func (self Result[T]) IsOk() Bool {
 	return self.ok != nil
 }
 
 // Returns true if the result is Ok and the value inside of it matches a predicate.
-func (self Result[T]) IsOkAnd(predicate func(T) primitive.Bool) primitive.Bool {
+func (self Result[T]) IsOkAnd(predicate func(T) Bool) Bool {
 	if self.IsOk() {
 		return predicate(*self.ok)
 	} else {
@@ -33,12 +28,12 @@ func (self Result[T]) IsOkAnd(predicate func(T) primitive.Bool) primitive.Bool {
 }
 
 // Returns true if the result is Err.
-func (self Result[T]) IsErr() primitive.Bool {
+func (self Result[T]) IsErr() Bool {
 	return self.err != nil
 }
 
 // Returns true if the result is Err and the value inside of it matches a predicate.
-func (self Result[T]) IsErrAnd(predicate func(error) primitive.Bool) primitive.Bool {
+func (self Result[T]) IsErrAnd(predicate func(error) Bool) Bool {
 	if self.IsErr() {
 		return predicate(self.err)
 	} else {
@@ -48,21 +43,21 @@ func (self Result[T]) IsErrAnd(predicate func(error) primitive.Bool) primitive.B
 
 // Converts from Result<T, E> to Option<T>.
 // Converts self into an Option<T>, consuming self, and discarding the error, if any.
-func (self Result[T]) Ok() option.Option[T] {
+func (self Result[T]) Ok() Option[T] {
 	if self.IsOk() {
-		return option.Some[T](*self.ok)
+		return Some[T](*self.ok)
 	} else {
-		return option.None[T]()
+		return None[T]()
 	}
 }
 
 // Converts from Result<T, E> to Option<E>.
 // Converts self into an Option<E>, consuming self, and discarding the success value, if any.
-func (self Result[T]) Err() option.Option[error] {
+func (self Result[T]) Err() Option[error] {
 	if self.IsErr() {
-		return option.Some[error](self.err)
+		return Some[error](self.err)
 	} else {
-		return option.None[error]()
+		return None[error]()
 	}
 }
 

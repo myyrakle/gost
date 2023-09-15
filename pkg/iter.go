@@ -1,9 +1,7 @@
-package trait
-
-import "github.com/myyrakle/gost/pkg/option"
+package gost
 
 type Iterator[T any] interface {
-	Next() option.Option[T]
+	Next() Option[T]
 }
 
 type IntoIterator[T any] interface {

@@ -1,4 +1,4 @@
-package trait
+package gost
 
 // Add is a trait for types that support addition.
 type Add[T any] interface {

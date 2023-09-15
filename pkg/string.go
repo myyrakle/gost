@@ -1,6 +1,13 @@
-package primitive
+package gost
 
-import "strconv"
+import (
+	"strconv"
+)
+
+// A trait for converting a value to a String.
+type ToString[T any] interface {
+	ToString() String
+}
 
 func (self Int) ToString() String {
 	return String(strconv.Itoa(int(self)))

@@ -1,4 +1,8 @@
-package primitive
+package gost
+
+type Clone[T any] interface {
+	Clone() T
+}
 
 func (self Int) Clone() Int {
 	return self
