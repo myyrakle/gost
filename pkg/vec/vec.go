@@ -202,3 +202,11 @@ func (self *Vec[T]) FillWith(f func() T) {
 		self.data[i] = f()
 	}
 }
+
+// Sorts the slice.
+// This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
+// When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
+// func (self *Vec[T]) Sort() {
+// 	// type check
+// 	sort.SliceStable(self.data, func(i, j int) { return self.data[i] < self.data[j] })
+// }
