@@ -126,3 +126,14 @@ func (self *Vec[T]) Dedup() {
 
 	self.data = self.data[:prev+1]
 }
+
+// Returns a reference to an element or subslice depending on the type of index.
+// If given a position, returns a reference to the element at that position or None if out of bounds.
+// If given a range, returns the subslice corresponding to that range, or None if out of bounds.
+func (self Vec[T]) Get(index int) option.Option[T] {
+	if index < 0 || index >= len(self.data) {
+		return option.None[T]()
+	} else {
+		return option.Some[T](self.data[index])
+	}
+}
