@@ -3,6 +3,7 @@ package gost
 type Iterator[T any] interface {
 	Next() Option[T]
 	Map(f func(T) T) Map[T]
+	Filter(f func(T) Bool) Filter[T]
 }
 
 type IntoIterator[T any] interface {

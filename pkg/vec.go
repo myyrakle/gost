@@ -246,3 +246,23 @@ func (self VecIter[T]) Map(f func(T) T) Map[T] {
 		newVec.Push(f(value.Unwrap()))
 	}
 }
+
+// filter
+func (self VecIter[T]) Filter(f func(T) Bool) Filter[T] {
+	newVec := New[T]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			newFilter := Filter[T]{iter: newVec.IntoIter()}
+
+			return newFilter
+		}
+
+		unwraped := value.Unwrap()
+		if f(unwraped) {
+			newVec.Push(unwraped)
+		}
+	}
+}
