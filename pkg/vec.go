@@ -208,3 +208,25 @@ func (self *Vec[T]) FillWith(f func() T) {
 // 	// type check
 // 	sort.SliceStable(self.data, func(i, j Int) { return self.data[i] < self.data[j] })
 // }
+
+type VecIter[T any] struct {
+	vec      Vec[T]
+	position Int
+}
+
+// into_iter
+func (self Vec[T]) IntoIter() VecIter[T] {
+	return VecIter[T]{vec: self, position: 0}
+}
+
+// next
+func (self VecIter[T]) Next() Option[T] {
+	if self.position >= self.vec.Len() {
+		return None[T]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[T](value)
+}
