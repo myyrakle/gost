@@ -2,6 +2,7 @@ package gost
 
 import (
 	"fmt"
+	"reflect"
 )
 
 type Display[T any] interface {
@@ -78,6 +79,16 @@ func (self Complex64) Display() String {
 
 func (self Complex128) Display() String {
 	return self.ToString()
+}
+
+func castToDisplay[T any](value T) Option[Display[T]] {
+	reflectedValue := reflect.ValueOf(value)
+
+	if display, ok := reflectedValue.Interface().(Display[T]); ok {
+		return Some[Display[T]](display)
+	} else {
+		return None[Display[T]]()
+	}
 }
 
 type Debug[T any] interface {
