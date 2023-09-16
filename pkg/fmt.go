@@ -5,7 +5,7 @@ import (
 )
 
 type Display[T any] interface {
-	Display() string
+	Display() String
 }
 
 func (self Int) Display() String {

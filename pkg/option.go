@@ -1,5 +1,10 @@
 package gost
 
+import (
+	"fmt"
+	"reflect"
+)
+
 type Option[T any] struct {
 	value *T
 }
@@ -213,5 +218,23 @@ func (self *Option[T]) Replace(value T) Option[T] {
 		oldValue := *self.value
 		self.value = &value
 		return Some[T](oldValue)
+	}
+}
+
+// impl Display for Option
+func (self Option[T]) Display() String {
+	if self.IsNone() {
+		return "None"
+	} else {
+		value := reflect.ValueOf(self.value)
+
+		if display, ok := value.Interface().(Display[T]); ok {
+			return "Some(" + display.Display() + ")"
+		}
+
+		typeName := reflect.TypeOf(self.value).Elem().Name()
+		fmt.Println(typeName)
+
+		panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
 	}
 }
