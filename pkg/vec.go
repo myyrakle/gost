@@ -215,12 +215,12 @@ type VecIter[T any] struct {
 }
 
 // into_iter
-func (self Vec[T]) IntoIter() VecIter[T] {
-	return VecIter[T]{vec: self, position: 0}
+func (self Vec[T]) IntoIter() Iterator[T] {
+	return &VecIter[T]{vec: self, position: 0}
 }
 
 // next
-func (self VecIter[T]) Next() Option[T] {
+func (self *VecIter[T]) Next() Option[T] {
 	if self.position >= self.vec.Len() {
 		return None[T]()
 	}
@@ -229,4 +229,20 @@ func (self VecIter[T]) Next() Option[T] {
 	self.position++
 
 	return Some[T](value)
+}
+
+// map
+func (self VecIter[T]) Map(f func(T) T) Map[T] {
+	newVec := New[T]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			newMap := Map[T]{iter: newVec.IntoIter()}
+
+			return newMap
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
 }
