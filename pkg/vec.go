@@ -19,6 +19,11 @@ func WithCapacity[T any](capacity Int) Vec[T] {
 	return Vec[T]{data: make([]T, 0, capacity)}
 }
 
+// Constructs a new, empty Vec<T> with at least the specified capacity.
+func WithLen[T any](len Int) Vec[T] {
+	return Vec[T]{data: make([]T, len)}
+}
+
 // Returns the total number of elements the vector can hold without reallocating.
 func (self Vec[T]) Capacity() Int {
 	return Int(cap(self.data))
@@ -208,3 +213,97 @@ func (self *Vec[T]) FillWith(f func() T) {
 // 	// type check
 // 	sort.SliceStable(self.data, func(i, j Int) { return self.data[i] < self.data[j] })
 // }
+
+type VecIter[T any] struct {
+	vec      Vec[T]
+	position Int
+}
+
+// into_iter
+func (self Vec[T]) IntoIter() Iterator[T] {
+	return &VecIter[T]{vec: self, position: 0}
+}
+
+// next
+func (self *VecIter[T]) Next() Option[T] {
+	if self.position >= self.vec.Len() {
+		return None[T]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[T](value)
+}
+
+// map
+func (self VecIter[T]) Map(f func(T) T) Iterator[T] {
+	newVec := New[T]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self VecIter[T]) Filter(f func(T) Bool) Iterator[T] {
+	newVec := New[T]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		unwraped := value.Unwrap()
+		if f(unwraped) {
+			newVec.Push(unwraped)
+		}
+	}
+}
+
+// fold
+func (self VecIter[T]) Fold(init T, f func(T, T) T) T {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self VecIter[T]) Rev() Iterator[T] {
+	newVec := WithLen[T](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+func (self VecIter[T]) CollectToVec() Vec[T] {
+	vec := Vec[T]{}
+	for {
+		value := self.Next()
+		if value.IsNone() {
+			return vec
+		}
+		vec.Push(value.Unwrap())
+	}
+}
