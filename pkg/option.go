@@ -233,7 +233,6 @@ func (self Option[T]) Display() String {
 		}
 
 		typeName := reflect.TypeOf(self.value).Elem().Name()
-		fmt.Println(typeName)
 
 		panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
 	}
