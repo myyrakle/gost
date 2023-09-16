@@ -1,6 +1,7 @@
 package gost
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -306,4 +307,36 @@ func (self VecIter[T]) CollectToVec() Vec[T] {
 		}
 		vec.Push(value.Unwrap())
 	}
+}
+
+// impl Display for Vec
+func (self Vec[T]) Display() String {
+	buffer := String("")
+	buffer += "Vec["
+
+	for i := 0; i < len(self.data); i++ {
+		e := self.data[i]
+
+		display := castToDisplay(e)
+		if display.IsSome() {
+			buffer += display.Unwrap().Display()
+		} else {
+			typeName := getTypeName(e)
+
+			panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
+		}
+
+		if i != len(self.data)-1 {
+			buffer += ", "
+		}
+	}
+
+	buffer += "]"
+
+	return String(buffer)
+}
+
+// impl Debug for Vec
+func (self Vec[T]) Debug() String {
+	return self.Display()
 }

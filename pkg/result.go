@@ -1,5 +1,10 @@
 package gost
 
+import (
+	"fmt"
+	"reflect"
+)
+
 type Result[T any] struct {
 	ok  *T
 	err error
@@ -196,4 +201,26 @@ func (self Result[T]) UnwrapOrElse(f func() T) T {
 	} else {
 		return f()
 	}
+}
+
+// impl Display for Result
+func (self Result[T]) Display() String {
+	if self.IsOk() {
+		value := reflect.ValueOf(self.ok)
+
+		if display, ok := value.Interface().(Display[T]); ok {
+			return "Ok(" + display.Display() + ")"
+		}
+
+		typeName := reflect.TypeOf(self.ok).Elem().Name()
+
+		panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
+	} else {
+		return String(self.err.Error())
+	}
+}
+
+// impl Debug for Result
+func (self Result[T]) Debug() String {
+	return self.Display()
 }
