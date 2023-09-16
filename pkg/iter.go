@@ -23,3 +23,18 @@ func (self Map[T]) CollectToVec() Vec[T] {
 		vec.Push(value.Unwrap())
 	}
 }
+
+type Filter[T any] struct {
+	iter Iterator[T]
+}
+
+func (self Filter[T]) CollectToVec() Vec[T] {
+	vec := Vec[T]{}
+	for {
+		value := self.iter.Next()
+		if value.IsNone() {
+			return vec
+		}
+		vec.Push(value.Unwrap())
+	}
+}
