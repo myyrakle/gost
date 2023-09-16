@@ -238,3 +238,8 @@ func (self Option[T]) Display() String {
 		panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
 	}
 }
+
+// impl Debug for Option
+func (self Option[T]) Debug() String {
+	return self.Display()
+}
