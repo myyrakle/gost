@@ -335,3 +335,8 @@ func (self Vec[T]) Display() String {
 
 	return String(buffer)
 }
+
+// impl Debug for Vec
+func (self Vec[T]) Debug() String {
+	return self.Display()
+}
