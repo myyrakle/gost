@@ -219,3 +219,8 @@ func (self Result[T]) Display() String {
 		return String(self.err.Error())
 	}
 }
+
+// impl Debug for Result
+func (self Result[T]) Debug() String {
+	return self.Display()
+}
