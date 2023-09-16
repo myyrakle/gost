@@ -41,3 +41,17 @@ func (self Filter[T]) CollectToVec() Vec[T] {
 	}
 }
 
+type Rev[T any] struct {
+	iter Iterator[T]
+}
+
+func (self Rev[T]) CollectToVec() Vec[T] {
+	vec := Vec[T]{}
+	for {
+		value := self.iter.Next()
+		if value.IsNone() {
+			return vec
+		}
+		vec.Push(value.Unwrap())
+	}
+}
