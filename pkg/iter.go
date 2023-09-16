@@ -4,6 +4,7 @@ type Iterator[T any] interface {
 	Next() Option[T]
 	Map(f func(T) T) Map[T]
 	Filter(f func(T) Bool) Filter[T]
+	Fold(init T, f func(T, T) T) T
 }
 
 type IntoIterator[T any] interface {
@@ -39,3 +40,4 @@ func (self Filter[T]) CollectToVec() Vec[T] {
 		vec.Push(value.Unwrap())
 	}
 }
+

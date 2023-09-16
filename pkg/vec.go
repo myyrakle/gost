@@ -266,3 +266,16 @@ func (self VecIter[T]) Filter(f func(T) Bool) Filter[T] {
 		}
 	}
 }
+
+// fold
+func (self VecIter[T]) Fold(init T, f func(T, T) T) T {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
