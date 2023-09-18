@@ -348,3 +348,22 @@ func (self HashMapValues[V]) Rev() Iterator[V] {
 func (self HashMapValues[V]) CollectToVec() Vec[V] {
 	return self.vec
 }
+
+// impl Display for HashMap
+func (self HashMap[K, V]) Display() String {
+	buffer := String("")
+	buffer += "HashMap{"
+
+	for key, value := range self.data {
+		buffer += Format("{}: {}, ", key, value)
+	}
+
+	buffer += "}"
+
+	return buffer
+}
+
+// impl Debug for HashMap
+func (self HashMap[K, V]) Debug() String {
+	return self.Display()
+}
