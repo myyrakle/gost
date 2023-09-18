@@ -66,3 +66,14 @@ func (self HashMap[K, V]) Get(key K) Option[V] {
 		return None[V]()
 	}
 }
+
+// Returns true if the map contains a value for the specified key.
+func (self HashMap[K, V]) ContainsKey(key K) Bool {
+	_, ok := self.data[key]
+	return Bool(ok)
+}
+
+type MapIter[K comparable, V any] struct {
+	vec      Vec[(K, V)]
+	position Int
+}
