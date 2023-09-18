@@ -99,3 +99,17 @@ func (self *MapIter[K, V]) Next() Option[Pair[K, V]] {
 
 	return Some[Pair[K, V]](value)
 }
+
+// map
+func (self MapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K, V]] {
+	newVec := VecNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
