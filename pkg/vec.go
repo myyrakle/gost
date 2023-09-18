@@ -3,6 +3,7 @@ package gost
 import (
 	"fmt"
 	"reflect"
+	"sort"
 )
 
 type Vec[T any] struct {
@@ -210,9 +211,20 @@ func (self *Vec[T]) FillWith(f func() T) {
 // Sorts the slice.
 // This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
 // When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
-// func (self *Vec[T]) Sort() {
+func (self *Vec[T]) Sort() {
+	sort.SliceStable(self.data, func(i, j int) bool {
+		lhs := castToOrd(self.data[i]).Unwrap()
+		rhs := self.data[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
+
+// func (self *Vec[T]) SortUnstable() {
 // 	// type check
-// 	sort.SliceStable(self.data, func(i, j Int) { return self.data[i] < self.data[j] })
+// 	sort.SliceStable(self.data, func(i, j Int) {
+// 		return self.data[i] < self.data[j]
+// 	})
 // }
 
 type VecIter[T any] struct {
