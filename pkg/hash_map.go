@@ -23,3 +23,8 @@ func (m HashMap[K, V]) AsMap() map[K]V {
 func (m HashMap[K, V]) Len() Int {
 	return Int(len(m.data))
 }
+
+// Returns true if the map contains no elements.
+func (m HashMap[K, V]) IsEmpty() Bool {
+	return m.Len() == 0
+}
