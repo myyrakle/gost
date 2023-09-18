@@ -74,6 +74,6 @@ func (self HashMap[K, V]) ContainsKey(key K) Bool {
 }
 
 type MapIter[K comparable, V any] struct {
-	vec      Vec[(K, V)]
+	vec      Vec[Pair[K, V]]
 	position Int
 }
