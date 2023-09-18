@@ -56,3 +56,13 @@ func (self *HashMap[K, V]) Remove(key K) Option[V] {
 func (self *HashMap[K, V]) Clear() {
 	self.data = map[K]V{}
 }
+
+// Returns a reference to the value corresponding to the key.
+func (self HashMap[K, V]) Get(key K) Option[V] {
+	value, ok := self.data[key]
+	if ok {
+		return Some(value)
+	} else {
+		return None[V]()
+	}
+}
