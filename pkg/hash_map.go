@@ -13,3 +13,8 @@ func HashMapNew[K comparable, V any]() HashMap[K, V] {
 func HashMapWithCapacity[K comparable, V any](capacity Int) HashMap[K, V] {
 	return HashMap[K, V]{data: make(map[K]V, capacity)}
 }
+
+// As Raw Map
+func (m HashMap[K, V]) AsMap() map[K]V {
+	return m.data
+}
