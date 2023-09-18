@@ -18,3 +18,8 @@ func HashMapWithCapacity[K comparable, V any](capacity Int) HashMap[K, V] {
 func (m HashMap[K, V]) AsMap() map[K]V {
 	return m.data
 }
+
+// Returns the number of elements in the map.
+func (m HashMap[K, V]) Len() Int {
+	return Int(len(m.data))
+}
