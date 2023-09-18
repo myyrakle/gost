@@ -256,3 +256,95 @@ func (self HashMapKeys[K]) Rev() Iterator[K] {
 func (self HashMapKeys[K]) CollectToVec() Vec[K] {
 	return self.vec
 }
+
+type HashMapValues[V any] struct {
+	vec      Vec[V]
+	position Int
+}
+
+// An iterator visiting all values in arbitrary order. The iterator element type is V.
+func (self HashMap[K, V]) Values() Iterator[V] {
+	vec := Vec[V]{}
+	for _, value := range self.data {
+		vec.Push(value)
+	}
+
+	return &HashMapValues[V]{vec: vec, position: 0}
+}
+
+// next
+func (self *HashMapValues[V]) Next() Option[V] {
+	if self.position >= self.vec.Len() {
+		return None[V]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[V](value)
+}
+
+// map
+func (self HashMapValues[V]) Map(f func(V) V) Iterator[V] {
+	newVec := VecNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self HashMapValues[V]) Filter(f func(V) Bool) Iterator[V] {
+	newVec := VecNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		unwraped := value.Unwrap()
+		if f(unwraped) {
+			newVec.Push(unwraped)
+		}
+	}
+}
+
+// fold
+func (self HashMapValues[V]) Fold(init V, f func(V, V) V) V {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self HashMapValues[V]) Rev() Iterator[V] {
+	newVec := VecWithLen[V](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+func (self HashMapValues[V]) CollectToVec() Vec[V] {
+	return self.vec
+}
