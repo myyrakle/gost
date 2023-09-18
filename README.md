@@ -1,6 +1,6 @@
 # gost
 
-![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.2.1-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.3.0-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 Experience the true taste of Rust in Go
 
@@ -53,16 +53,26 @@ func main() {
 		gost.Println("result: overflow")
 	}
 
-	vec := gost.Vec[gost.Int]{}
-	vec.Push(gost.Int(1))
-	vec.Push(gost.Int(2))
-	vec.Push(gost.Int(3))
+	vector := gost.Vec[gost.Int]{}
+	vector.Push(gost.Int(3))
+	vector.Push(gost.Int(1))
+	vector.Push(gost.Int(2))
+	vector.Push(gost.Int(4))
+	vector.Sort()
+	gost.Println("sorted Vec: {}", vector)
 
-	newVec := vec.IntoIter().Map(func(x gost.Int) gost.Int { return x * 2 }).CollectToVec()
+	newVec := vector.IntoIter().Map(func(x gost.Int) gost.Int { return x * 2 }).CollectToVec()
 	gost.Println("mapped Vec: {}", newVec)
 
 	newVec.Push(gost.Int(7))
 	foo := newVec.IntoIter().Fold(gost.Int(0), func(a, b gost.Int) gost.Int { return a + b })
 	gost.Println("fold value: {}", foo)
+
+	hashMap := gost.HashMapNew[gost.String, gost.Int]()
+	hashMap.Insert(gost.String("foo"), gost.Int(1))
+	hashMap.Insert(gost.String("bar"), gost.Int(2))
+	hashMap.Insert(gost.String("baz"), gost.Int(3))
+
+	gost.Println("hashMap: {}", hashMap)
 }
 ```
