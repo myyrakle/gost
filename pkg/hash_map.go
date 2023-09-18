@@ -160,3 +160,7 @@ func (self MapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 		i--
 	}
 }
+
+func (self MapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
+	return self.vec
+}
