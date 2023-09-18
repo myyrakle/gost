@@ -204,6 +204,35 @@ func (self Vec[T]) BinarySearch(value T) Option[Int] {
 	return None[Int]()
 }
 
+// Binary searches this slice with a comparator function.
+// The comparator function should return an order code that indicates whether its argument is Less, Equal or Greater the desired target. If the slice is not sorted or if the comparator function does not implement an order consistent with the sort order of the underlying slice, the returned result is unspecified and meaningless.
+func (self Vec[T]) BinarySearchBy(f func(T) Ordering) Option[Int] {
+	low := 0
+	high := len(self.data) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+		ordering := f(self.data[mid])
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[Int](Int(mid))
+			}
+		}
+	}
+
+	return None[Int]()
+}
+
 // Fills self with elements by cloning value.
 func (self *Vec[T]) Fill(value T) {
 	for i := 0; i < len(self.data); i++ {
