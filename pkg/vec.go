@@ -12,17 +12,17 @@ type Vec[T any] struct {
 
 // Constructs a new, empty Vec<T>.
 // The vector will not allocate until elements are pushed onto it.
-func New[T any]() Vec[T] {
+func VecNew[T any]() Vec[T] {
 	return Vec[T]{data: make([]T, 0)}
 }
 
 // Constructs a new, empty Vec<T> with at least the specified capacity.
-func WithCapacity[T any](capacity Int) Vec[T] {
+func VecWithCapacity[T any](capacity Int) Vec[T] {
 	return Vec[T]{data: make([]T, 0, capacity)}
 }
 
 // Constructs a new, empty Vec<T> with at least the specified capacity.
-func WithLen[T any](len Int) Vec[T] {
+func VecWithLen[T any](len Int) Vec[T] {
 	return Vec[T]{data: make([]T, len)}
 }
 
@@ -322,7 +322,7 @@ func (self *VecIter[T]) Next() Option[T] {
 
 // map
 func (self VecIter[T]) Map(f func(T) T) Iterator[T] {
-	newVec := New[T]()
+	newVec := VecNew[T]()
 
 	for {
 		value := self.Next()
@@ -336,7 +336,7 @@ func (self VecIter[T]) Map(f func(T) T) Iterator[T] {
 
 // filter
 func (self VecIter[T]) Filter(f func(T) Bool) Iterator[T] {
-	newVec := New[T]()
+	newVec := VecNew[T]()
 
 	for {
 		value := self.Next()
@@ -367,7 +367,7 @@ func (self VecIter[T]) Fold(init T, f func(T, T) T) T {
 
 // rev
 func (self VecIter[T]) Rev() Iterator[T] {
-	newVec := WithLen[T](self.vec.Len())
+	newVec := VecWithLen[T](self.vec.Len())
 	i := self.vec.Len() - 1
 
 	for {
