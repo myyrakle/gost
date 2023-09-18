@@ -179,3 +179,80 @@ func (self HashMap[K, V]) Keys() Iterator[K] {
 
 	return &HashMapKeys[K]{vec: vec, position: 0}
 }
+
+// next
+func (self *HashMapKeys[K]) Next() Option[K] {
+	if self.position >= self.vec.Len() {
+		return None[K]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[K](value)
+}
+
+// map
+func (self HashMapKeys[K]) Map(f func(K) K) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self HashMapKeys[K]) Filter(f func(K) Bool) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		unwraped := value.Unwrap()
+		if f(unwraped) {
+			newVec.Push(unwraped)
+		}
+	}
+}
+
+// fold
+func (self HashMapKeys[K]) Fold(init K, f func(K, K) K) K {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self HashMapKeys[K]) Rev() Iterator[K] {
+	newVec := VecWithLen[K](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+func (self HashMapKeys[K]) CollectToVec() Vec[K] {
+	return self.vec
+}
