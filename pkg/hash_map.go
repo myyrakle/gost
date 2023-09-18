@@ -51,3 +51,8 @@ func (self *HashMap[K, V]) Remove(key K) Option[V] {
 		return None[V]()
 	}
 }
+
+// Clears the map, removing all key-value pairs. Keeps the allocated memory for reuse.
+func (self *HashMap[K, V]) Clear() {
+	self.data = map[K]V{}
+}
