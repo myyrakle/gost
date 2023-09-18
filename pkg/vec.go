@@ -175,24 +175,63 @@ func (self Vec[T]) Contains(value T) Bool {
 }
 
 // Binary searches this slice for a given element. If the slice is not sorted, the returned result is unspecified and meaningless.
-// If the value is found then Result::Ok is returned, containing the index of the matching element. If there are multiple matches, then any one of the matches could be returned. The index is chosen deterministically, but is subject to change in future versions of Rust. If the value is not found then Result::Err is returned, containing the index where a matching element could be inserted while maIntaining sorted order.
-// func (self Vec[T]) BinarySearch(value T) Option[Int] {
-// 	low := 0
-// 	high := len(self.data) - 1
+func (self Vec[T]) BinarySearch(value T) Option[Int] {
+	low := 0
+	high := len(self.data) - 1
 
-// 	for low <= high {
-// 		mid := (low + high) / 2
-// 		if self.data[mid] < value {
-// 			low = mid + 1
-// 		} else if self.data[mid] > value {
-// 			high = mid - 1
-// 		} else {
-// 			return Some[Int](mid)
-// 		}
-// 	}
+	for low <= high {
+		mid := (low + high) / 2
 
-// 	return None[Int]()
-// }
+		midData := castToOrd(self.data[mid]).Unwrap()
+		ordering := midData.Cmp(value)
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[Int](Int(mid))
+			}
+		}
+	}
+
+	return None[Int]()
+}
+
+// Binary searches this slice with a comparator function.
+// The comparator function should return an order code that indicates whether its argument is Less, Equal or Greater the desired target. If the slice is not sorted or if the comparator function does not implement an order consistent with the sort order of the underlying slice, the returned result is unspecified and meaningless.
+func (self Vec[T]) BinarySearchBy(f func(T) Ordering) Option[Int] {
+	low := 0
+	high := len(self.data) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+		ordering := f(self.data[mid])
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[Int](Int(mid))
+			}
+		}
+	}
+
+	return None[Int]()
+}
 
 // Fills self with elements by cloning value.
 func (self *Vec[T]) Fill(value T) {
