@@ -77,3 +77,13 @@ type MapIter[K comparable, V any] struct {
 	vec      Vec[Pair[K, V]]
 	position Int
 }
+
+// into_iter
+func (self HashMap[K, V]) IntoIter() Iterator[Pair[K, V]] {
+	vec := Vec[Pair[K, V]]{}
+	for key, value := range self.data {
+		vec.Push(Pair[K, V]{Key: key, Value: value})
+	}
+
+	return &MapIter[K, V]{vec: vec, position: 0}
+}
