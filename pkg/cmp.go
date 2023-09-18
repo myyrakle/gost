@@ -250,3 +250,13 @@ func (self Byte) Eq(rhs Byte) Bool {
 func (self Rune) Eq(rhs Rune) Bool {
 	return self == rhs
 }
+
+func castToEq[T any](value T) Option[Eq[T]] {
+	reflectedValue := reflect.ValueOf(value)
+
+	if casted, ok := reflectedValue.Interface().(Eq[T]); ok {
+		return Some[Eq[T]](casted)
+	} else {
+		return None[Eq[T]]()
+	}
+}
