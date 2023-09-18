@@ -3,6 +3,7 @@ package gost
 import (
 	"fmt"
 	"reflect"
+	"sort"
 )
 
 type Vec[T any] struct {
@@ -210,10 +211,53 @@ func (self *Vec[T]) FillWith(f func() T) {
 // Sorts the slice.
 // This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
 // When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
-// func (self *Vec[T]) Sort() {
-// 	// type check
-// 	sort.SliceStable(self.data, func(i, j Int) { return self.data[i] < self.data[j] })
-// }
+func (self *Vec[T]) Sort() {
+	sort.SliceStable(self.data, func(i, j int) bool {
+		lhs := castToOrd(self.data[i]).Unwrap()
+		rhs := self.data[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
+
+// Sorts the slice with a comparator function.
+// This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
+// The comparator function must define a total ordering for the elements in the slice. If the ordering is not total, the order of the elements is unspecified. An order is a total order if it is (for all a, b and c):
+// - total and antisymmetric: exactly one of a < b, a == b or a > b is true, and
+// - transitive, a < b and b < c implies a < c. The same must hold for both == and >.
+func (self *Vec[T]) SortBy(compare func(T, T) Ordering) {
+	sort.SliceStable(self.data, func(i, j int) bool {
+		lhs := self.data[i]
+		rhs := self.data[j]
+
+		return compare(lhs, rhs) == OrderingLess
+	})
+}
+
+// Sorts the slice, but might not preserve the order of equal elements.
+// This sort is unstable (i.e., may reorder equal elements), in-place (i.e., does not allocate), and O(n * log(n)) worst-case.
+func (self *Vec[T]) SortUnstable() {
+	sort.Slice(self.data, func(i, j int) bool {
+		lhs := castToOrd(self.data[i]).Unwrap()
+		rhs := self.data[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
+
+// Sorts the slice with a comparator function, but might not preserve the order of equal elements.
+// This sort is unstable (i.e., may reorder equal elements), in-place (i.e., does not allocate), and O(n * log(n)) worst-case.
+// The comparator function must define a total ordering for the elements in the slice. If the ordering is not total, the order of the elements is unspecified. An order is a total order if it is (for all a, b and c):
+// - total and antisymmetric: exactly one of a < b, a == b or a > b is true, and
+// - transitive, a < b and b < c implies a < c. The same must hold for both == and >.
+func (self *Vec[T]) SortUnstableBy(compare func(T, T) Ordering) {
+	sort.Slice(self.data, func(i, j int) bool {
+		lhs := self.data[i]
+		rhs := self.data[j]
+
+		return compare(lhs, rhs) == OrderingLess
+	})
+}
 
 type VecIter[T any] struct {
 	vec      Vec[T]

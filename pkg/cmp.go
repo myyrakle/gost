@@ -1,5 +1,7 @@
 package gost
 
+import "reflect"
+
 type Ordering int
 
 // Ordering enum values
@@ -171,6 +173,16 @@ func (self Rune) Cmp(rhs Rune) Ordering {
 	}
 }
 
+func castToOrd[T any](value T) Option[Ord[T]] {
+	reflectedValue := reflect.ValueOf(value)
+
+	if ord, ok := reflectedValue.Interface().(Ord[T]); ok {
+		return Some[Ord[T]](ord)
+	} else {
+		return None[Ord[T]]()
+	}
+}
+
 type Eq[T any] interface {
 	Eq(rhs T) Bool
 }
@@ -237,4 +249,14 @@ func (self Byte) Eq(rhs Byte) Bool {
 
 func (self Rune) Eq(rhs Rune) Bool {
 	return self == rhs
+}
+
+func castToEq[T any](value T) Option[Eq[T]] {
+	reflectedValue := reflect.ValueOf(value)
+
+	if casted, ok := reflectedValue.Interface().(Eq[T]); ok {
+		return Some[Eq[T]](casted)
+	} else {
+		return None[Eq[T]]()
+	}
 }
