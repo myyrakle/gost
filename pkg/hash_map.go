@@ -40,3 +40,14 @@ func (self *HashMap[K, V]) Insert(key K, value V) Option[V] {
 		return None[V]()
 	}
 }
+
+// Removes a key from the map, returning the value at the key if the key was previously in the map.
+func (self *HashMap[K, V]) Remove(key K) Option[V] {
+	old, ok := self.data[key]
+	delete(self.data, key)
+	if ok {
+		return Some(old)
+	} else {
+		return None[V]()
+	}
+}
