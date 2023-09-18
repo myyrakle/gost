@@ -220,12 +220,16 @@ func (self *Vec[T]) Sort() {
 	})
 }
 
-// func (self *Vec[T]) SortUnstable() {
-// 	// type check
-// 	sort.SliceStable(self.data, func(i, j Int) {
-// 		return self.data[i] < self.data[j]
-// 	})
-// }
+// Sorts the slice, but might not preserve the order of equal elements.
+// This sort is unstable (i.e., may reorder equal elements), in-place (i.e., does not allocate), and O(n * log(n)) worst-case.
+func (self *Vec[T]) SortUnstable() {
+	sort.Slice(self.data, func(i, j int) bool {
+		lhs := castToOrd(self.data[i]).Unwrap()
+		rhs := self.data[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
 
 type VecIter[T any] struct {
 	vec      Vec[T]
