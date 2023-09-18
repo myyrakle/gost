@@ -87,3 +87,15 @@ func (self HashMap[K, V]) IntoIter() Iterator[Pair[K, V]] {
 
 	return &MapIter[K, V]{vec: vec, position: 0}
 }
+
+// next
+func (self *MapIter[K, V]) Next() Option[Pair[K, V]] {
+	if self.position >= self.vec.Len() {
+		return None[Pair[K, V]]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[Pair[K, V]](value)
+}
