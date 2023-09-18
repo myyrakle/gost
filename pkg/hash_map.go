@@ -73,7 +73,7 @@ func (self HashMap[K, V]) ContainsKey(key K) Bool {
 	return Bool(ok)
 }
 
-type MapIter[K comparable, V any] struct {
+type HashMapIter[K comparable, V any] struct {
 	vec      Vec[Pair[K, V]]
 	position Int
 }
@@ -85,11 +85,11 @@ func (self HashMap[K, V]) IntoIter() Iterator[Pair[K, V]] {
 		vec.Push(Pair[K, V]{Key: key, Value: value})
 	}
 
-	return &MapIter[K, V]{vec: vec, position: 0}
+	return &HashMapIter[K, V]{vec: vec, position: 0}
 }
 
 // next
-func (self *MapIter[K, V]) Next() Option[Pair[K, V]] {
+func (self *HashMapIter[K, V]) Next() Option[Pair[K, V]] {
 	if self.position >= self.vec.Len() {
 		return None[Pair[K, V]]()
 	}
@@ -101,7 +101,7 @@ func (self *MapIter[K, V]) Next() Option[Pair[K, V]] {
 }
 
 // map
-func (self MapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K, V]] {
+func (self HashMapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K, V]] {
 	newVec := VecNew[Pair[K, V]]()
 
 	for {
@@ -115,7 +115,7 @@ func (self MapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K, V]
 }
 
 // filter
-func (self MapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V]] {
+func (self HashMapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V]] {
 	newVec := VecNew[Pair[K, V]]()
 
 	for {
@@ -133,7 +133,7 @@ func (self MapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V]] {
 }
 
 // fold
-func (self MapIter[K, V]) Fold(init Pair[K, V], f func(Pair[K, V], Pair[K, V]) Pair[K, V]) Pair[K, V] {
+func (self HashMapIter[K, V]) Fold(init Pair[K, V], f func(Pair[K, V], Pair[K, V]) Pair[K, V]) Pair[K, V] {
 	for {
 		value := self.Next()
 
@@ -146,7 +146,7 @@ func (self MapIter[K, V]) Fold(init Pair[K, V], f func(Pair[K, V], Pair[K, V]) P
 }
 
 // rev
-func (self MapIter[K, V]) Rev() Iterator[Pair[K, V]] {
+func (self HashMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 	newVec := VecWithLen[Pair[K, V]](self.vec.Len())
 	i := self.vec.Len() - 1
 
@@ -161,6 +161,11 @@ func (self MapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 	}
 }
 
-func (self MapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
+func (self HashMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
 	return self.vec
+}
+
+type HashMapKeys[K any] struct {
+	vec      Vec[K]
+	position Int
 }
