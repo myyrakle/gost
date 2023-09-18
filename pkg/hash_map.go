@@ -169,3 +169,13 @@ type HashMapKeys[K any] struct {
 	vec      Vec[K]
 	position Int
 }
+
+// An iterator visiting all keys in arbitrary order. The iterator element type is K.
+func (self HashMap[K, V]) Keys() Iterator[K] {
+	vec := Vec[K]{}
+	for key := range self.data {
+		vec.Push(key)
+	}
+
+	return &HashMapKeys[K]{vec: vec, position: 0}
+}
