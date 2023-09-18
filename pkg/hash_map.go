@@ -1,5 +1,7 @@
 package gost
 
+import "strings"
+
 type HashMap[K comparable, V any] struct {
 	data map[K]V
 }
@@ -354,9 +356,12 @@ func (self HashMap[K, V]) Display() String {
 	buffer := String("")
 	buffer += "HashMap{"
 
+	fields := []string{}
 	for key, value := range self.data {
-		buffer += Format("{}: {}, ", key, value)
+		fields = append(fields, string(Format("{}: {}", key, value)))
 	}
+
+	buffer += String(strings.Join(fields, ", "))
 
 	buffer += "}"
 
