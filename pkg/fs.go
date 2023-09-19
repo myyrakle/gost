@@ -104,3 +104,54 @@ func Read(path String) Result[[]Byte] {
 		return Ok[[]Byte](casted)
 	}
 }
+
+type FileType struct {
+	typeInfo string
+}
+
+func (self FileType) IsDir() bool {
+	return self.typeInfo == "dir"
+}
+
+func (self FileType) IsFile() bool {
+	return self.typeInfo == "file"
+}
+
+func (self FileType) IsSymlink() bool {
+	return self.typeInfo == "symlink"
+}
+
+type DirEntry struct {
+	Name     String
+	FileType FileType
+}
+
+// Returns an iterator over the entries within a directory.
+func ReadDir(path String) Result[Vec[DirEntry]] {
+	entries, err := os.ReadDir(string(path))
+
+	if err != nil {
+		return Err[Vec[DirEntry]](err)
+	} else {
+		vec := VecWithLen[DirEntry](Int(len(entries)))
+
+		for _, entry := range entries {
+			fileType := FileType{}
+
+			if entry.Type().Perm().IsDir() {
+				fileType.typeInfo = "dir"
+			} else if entry.Type().Perm().IsRegular() {
+				fileType.typeInfo = "file"
+			} else if entry.Type().Perm()&os.ModeSymlink != 0 {
+				fileType.typeInfo = "symlink"
+			}
+
+			vec.Push(DirEntry{
+				Name:     String(entry.Name()),
+				FileType: fileType,
+			})
+		}
+
+		return Ok[Vec[DirEntry]](vec)
+	}
+}
