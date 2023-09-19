@@ -48,3 +48,14 @@ func Write(path String, data []Byte) Result[any] {
 		return Ok[any](nil)
 	}
 }
+
+// Removes a file from the filesystem.
+func RemoveFile(path String) Result[any] {
+	err := os.Remove(string(path))
+
+	if err != nil {
+		return Err[any](err)
+	} else {
+		return Ok[any](nil)
+	}
+}
