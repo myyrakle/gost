@@ -71,3 +71,36 @@ func Rename(from String, to String) Result[any] {
 		return Ok[any](nil)
 	}
 }
+
+// Read the entire contents of a file into a bytes vector.
+func Read(path String) Result[[]Byte] {
+	file, err := os.Open(string(path))
+
+	if err != nil {
+		return Err[[]Byte](err)
+	}
+
+	defer file.Close()
+
+	stat, err := file.Stat()
+
+	if err != nil {
+		return Err[[]Byte](err)
+	}
+
+	data := make([]byte, stat.Size())
+
+	_, err = file.Read(data)
+
+	if err != nil {
+		return Err[[]Byte](err)
+	} else {
+		casted := []Byte{}
+
+		for _, b := range data {
+			casted = append(casted, Byte(b))
+		}
+
+		return Ok[[]Byte](casted)
+	}
+}
