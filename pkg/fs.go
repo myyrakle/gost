@@ -59,3 +59,15 @@ func RemoveFile(path String) Result[any] {
 		return Ok[any](nil)
 	}
 }
+
+// Rename a file or directory to a new name, replacing the original file if to already exists.
+// This will not work if the new name is on a different mount point.
+func Rename(from String, to String) Result[any] {
+	err := os.Rename(string(from), string(to))
+
+	if err != nil {
+		return Err[any](err)
+	} else {
+		return Ok[any](nil)
+	}
+}
