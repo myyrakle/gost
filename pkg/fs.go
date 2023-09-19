@@ -1,6 +1,9 @@
 package gost
 
-import "os"
+import (
+	"os"
+	"path/filepath"
+)
 
 // Creates a new, empty directory at the provided path
 func CreateDir(path String) Result[any] {
@@ -122,7 +125,8 @@ func (self FileType) IsSymlink() bool {
 }
 
 type DirEntry struct {
-	Name     String
+	FileName String
+	Path     String
 	FileType FileType
 }
 
@@ -146,9 +150,12 @@ func ReadDir(path String) Result[Vec[DirEntry]] {
 				fileType.typeInfo = "symlink"
 			}
 
+			entryPath := filepath.Join(string(path), entry.Name())
+
 			vec.Push(DirEntry{
-				Name:     String(entry.Name()),
+				FileName: String(entry.Name()),
 				FileType: fileType,
+				Path:     String(entryPath),
 			})
 		}
 
