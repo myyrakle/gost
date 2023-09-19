@@ -174,3 +174,30 @@ func Copy(from String, to String) Result[any] {
 		return Ok[any](nil)
 	}
 }
+
+// Read the entire contents of a file into a string.
+func ReadToString(path String) Result[String] {
+	file, err := os.Open(string(path))
+
+	if err != nil {
+		return Err[String](err)
+	}
+
+	defer file.Close()
+
+	stat, err := file.Stat()
+
+	if err != nil {
+		return Err[String](err)
+	}
+
+	data := make([]byte, stat.Size())
+
+	_, err = file.Read(data)
+
+	if err != nil {
+		return Err[String](err)
+	} else {
+		return Ok[String](String(string(data)))
+	}
+}
