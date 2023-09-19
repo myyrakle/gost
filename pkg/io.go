@@ -76,3 +76,13 @@ type Stdin struct {
 func (self *Stdin) Lock() *sync.Mutex {
 	return &self.lock
 }
+
+// Locks this handle and reads a line of input, appending it to the specified buffer.
+func (self *Stdin) ReadLine(buffer *String) {
+	self.lock.Lock()
+	defer self.lock.Unlock()
+
+	var line string
+	fmt.Scanln(&line)
+	*buffer = String(line)
+}
