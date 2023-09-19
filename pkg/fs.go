@@ -13,6 +13,17 @@ func CreateDir(path String) Result[any] {
 	}
 }
 
+// Removes an empty directory.
+func RemoveDir(path String) Result[any] {
+	err := os.Remove(string(path))
+
+	if err != nil {
+		return Err[any](err)
+	} else {
+		return Ok[any](nil)
+	}
+}
+
 // Write a slice as the entire contents of a file.
 func Write(path String, data []Byte) Result[any] {
 	file, err := os.Create(string(path))
