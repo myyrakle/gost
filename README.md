@@ -1,6 +1,8 @@
 # gost
 
-![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.3.0-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.4.0-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
+![](./etc/gorris.jpg)
 
 Experience the true taste of Rust in Go
 
@@ -20,7 +22,7 @@ package main
 import (
 	"math"
 
-	gost "github.com/myyrakle/gost/pkg"
+	gost "github.com/myyrakle/gost"
 )
 
 func CheckedAdd(a, b gost.Int) gost.Option[gost.Int] {
