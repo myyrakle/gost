@@ -162,3 +162,15 @@ func ReadDir(path String) Result[Vec[DirEntry]] {
 		return Ok[Vec[DirEntry]](vec)
 	}
 }
+
+// Copies the contents of one file to another. This function will also copy the permission bits of the original file to the destination file.
+// This function will overwrite the contents of to.
+func Copy(from String, to String) Result[any] {
+	err := os.Link(string(from), string(to))
+
+	if err != nil {
+		return Err[any](err)
+	} else {
+		return Ok[any](nil)
+	}
+}
