@@ -2,6 +2,7 @@ package gost
 
 import (
 	"fmt"
+	"sync"
 	"unicode/utf8"
 )
 
@@ -65,4 +66,13 @@ func Format(format String, params ...any) String {
 	}
 
 	return String(buffer)
+}
+
+type Stdin struct {
+	lock sync.Mutex
+}
+
+// Locks this handle to the standard input stream, returning a readable guard.
+func (self *Stdin) Lock() *sync.Mutex {
+	return &self.lock
 }
