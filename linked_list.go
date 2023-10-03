@@ -31,6 +31,14 @@ func (list LinkedList[T]) IsEmpty() Bool {
 	return list.len == 0
 }
 
+// Removes all elements from the LinkedList.
+// This operation should compute in O(1) time. +GC
+func (list *LinkedList[T]) Clear() {
+	list.head = nil
+	list.tail = nil
+	list.len = 0
+}
+
 // Appends an element to the back of a list.
 // This operation should compute in O(1) time.
 func (list *LinkedList[T]) PushBack(value T) {
