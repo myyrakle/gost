@@ -79,6 +79,30 @@ func (list *LinkedList[T]) Back() Option[*T] {
 	return Some[*T](&list.tail.value)
 }
 
+// Adds an element first in the list.
+// This operation should compute in O(1) time.
+func (list *LinkedList[T]) PushFront(value T) {
+	newNode := LinkedListNode[T]{
+		value: value,
+		next:  nil,
+		prev:  nil,
+	}
+
+	newNode.next = list.head
+
+	if list.head != nil {
+		list.head.prev = &newNode
+	}
+
+	list.head = &newNode
+
+	if list.tail == nil {
+		list.tail = &newNode
+	}
+
+	list.len++
+}
+
 // into_iter
 func (list *LinkedList[T]) IntoIter() Iterator[T] {
 	return &LinkedListIter[T]{
