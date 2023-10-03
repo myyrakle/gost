@@ -98,3 +98,24 @@ func (self LinkedListIter[T]) Map(f func(T) T) Iterator[T] {
 
 	return newList.IntoIter()
 }
+
+// filter
+func (self LinkedListIter[T]) Filter(f func(T) bool) Iterator[T] {
+	currentIter := self
+
+	newList := LinkedListNew[T]()
+
+	for {
+		value := currentIter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if f(value.Unwrap()) {
+			newList.PushBack(value.Unwrap())
+		}
+	}
+
+	return newList.IntoIter()
+}
