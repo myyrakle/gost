@@ -149,6 +149,28 @@ func (list *LinkedList[T]) Front() Option[*T] {
 	return Some[*T](&list.head.value)
 }
 
+// Moves all elements from other to the end of the list.
+// This reuses all the nodes from other and moves them into self. After this operation, other becomes empty.
+// This operation should compute in O(1) time and O(1) memory.
+func (list *LinkedList[T]) Append(other *LinkedList[T]) {
+	if other.head == nil {
+		return
+	}
+
+	if list.head == nil {
+		list.head = other.head
+		list.tail = other.tail
+		list.len = other.len
+	} else {
+		list.tail.next = other.head
+		other.head.prev = list.tail
+		list.tail = other.tail
+		list.len += other.len
+	}
+
+	other.Clear()
+}
+
 // into_iter
 func (list *LinkedList[T]) IntoIter() Iterator[T] {
 	return &LinkedListIter[T]{
