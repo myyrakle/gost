@@ -119,3 +119,22 @@ func (self LinkedListIter[T]) Filter(f func(T) bool) Iterator[T] {
 
 	return newList.IntoIter()
 }
+
+// fold
+func (self LinkedListIter[T]) Fold(init T, f func(T, T) T) T {
+	currentIter := self
+
+	result := init
+
+	for {
+		value := currentIter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		result = f(result, value.Unwrap())
+	}
+
+	return result
+}
