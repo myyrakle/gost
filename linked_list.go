@@ -56,3 +56,9 @@ func (list *LinkedList[T]) PopBack() Option[T] {
 
 	return Some[T](value)
 }
+
+
+
+type LinkedListIter[T any] struct {
+	pointer LinkedListNode[T]
+}

@@ -87,7 +87,6 @@ func (self *Vec[T]) Insert(index Int, value T) {
 	self.data[index] = value
 }
 
-// Retains only the elements specified by the predicate.
 func (self *Vec[T]) Retain(predicate func(T) Bool) {
 	newData := make([]T, 0, len(self.data))
 	for _, value := range self.data {
