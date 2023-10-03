@@ -67,3 +67,15 @@ func (list *LinkedList[T]) IntoIter() LinkedListIter[T] {
 type LinkedListIter[T any] struct {
 	pointer *LinkedListNode[T]
 }
+
+// next
+func (self *LinkedListIter[T]) Next() Option[T] {
+	if self.pointer == nil {
+		return None[T]()
+	}
+
+	value := self.pointer.value
+	self.pointer = self.pointer.next
+
+	return Some[T](value)
+}
