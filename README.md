@@ -1,6 +1,6 @@
 # gost
 
-![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.4.0-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.5.0-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ![](./etc/gorris.jpg)
 
@@ -76,5 +76,16 @@ func main() {
 	hashMap.Insert(gost.String("baz"), gost.Int(3))
 
 	gost.Println("hashMap: {}", hashMap)
+
+	linkedList := gost.LinkedListNew[gost.Int]()
+	linkedList.PushBack(gost.Int(1))
+	linkedList.PushFront(gost.Int(2))
+	linkedList.PushBack(gost.Int(3))
+	linkedList2 := gost.LinkedListNew[gost.Int]()
+	linkedList2.PushBack(gost.Int(4))
+	linkedList2.PushFront(gost.Int(5))
+	linkedList.Append(&linkedList2)
+
+	gost.Println("linkedList: {}", linkedList)
 }
 ```
