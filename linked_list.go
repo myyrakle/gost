@@ -69,6 +69,16 @@ func (list *LinkedList[T]) PopBack() Option[T] {
 	return Some[T](value)
 }
 
+// Provides a reference to the back element, or None if the list is empty.
+// This operation should compute in O(1) time.
+func (list *LinkedList[T]) Back() Option[*T] {
+	if list.tail == nil {
+		return None[*T]()
+	}
+
+	return Some[*T](&list.tail.value)
+}
+
 // into_iter
 func (list *LinkedList[T]) IntoIter() Iterator[T] {
 	return &LinkedListIter[T]{
