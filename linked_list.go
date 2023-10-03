@@ -57,8 +57,13 @@ func (list *LinkedList[T]) PopBack() Option[T] {
 	return Some[T](value)
 }
 
-
+// into_iter
+func (list *LinkedList[T]) IntoIter() LinkedListIter[T] {
+	return LinkedListIter[T]{
+		pointer: list.head,
+	}
+}
 
 type LinkedListIter[T any] struct {
-	pointer LinkedListNode[T]
+	pointer *LinkedListNode[T]
 }
