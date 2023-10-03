@@ -138,3 +138,22 @@ func (self LinkedListIter[T]) Fold(init T, f func(T, T) T) T {
 
 	return result
 }
+
+// rev
+func (self LinkedListIter[T]) Rev() Iterator[T] {
+	currentIter := self
+
+	newList := LinkedListNew[T]()
+
+	for {
+		value := currentIter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newList.PushBack(value.Unwrap())
+	}
+
+	return newList.IntoIter()
+}
