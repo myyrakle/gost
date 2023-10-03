@@ -139,6 +139,16 @@ func (list *LinkedList[T]) PopFront() Option[T] {
 	return Some[T](value)
 }
 
+// Provides a reference to the front element, or None if the list is empty.
+// This operation should compute in O(1) time.
+func (list *LinkedList[T]) Front() Option[*T] {
+	if list.head == nil {
+		return None[*T]()
+	}
+
+	return Some[*T](&list.head.value)
+}
+
 // into_iter
 func (list *LinkedList[T]) IntoIter() Iterator[T] {
 	return &LinkedListIter[T]{
