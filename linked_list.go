@@ -1,8 +1,11 @@
 package gost
 
+import "fmt"
+
 type LinkedList[T any] struct {
 	head *LinkedListNode[T]
 	tail *LinkedListNode[T]
+	len  Int
 }
 
 type LinkedListNode[T any] struct {
@@ -14,6 +17,11 @@ type LinkedListNode[T any] struct {
 // Creates an empty LinkedList.
 func LinkedListNew[T any]() LinkedList[T] {
 	return LinkedList[T]{}
+}
+
+// len
+func (list LinkedList[T]) Len() Int {
+	return list.len
 }
 
 // Appends an element to the back of a list.
@@ -36,6 +44,8 @@ func (list *LinkedList[T]) PushBack(value T) {
 	if list.head == nil {
 		list.head = &newNode
 	}
+
+	list.len++
 }
 
 // Removes the last element from a list and returns it, or None if it is empty.
@@ -54,12 +64,14 @@ func (list *LinkedList[T]) PopBack() Option[T] {
 		list.head = nil
 	}
 
+	list.len--
+
 	return Some[T](value)
 }
 
 // into_iter
-func (list *LinkedList[T]) IntoIter() LinkedListIter[T] {
-	return LinkedListIter[T]{
+func (list *LinkedList[T]) IntoIter() Iterator[T] {
+	return &LinkedListIter[T]{
 		pointer: list.head,
 	}
 }
@@ -100,7 +112,7 @@ func (self LinkedListIter[T]) Map(f func(T) T) Iterator[T] {
 }
 
 // filter
-func (self LinkedListIter[T]) Filter(f func(T) bool) Iterator[T] {
+func (self LinkedListIter[T]) Filter(f func(T) Bool) Iterator[T] {
 	currentIter := self
 
 	newList := LinkedListNew[T]()
@@ -167,4 +179,40 @@ func (self LinkedListIter[T]) CollectToVec() Vec[T] {
 		}
 		vec.Push(value.Unwrap())
 	}
+}
+
+// impl Display for Vec
+func (self LinkedList[T]) Display() String {
+	buffer := String("")
+	buffer += "LinkedList["
+
+	iter := self.IntoIter()
+	count := 0
+	for {
+		wrapped := iter.Next()
+
+		if wrapped.IsNone() {
+			break
+		}
+		e := wrapped.Unwrap()
+
+		display := castToDisplay(e)
+		if display.IsSome() {
+			buffer += display.Unwrap().Display()
+		} else {
+			typeName := getTypeName(e)
+
+			panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
+		}
+
+		if count < int(self.Len())-1 {
+			buffer += ", "
+		}
+
+		count++
+	}
+
+	buffer += "]"
+
+	return String(buffer)
 }
