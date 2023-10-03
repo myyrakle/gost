@@ -37,3 +37,22 @@ func (list *LinkedList[T]) PushBack(value T) {
 		list.head = &newNode
 	}
 }
+
+// Removes the last element from a list and returns it, or None if it is empty.
+// This operation should compute in O(1) time.
+func (list *LinkedList[T]) PopBack() Option[T] {
+	if list.tail == nil {
+		return None[T]()
+	}
+
+	value := list.tail.value
+	list.tail = list.tail.prev
+
+	if list.tail != nil {
+		list.tail.next = nil
+	} else {
+		list.head = nil
+	}
+
+	return Some[T](value)
+}
