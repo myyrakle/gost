@@ -10,3 +10,8 @@ type LinkedListNode[T any] struct {
 	next  *LinkedListNode[T]
 	prev  *LinkedListNode[T]
 }
+
+// Creates an empty LinkedList.
+func LinkedListNew[T any]() LinkedList[T] {
+	return LinkedList[T]{}
+}
