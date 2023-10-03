@@ -79,3 +79,22 @@ func (self *LinkedListIter[T]) Next() Option[T] {
 
 	return Some[T](value)
 }
+
+// map
+func (self LinkedListIter[T]) Map(f func(T) T) Iterator[T] {
+	currentIter := self
+
+	newList := LinkedListNew[T]()
+
+	for {
+		value := currentIter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newList.PushBack(f(value.Unwrap()))
+	}
+
+	return newList.IntoIter()
+}
