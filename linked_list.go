@@ -157,3 +157,14 @@ func (self LinkedListIter[T]) Rev() Iterator[T] {
 
 	return newList.IntoIter()
 }
+
+func (self LinkedListIter[T]) CollectToVec() Vec[T] {
+	vec := Vec[T]{}
+	for {
+		value := self.Next()
+		if value.IsNone() {
+			return vec
+		}
+		vec.Push(value.Unwrap())
+	}
+}
