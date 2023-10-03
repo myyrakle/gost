@@ -19,9 +19,16 @@ func LinkedListNew[T any]() LinkedList[T] {
 	return LinkedList[T]{}
 }
 
-// len
+// Returns the length of the LinkedList.
+// This operation should compute in O(1) time.
 func (list LinkedList[T]) Len() Int {
 	return list.len
+}
+
+// Returns true if the LinkedList is empty.
+// This operation should compute in O(1) time.
+func (list LinkedList[T]) IsEmpty() Bool {
+	return list.len == 0
 }
 
 // Appends an element to the back of a list.
