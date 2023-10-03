@@ -181,7 +181,7 @@ func (self LinkedListIter[T]) CollectToVec() Vec[T] {
 	}
 }
 
-// impl Display for Vec
+// impl Display for LinkedList
 func (self LinkedList[T]) Display() String {
 	buffer := String("")
 	buffer += "LinkedList["
@@ -215,4 +215,9 @@ func (self LinkedList[T]) Display() String {
 	buffer += "]"
 
 	return String(buffer)
+}
+
+// impl Debug for LinkedList
+func (self LinkedList[T]) Debug() String {
+	return self.Display()
 }
