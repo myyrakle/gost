@@ -13,7 +13,7 @@ type Ord[T any] interface {
 	Cmp(rhs T) Ordering
 }
 
-func (self Int) Cmp(rhs Int) Ordering {
+func (self ISize) Cmp(rhs ISize) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -23,7 +23,7 @@ func (self Int) Cmp(rhs Int) Ordering {
 	}
 }
 
-func (self Int8) Cmp(rhs Int8) Ordering {
+func (self ISize8) Cmp(rhs ISize8) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -33,7 +33,7 @@ func (self Int8) Cmp(rhs Int8) Ordering {
 	}
 }
 
-func (self Int16) Cmp(rhs Int16) Ordering {
+func (self ISize16) Cmp(rhs ISize16) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -43,7 +43,7 @@ func (self Int16) Cmp(rhs Int16) Ordering {
 	}
 }
 
-func (self Int32) Cmp(rhs Int32) Ordering {
+func (self ISize32) Cmp(rhs ISize32) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -53,7 +53,7 @@ func (self Int32) Cmp(rhs Int32) Ordering {
 	}
 }
 
-func (self Int64) Cmp(rhs Int64) Ordering {
+func (self ISize64) Cmp(rhs ISize64) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -63,7 +63,7 @@ func (self Int64) Cmp(rhs Int64) Ordering {
 	}
 }
 
-func (self Uint) Cmp(rhs Uint) Ordering {
+func (self USize) Cmp(rhs USize) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -73,7 +73,7 @@ func (self Uint) Cmp(rhs Uint) Ordering {
 	}
 }
 
-func (self Uint8) Cmp(rhs Uint8) Ordering {
+func (self USize8) Cmp(rhs USize8) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -83,7 +83,7 @@ func (self Uint8) Cmp(rhs Uint8) Ordering {
 	}
 }
 
-func (self Uint16) Cmp(rhs Uint16) Ordering {
+func (self USize16) Cmp(rhs USize16) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -93,7 +93,7 @@ func (self Uint16) Cmp(rhs Uint16) Ordering {
 	}
 }
 
-func (self Uint32) Cmp(rhs Uint32) Ordering {
+func (self USize32) Cmp(rhs USize32) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -103,7 +103,7 @@ func (self Uint32) Cmp(rhs Uint32) Ordering {
 	}
 }
 
-func (self Uint64) Cmp(rhs Uint64) Ordering {
+func (self USize64) Cmp(rhs USize64) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -187,43 +187,43 @@ type Eq[T any] interface {
 	Eq(rhs T) Bool
 }
 
-func (self Int) Eq(rhs Int) Bool {
+func (self ISize) Eq(rhs ISize) Bool {
 	return self == rhs
 }
 
-func (self Int8) Eq(rhs Int8) Bool {
+func (self ISize8) Eq(rhs ISize8) Bool {
 	return self == rhs
 }
 
-func (self Int16) Eq(rhs Int16) Bool {
+func (self ISize16) Eq(rhs ISize16) Bool {
 	return self == rhs
 }
 
-func (self Int32) Eq(rhs Int32) Bool {
+func (self ISize32) Eq(rhs ISize32) Bool {
 	return self == rhs
 }
 
-func (self Int64) Eq(rhs Int64) Bool {
+func (self ISize64) Eq(rhs ISize64) Bool {
 	return self == rhs
 }
 
-func (self Uint) Eq(rhs Uint) Bool {
+func (self USize) Eq(rhs USize) Bool {
 	return self == rhs
 }
 
-func (self Uint8) Eq(rhs Uint8) Bool {
+func (self USize8) Eq(rhs USize8) Bool {
 	return self == rhs
 }
 
-func (self Uint16) Eq(rhs Uint16) Bool {
+func (self USize16) Eq(rhs USize16) Bool {
 	return self == rhs
 }
 
-func (self Uint32) Eq(rhs Uint32) Bool {
+func (self USize32) Eq(rhs USize32) Bool {
 	return self == rhs
 }
 
-func (self Uint64) Eq(rhs Uint64) Bool {
+func (self USize64) Eq(rhs USize64) Bool {
 	return self == rhs
 }
 

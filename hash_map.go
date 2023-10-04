@@ -12,7 +12,7 @@ func HashMapNew[K comparable, V any]() HashMap[K, V] {
 }
 
 // Creates an empty HashMap with at least the specified capacity.
-func HashMapWithCapacity[K comparable, V any](capacity Int) HashMap[K, V] {
+func HashMapWithCapacity[K comparable, V any](capacity ISize) HashMap[K, V] {
 	return HashMap[K, V]{data: make(map[K]V, capacity)}
 }
 
@@ -22,8 +22,8 @@ func (self HashMap[K, V]) AsMap() map[K]V {
 }
 
 // Returns the number of elements in the map.
-func (self HashMap[K, V]) Len() Int {
-	return Int(len(self.data))
+func (self HashMap[K, V]) Len() ISize {
+	return ISize(len(self.data))
 }
 
 // Returns true if the map contains no elements.
@@ -77,11 +77,11 @@ func (self HashMap[K, V]) ContainsKey(key K) Bool {
 
 type HashMapIter[K comparable, V any] struct {
 	vec      Vec[Pair[K, V]]
-	position Int
+	position ISize
 }
 
 // into_iter
-func (self HashMap[K, V]) IntoIter() Iterator[Pair[K, V]] {
+func (self HashMap[K, V]) ISizeoIter() Iterator[Pair[K, V]] {
 	vec := Vec[Pair[K, V]]{}
 	for key, value := range self.data {
 		vec.Push(Pair[K, V]{Key: key, Value: value})
@@ -110,7 +110,7 @@ func (self HashMapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -124,7 +124,7 @@ func (self HashMapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -156,7 +156,7 @@ func (self HashMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
@@ -169,7 +169,7 @@ func (self HashMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
 
 type HashMapKeys[K any] struct {
 	vec      Vec[K]
-	position Int
+	position ISize
 }
 
 // An iterator visiting all keys in arbitrary order. The iterator element type is K.
@@ -202,7 +202,7 @@ func (self HashMapKeys[K]) Map(f func(K) K) Iterator[K] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -216,7 +216,7 @@ func (self HashMapKeys[K]) Filter(f func(K) Bool) Iterator[K] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -248,7 +248,7 @@ func (self HashMapKeys[K]) Rev() Iterator[K] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
@@ -261,7 +261,7 @@ func (self HashMapKeys[K]) CollectToVec() Vec[K] {
 
 type HashMapValues[V any] struct {
 	vec      Vec[V]
-	position Int
+	position ISize
 }
 
 // An iterator visiting all values in arbitrary order. The iterator element type is V.
@@ -294,7 +294,7 @@ func (self HashMapValues[V]) Map(f func(V) V) Iterator[V] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -308,7 +308,7 @@ func (self HashMapValues[V]) Filter(f func(V) Bool) Iterator[V] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -340,7 +340,7 @@ func (self HashMapValues[V]) Rev() Iterator[V] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.IntoIter()
+			return newVec.ISizeoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
