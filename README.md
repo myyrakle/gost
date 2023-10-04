@@ -26,7 +26,7 @@ import (
 )
 
 func CheckedAdd(a, b gost.ISize) gost.Option[gost.ISize] {
-	max := gost.ISize(math.MaxISize64)
+	max := gost.ISize(math.MaxInt)
 	if (b > 0 && a > max-b) || (b < 0 && a < max-b) {
 		return gost.None[gost.ISize]()
 	}
@@ -45,7 +45,7 @@ func main() {
 		gost.Println("result: overflow")
 	}
 
-	a = gost.ISize(math.MaxISize64)
+	a = gost.ISize(math.MaxInt)
 	b = gost.ISize(1)
 	result = CheckedAdd(a, b)
 
