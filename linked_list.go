@@ -172,7 +172,7 @@ func (list *LinkedList[T]) Append(other *LinkedList[T]) {
 }
 
 // into_iter
-func (list *LinkedList[T]) ISizeoIter() Iterator[T] {
+func (list *LinkedList[T]) IntoIter() Iterator[T] {
 	return &LinkedListIter[T]{
 		pointer: list.head,
 	}
@@ -210,7 +210,7 @@ func (self LinkedListIter[T]) Map(f func(T) T) Iterator[T] {
 		newList.PushBack(f(value.Unwrap()))
 	}
 
-	return newList.ISizeoIter()
+	return newList.IntoIter()
 }
 
 // filter
@@ -231,7 +231,7 @@ func (self LinkedListIter[T]) Filter(f func(T) Bool) Iterator[T] {
 		}
 	}
 
-	return newList.ISizeoIter()
+	return newList.IntoIter()
 }
 
 // fold
@@ -269,7 +269,7 @@ func (self LinkedListIter[T]) Rev() Iterator[T] {
 		newList.PushBack(value.Unwrap())
 	}
 
-	return newList.ISizeoIter()
+	return newList.IntoIter()
 }
 
 func (self LinkedListIter[T]) CollectToVec() Vec[T] {
@@ -283,12 +283,23 @@ func (self LinkedListIter[T]) CollectToVec() Vec[T] {
 	}
 }
 
+func (self LinkedListIter[T]) CollectToLinkedList() LinkedList[T] {
+	list := LinkedListNew[T]()
+	for {
+		value := self.Next()
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
+
 // impl Display for LinkedList
 func (self LinkedList[T]) Display() String {
 	buffer := String("")
 	buffer += "LinkedList["
 
-	iter := self.ISizeoIter()
+	iter := self.IntoIter()
 	count := 0
 	for {
 		wrapped := iter.Next()

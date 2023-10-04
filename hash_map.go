@@ -81,7 +81,7 @@ type HashMapIter[K comparable, V any] struct {
 }
 
 // into_iter
-func (self HashMap[K, V]) ISizeoIter() Iterator[Pair[K, V]] {
+func (self HashMap[K, V]) IntoIter() Iterator[Pair[K, V]] {
 	vec := Vec[Pair[K, V]]{}
 	for key, value := range self.data {
 		vec.Push(Pair[K, V]{Key: key, Value: value})
@@ -110,7 +110,7 @@ func (self HashMapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -124,7 +124,7 @@ func (self HashMapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -156,7 +156,7 @@ func (self HashMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
@@ -165,6 +165,20 @@ func (self HashMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 
 func (self HashMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
 	return self.vec
+}
+
+// Collect to LinkedList
+func (self HashMapIter[K, V]) CollectToLinkedList() LinkedList[Pair[K, V]] {
+	list := LinkedListNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
 }
 
 type HashMapKeys[K any] struct {
@@ -202,7 +216,7 @@ func (self HashMapKeys[K]) Map(f func(K) K) Iterator[K] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -216,7 +230,7 @@ func (self HashMapKeys[K]) Filter(f func(K) Bool) Iterator[K] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -248,7 +262,7 @@ func (self HashMapKeys[K]) Rev() Iterator[K] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
@@ -257,6 +271,20 @@ func (self HashMapKeys[K]) Rev() Iterator[K] {
 
 func (self HashMapKeys[K]) CollectToVec() Vec[K] {
 	return self.vec
+}
+
+// Collect to LinkedList
+func (self HashMapKeys[K]) CollectToLinkedList() LinkedList[K] {
+	list := LinkedListNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
 }
 
 type HashMapValues[V any] struct {
@@ -294,7 +322,7 @@ func (self HashMapValues[V]) Map(f func(V) V) Iterator[V] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -308,7 +336,7 @@ func (self HashMapValues[V]) Filter(f func(V) Bool) Iterator[V] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -340,7 +368,7 @@ func (self HashMapValues[V]) Rev() Iterator[V] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
@@ -349,6 +377,20 @@ func (self HashMapValues[V]) Rev() Iterator[V] {
 
 func (self HashMapValues[V]) CollectToVec() Vec[V] {
 	return self.vec
+}
+
+// Collect to LinkedList
+func (self HashMapValues[V]) CollectToLinkedList() LinkedList[V] {
+	list := LinkedListNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
 }
 
 // impl Display for HashMap

@@ -63,11 +63,11 @@ func main() {
 	vector.Sort()
 	gost.Println("sorted Vec: {}", vector)
 
-	newVec := vector.ISizeoIter().Map(func(x gost.ISize) gost.ISize { return x * 2 }).CollectToVec()
+	newVec := vector.IntoIter().Map(func(x gost.ISize) gost.ISize { return x * 2 }).CollectToVec()
 	gost.Println("mapped Vec: {}", newVec)
 
 	newVec.Push(gost.ISize(7))
-	foo := newVec.ISizeoIter().Fold(gost.ISize(0), func(a, b gost.ISize) gost.ISize { return a + b })
+	foo := newVec.IntoIter().Fold(gost.ISize(0), func(a, b gost.ISize) gost.ISize { return a + b })
 	gost.Println("fold value: {}", foo)
 
 	hashMap := gost.HashMapNew[gost.String, gost.ISize]()

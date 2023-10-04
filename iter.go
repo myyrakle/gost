@@ -7,8 +7,9 @@ type Iterator[T any] interface {
 	Fold(init T, f func(T, T) T) T
 	Rev() Iterator[T]
 	CollectToVec() Vec[T]
+	CollectToLinkedList() LinkedList[T]
 }
 
-type ISizeoIterator[T any] interface {
-	ISizeoIter() Iterator[T]
+type IntoIterator[T any] interface {
+	IntoIter() Iterator[T]
 }

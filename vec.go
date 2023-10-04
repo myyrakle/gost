@@ -303,7 +303,7 @@ type VecIter[T any] struct {
 }
 
 // into_iter
-func (self Vec[T]) ISizeoIter() Iterator[T] {
+func (self Vec[T]) IntoIter() Iterator[T] {
 	return &VecIter[T]{vec: self, position: 0}
 }
 
@@ -327,7 +327,7 @@ func (self VecIter[T]) Map(f func(T) T) Iterator[T] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
 	}
@@ -341,7 +341,7 @@ func (self VecIter[T]) Filter(f func(T) Bool) Iterator[T] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 
 		unwraped := value.Unwrap()
@@ -373,7 +373,7 @@ func (self VecIter[T]) Rev() Iterator[T] {
 		value := self.Next()
 
 		if value.IsNone() {
-			return newVec.ISizeoIter()
+			return newVec.IntoIter()
 		}
 		newVec.AsSlice()[i] = value.Unwrap()
 		i--
@@ -388,6 +388,17 @@ func (self VecIter[T]) CollectToVec() Vec[T] {
 			return vec
 		}
 		vec.Push(value.Unwrap())
+	}
+}
+
+func (self VecIter[T]) CollectToLinkedList() LinkedList[T] {
+	list := LinkedListNew[T]()
+	for {
+		value := self.Next()
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
 	}
 }
 
