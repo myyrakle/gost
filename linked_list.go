@@ -5,7 +5,7 @@ import "fmt"
 type LinkedList[T any] struct {
 	head *LinkedListNode[T]
 	tail *LinkedListNode[T]
-	len  Int
+	len  ISize
 }
 
 type LinkedListNode[T any] struct {
@@ -21,7 +21,7 @@ func LinkedListNew[T any]() LinkedList[T] {
 
 // Returns the length of the LinkedList.
 // This operation should compute in O(1) time.
-func (list LinkedList[T]) Len() Int {
+func (list LinkedList[T]) Len() ISize {
 	return list.len
 }
 
@@ -172,7 +172,7 @@ func (list *LinkedList[T]) Append(other *LinkedList[T]) {
 }
 
 // into_iter
-func (list *LinkedList[T]) IntoIter() Iterator[T] {
+func (list *LinkedList[T]) ISizeoIter() Iterator[T] {
 	return &LinkedListIter[T]{
 		pointer: list.head,
 	}
@@ -210,7 +210,7 @@ func (self LinkedListIter[T]) Map(f func(T) T) Iterator[T] {
 		newList.PushBack(f(value.Unwrap()))
 	}
 
-	return newList.IntoIter()
+	return newList.ISizeoIter()
 }
 
 // filter
@@ -231,7 +231,7 @@ func (self LinkedListIter[T]) Filter(f func(T) Bool) Iterator[T] {
 		}
 	}
 
-	return newList.IntoIter()
+	return newList.ISizeoIter()
 }
 
 // fold
@@ -269,7 +269,7 @@ func (self LinkedListIter[T]) Rev() Iterator[T] {
 		newList.PushBack(value.Unwrap())
 	}
 
-	return newList.IntoIter()
+	return newList.ISizeoIter()
 }
 
 func (self LinkedListIter[T]) CollectToVec() Vec[T] {
@@ -288,7 +288,7 @@ func (self LinkedList[T]) Display() String {
 	buffer := String("")
 	buffer += "LinkedList["
 
-	iter := self.IntoIter()
+	iter := self.ISizeoIter()
 	count := 0
 	for {
 		wrapped := iter.Next()

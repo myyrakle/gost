@@ -137,7 +137,7 @@ func ReadDir(path String) Result[Vec[DirEntry]] {
 	if err != nil {
 		return Err[Vec[DirEntry]](err)
 	} else {
-		vec := VecWithLen[DirEntry](Int(len(entries)))
+		vec := VecWithLen[DirEntry](ISize(len(entries)))
 
 		for _, entry := range entries {
 			fileType := FileType{}

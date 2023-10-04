@@ -25,18 +25,18 @@ import (
 	gost "github.com/myyrakle/gost"
 )
 
-func CheckedAdd(a, b gost.Int) gost.Option[gost.Int] {
-	max := gost.Int(math.MaxInt64)
+func CheckedAdd(a, b gost.ISize) gost.Option[gost.ISize] {
+	max := gost.ISize(math.MaxISize64)
 	if (b > 0 && a > max-b) || (b < 0 && a < max-b) {
-		return gost.None[gost.Int]()
+		return gost.None[gost.ISize]()
 	}
 
 	return gost.Some(a + b)
 }
 
 func main() {
-	a := gost.Int(1)
-	b := gost.Int(2)
+	a := gost.ISize(1)
+	b := gost.ISize(2)
 	result := CheckedAdd(a, b)
 
 	if result.IsSome() {
@@ -45,8 +45,8 @@ func main() {
 		gost.Println("result: overflow")
 	}
 
-	a = gost.Int(math.MaxInt64)
-	b = gost.Int(1)
+	a = gost.ISize(math.MaxISize64)
+	b = gost.ISize(1)
 	result = CheckedAdd(a, b)
 
 	if result.IsSome() {
@@ -55,35 +55,35 @@ func main() {
 		gost.Println("result: overflow")
 	}
 
-	vector := gost.Vec[gost.Int]{}
-	vector.Push(gost.Int(3))
-	vector.Push(gost.Int(1))
-	vector.Push(gost.Int(2))
-	vector.Push(gost.Int(4))
+	vector := gost.Vec[gost.ISize]{}
+	vector.Push(gost.ISize(3))
+	vector.Push(gost.ISize(1))
+	vector.Push(gost.ISize(2))
+	vector.Push(gost.ISize(4))
 	vector.Sort()
 	gost.Println("sorted Vec: {}", vector)
 
-	newVec := vector.IntoIter().Map(func(x gost.Int) gost.Int { return x * 2 }).CollectToVec()
+	newVec := vector.ISizeoIter().Map(func(x gost.ISize) gost.ISize { return x * 2 }).CollectToVec()
 	gost.Println("mapped Vec: {}", newVec)
 
-	newVec.Push(gost.Int(7))
-	foo := newVec.IntoIter().Fold(gost.Int(0), func(a, b gost.Int) gost.Int { return a + b })
+	newVec.Push(gost.ISize(7))
+	foo := newVec.ISizeoIter().Fold(gost.ISize(0), func(a, b gost.ISize) gost.ISize { return a + b })
 	gost.Println("fold value: {}", foo)
 
-	hashMap := gost.HashMapNew[gost.String, gost.Int]()
-	hashMap.Insert(gost.String("foo"), gost.Int(1))
-	hashMap.Insert(gost.String("bar"), gost.Int(2))
-	hashMap.Insert(gost.String("baz"), gost.Int(3))
+	hashMap := gost.HashMapNew[gost.String, gost.ISize]()
+	hashMap.Insert(gost.String("foo"), gost.ISize(1))
+	hashMap.Insert(gost.String("bar"), gost.ISize(2))
+	hashMap.Insert(gost.String("baz"), gost.ISize(3))
 
 	gost.Println("hashMap: {}", hashMap)
 
-	linkedList := gost.LinkedListNew[gost.Int]()
-	linkedList.PushBack(gost.Int(1))
-	linkedList.PushFront(gost.Int(2))
-	linkedList.PushBack(gost.Int(3))
-	linkedList2 := gost.LinkedListNew[gost.Int]()
-	linkedList2.PushBack(gost.Int(4))
-	linkedList2.PushFront(gost.Int(5))
+	linkedList := gost.LinkedListNew[gost.ISize]()
+	linkedList.PushBack(gost.ISize(1))
+	linkedList.PushFront(gost.ISize(2))
+	linkedList.PushBack(gost.ISize(3))
+	linkedList2 := gost.LinkedListNew[gost.ISize]()
+	linkedList2.PushBack(gost.ISize(4))
+	linkedList2.PushFront(gost.ISize(5))
 	linkedList.Append(&linkedList2)
 
 	gost.Println("linkedList: {}", linkedList)

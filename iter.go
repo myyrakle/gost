@@ -9,6 +9,6 @@ type Iterator[T any] interface {
 	CollectToVec() Vec[T]
 }
 
-type IntoIterator[T any] interface {
-	IntoIter() Iterator[T]
+type ISizeoIterator[T any] interface {
+	ISizeoIter() Iterator[T]
 }

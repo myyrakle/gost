@@ -4,43 +4,43 @@ type Clone[T any] interface {
 	Clone() T
 }
 
-func (self Int) Clone() Int {
+func (self ISize) Clone() ISize {
 	return self
 }
 
-func (self Int8) Clone() Int8 {
+func (self ISize8) Clone() ISize8 {
 	return self
 }
 
-func (self Int16) Clone() Int16 {
+func (self ISize16) Clone() ISize16 {
 	return self
 }
 
-func (self Int32) Clone() Int32 {
+func (self ISize32) Clone() ISize32 {
 	return self
 }
 
-func (self Int64) Clone() Int64 {
+func (self ISize64) Clone() ISize64 {
 	return self
 }
 
-func (self Uint) Clone() Uint {
+func (self USize) Clone() USize {
 	return self
 }
 
-func (self Uint8) Clone() Uint8 {
+func (self USize8) Clone() USize8 {
 	return self
 }
 
-func (self Uint16) Clone() Uint16 {
+func (self USize16) Clone() USize16 {
 	return self
 }
 
-func (self Uint32) Clone() Uint32 {
+func (self USize32) Clone() USize32 {
 	return self
 }
 
-func (self Uint64) Clone() Uint64 {
+func (self USize64) Clone() USize64 {
 	return self
 }
 

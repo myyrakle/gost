@@ -9,43 +9,43 @@ type ToString[T any] interface {
 	ToString() String
 }
 
-func (self Int) ToString() String {
+func (self ISize) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Int8) ToString() String {
+func (self ISize8) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Int16) ToString() String {
+func (self ISize16) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Int32) ToString() String {
+func (self ISize32) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Int64) ToString() String {
+func (self ISize64) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Uint) ToString() String {
+func (self USize) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Uint8) ToString() String {
+func (self USize8) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Uint16) ToString() String {
+func (self USize16) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Uint32) ToString() String {
+func (self USize32) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Uint64) ToString() String {
+func (self USize64) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
