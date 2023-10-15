@@ -173,3 +173,69 @@ func (self Complex64) Sub(rhs Complex64) Complex64 {
 func (self Complex128) Sub(rhs Complex128) Complex128 {
 	return self - rhs
 }
+
+// Mul implements
+func (self ISize) Mul(rhs ISize) ISize {
+	return self * rhs
+}
+
+func (self I8) Mul(rhs I8) I8 {
+
+	return self * rhs
+}
+
+func (self I16) Mul(rhs I16) I16 {
+	return self * rhs
+}
+
+func (self I32) Mul(rhs I32) I32 {
+	return self * rhs
+}
+
+func (self I64) Mul(rhs I64) I64 {
+	return self * rhs
+}
+
+func (self USize) Mul(rhs USize) USize {
+	return self * rhs
+}
+
+func (self U8) Mul(rhs U8) U8 {
+	return self * rhs
+}
+
+func (self U16) Mul(rhs U16) U16 {
+	return self * rhs
+}
+
+func (self U32) Mul(rhs U32) U32 {
+	return self * rhs
+}
+
+func (self U64) Mul(rhs U64) U64 {
+	return self * rhs
+}
+
+func (self F32) Mul(rhs F32) F32 {
+	return self * rhs
+}
+
+func (self F64) Mul(rhs F64) F64 {
+	return self * rhs
+}
+
+func (self Byte) Mul(rhs Byte) Byte {
+	return self * rhs
+}
+
+func (self Char) Mul(rhs Char) Char {
+	return self * rhs
+}
+
+func (self Complex64) Mul(rhs Complex64) Complex64 {
+	return self * rhs
+}
+
+func (self Complex128) Mul(rhs Complex128) Complex128 {
+	return self * rhs
+}
