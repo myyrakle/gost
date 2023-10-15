@@ -13,19 +13,19 @@ func (self ISize) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self ISize8) ToString() String {
+func (self I8) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self ISize16) ToString() String {
+func (self I16) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self ISize32) ToString() String {
+func (self I32) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self ISize64) ToString() String {
+func (self I64) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
@@ -33,27 +33,27 @@ func (self USize) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self USize8) ToString() String {
+func (self U8) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self USize16) ToString() String {
+func (self U16) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self USize32) ToString() String {
+func (self U32) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self USize64) ToString() String {
+func (self U64) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Float32) ToString() String {
+func (self F32) ToString() String {
 	return String(strconv.FormatFloat(float64(self), 'f', -1, 32))
 }
 
-func (self Float64) ToString() String {
+func (self F64) ToString() String {
 	return String(strconv.FormatFloat(float64(self), 'f', -1, 64))
 }
 
@@ -61,7 +61,7 @@ func (self Byte) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
-func (self Rune) ToString() String {
+func (self Char) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
