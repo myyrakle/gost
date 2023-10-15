@@ -239,3 +239,68 @@ func (self Complex64) Mul(rhs Complex64) Complex64 {
 func (self Complex128) Mul(rhs Complex128) Complex128 {
 	return self * rhs
 }
+
+// Div implements
+func (self ISize) Div(rhs ISize) ISize {
+	return self / rhs
+}
+
+func (self I8) Div(rhs I8) I8 {
+	return self / rhs
+}
+
+func (self I16) Div(rhs I16) I16 {
+	return self / rhs
+}
+
+func (self I32) Div(rhs I32) I32 {
+	return self / rhs
+}
+
+func (self I64) Div(rhs I64) I64 {
+	return self / rhs
+}
+
+func (self USize) Div(rhs USize) USize {
+	return self / rhs
+}
+
+func (self U8) Div(rhs U8) U8 {
+	return self / rhs
+}
+
+func (self U16) Div(rhs U16) U16 {
+	return self / rhs
+}
+
+func (self U32) Div(rhs U32) U32 {
+	return self / rhs
+}
+
+func (self U64) Div(rhs U64) U64 {
+	return self / rhs
+}
+
+func (self F32) Div(rhs F32) F32 {
+	return self / rhs
+}
+
+func (self F64) Div(rhs F64) F64 {
+	return self / rhs
+}
+
+func (self Byte) Div(rhs Byte) Byte {
+	return self / rhs
+}
+
+func (self Char) Div(rhs Char) Char {
+	return self / rhs
+}
+
+func (self Complex64) Div(rhs Complex64) Complex64 {
+	return self / rhs
+}
+
+func (self Complex128) Div(rhs Complex128) Complex128 {
+	return self / rhs
+}
