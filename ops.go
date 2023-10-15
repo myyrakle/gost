@@ -502,3 +502,68 @@ func (self *Complex64) MulAssign(rhs Complex64) {
 func (self *Complex128) MulAssign(rhs Complex128) {
 	*self *= rhs
 }
+
+// DivAssign implements
+func (self *ISize) DivAssign(rhs ISize) {
+	*self /= rhs
+}
+
+func (self *I8) DivAssign(rhs I8) {
+	*self /= rhs
+}
+
+func (self *I16) DivAssign(rhs I16) {
+	*self /= rhs
+}
+
+func (self *I32) DivAssign(rhs I32) {
+	*self /= rhs
+}
+
+func (self *I64) DivAssign(rhs I64) {
+	*self /= rhs
+}
+
+func (self *USize) DivAssign(rhs USize) {
+	*self /= rhs
+}
+
+func (self *U8) DivAssign(rhs U8) {
+	*self /= rhs
+}
+
+func (self *U16) DivAssign(rhs U16) {
+	*self /= rhs
+}
+
+func (self *U32) DivAssign(rhs U32) {
+	*self /= rhs
+}
+
+func (self *U64) DivAssign(rhs U64) {
+	*self /= rhs
+}
+
+func (self *F32) DivAssign(rhs F32) {
+	*self /= rhs
+}
+
+func (self *F64) DivAssign(rhs F64) {
+	*self /= rhs
+}
+
+func (self *Byte) DivAssign(rhs Byte) {
+	*self /= rhs
+}
+
+func (self *Char) DivAssign(rhs Char) {
+	*self /= rhs
+}
+
+func (self *Complex64) DivAssign(rhs Complex64) {
+	*self /= rhs
+}
+
+func (self *Complex128) DivAssign(rhs Complex128) {
+	*self /= rhs
+}
