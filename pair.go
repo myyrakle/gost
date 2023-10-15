@@ -50,3 +50,11 @@ func (p Pair[K, V]) Clone() Pair[K, V] {
 		Value: valueClone,
 	}
 }
+
+// impl Eq for Pair
+func (p Pair[K, V]) Eq(other Pair[K, V]) Bool {
+	keyEq := castToEq[K](p.Key).Unwrap().Eq(other.Key)
+	valueEq := castToEq[V](p.Value).Unwrap().Eq(other.Value)
+
+	return keyEq && valueEq
+}
