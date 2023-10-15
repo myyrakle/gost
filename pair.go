@@ -29,3 +29,13 @@ func (p Pair[K, V]) ToString() string {
 
 	return fmt.Sprintf("Pair[%s, %s]", key, value)
 }
+
+// impl Display for Pair
+func (p Pair[K, V]) String() string {
+	return p.ToString()
+}
+
+// impl Debug for Pair
+func (p Pair[K, V]) Debug() string {
+	return p.ToString()
+}
