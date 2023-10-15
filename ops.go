@@ -437,3 +437,68 @@ func (self *Complex64) SubAssign(rhs Complex64) {
 func (self *Complex128) SubAssign(rhs Complex128) {
 	*self -= rhs
 }
+
+// MulAssign implements
+func (self *ISize) MulAssign(rhs ISize) {
+	*self *= rhs
+}
+
+func (self *I8) MulAssign(rhs I8) {
+	*self *= rhs
+}
+
+func (self *I16) MulAssign(rhs I16) {
+	*self *= rhs
+}
+
+func (self *I32) MulAssign(rhs I32) {
+	*self *= rhs
+}
+
+func (self *I64) MulAssign(rhs I64) {
+	*self *= rhs
+}
+
+func (self *USize) MulAssign(rhs USize) {
+	*self *= rhs
+}
+
+func (self *U8) MulAssign(rhs U8) {
+	*self *= rhs
+}
+
+func (self *U16) MulAssign(rhs U16) {
+	*self *= rhs
+}
+
+func (self *U32) MulAssign(rhs U32) {
+	*self *= rhs
+}
+
+func (self *U64) MulAssign(rhs U64) {
+	*self *= rhs
+}
+
+func (self *F32) MulAssign(rhs F32) {
+	*self *= rhs
+}
+
+func (self *F64) MulAssign(rhs F64) {
+	*self *= rhs
+}
+
+func (self *Byte) MulAssign(rhs Byte) {
+	*self *= rhs
+}
+
+func (self *Char) MulAssign(rhs Char) {
+	*self *= rhs
+}
+
+func (self *Complex64) MulAssign(rhs Complex64) {
+	*self *= rhs
+}
+
+func (self *Complex128) MulAssign(rhs Complex128) {
+	*self *= rhs
+}
