@@ -1,12 +1,23 @@
 package gost
 
 import (
+	"reflect"
 	"strconv"
 )
 
 // A trait for converting a value to a String.
 type ToString[T any] interface {
 	ToString() String
+}
+
+func castToToString[T any](value T) Option[ToString[T]] {
+	reflectedValue := reflect.ValueOf(value)
+
+	if casted, ok := reflectedValue.Interface().(ToString[T]); ok {
+		return Some[ToString[T]](casted)
+	} else {
+		return None[ToString[T]]()
+	}
 }
 
 func (self ISize) ToString() String {
