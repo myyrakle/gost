@@ -39,3 +39,14 @@ func (p Pair[K, V]) String() string {
 func (p Pair[K, V]) Debug() string {
 	return p.ToString()
 }
+
+// impl Clone for Pair
+func (p Pair[K, V]) Clone() Pair[K, V] {
+	keyClone := castToClone[K](p.Key).Unwrap().Clone()
+	valueClone := castToClone[V](p.Value).Unwrap().Clone()
+
+	return Pair[K, V]{
+		Key:   keyClone,
+		Value: valueClone,
+	}
+}
