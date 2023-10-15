@@ -8,19 +8,19 @@ func (self ISize) Clone() ISize {
 	return self
 }
 
-func (self ISize8) Clone() ISize8 {
+func (self I8) Clone() I8 {
 	return self
 }
 
-func (self ISize16) Clone() ISize16 {
+func (self I16) Clone() I16 {
 	return self
 }
 
-func (self ISize32) Clone() ISize32 {
+func (self I32) Clone() I32 {
 	return self
 }
 
-func (self ISize64) Clone() ISize64 {
+func (self I64) Clone() I64 {
 	return self
 }
 
@@ -28,27 +28,27 @@ func (self USize) Clone() USize {
 	return self
 }
 
-func (self USize8) Clone() USize8 {
+func (self U8) Clone() U8 {
 	return self
 }
 
-func (self USize16) Clone() USize16 {
+func (self U16) Clone() U16 {
 	return self
 }
 
-func (self USize32) Clone() USize32 {
+func (self U32) Clone() U32 {
 	return self
 }
 
-func (self USize64) Clone() USize64 {
+func (self U64) Clone() U64 {
 	return self
 }
 
-func (self Float32) Clone() Float32 {
+func (self F32) Clone() F32 {
 	return self
 }
 
-func (self Float64) Clone() Float64 {
+func (self F64) Clone() F64 {
 	return self
 }
 
@@ -56,7 +56,7 @@ func (self Byte) Clone() Byte {
 	return self
 }
 
-func (self Rune) Clone() Rune {
+func (self Char) Clone() Char {
 	return self
 }
 

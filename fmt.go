@@ -13,19 +13,19 @@ func (self ISize) Display() String {
 	return self.ToString()
 }
 
-func (self ISize8) Display() String {
+func (self I8) Display() String {
 	return self.ToString()
 }
 
-func (self ISize16) Display() String {
+func (self I16) Display() String {
 	return self.ToString()
 }
 
-func (self ISize32) Display() String {
+func (self I32) Display() String {
 	return self.ToString()
 }
 
-func (self ISize64) Display() String {
+func (self I64) Display() String {
 	return self.ToString()
 }
 
@@ -33,27 +33,27 @@ func (self USize) Display() String {
 	return self.ToString()
 }
 
-func (self USize8) Display() String {
+func (self U8) Display() String {
 	return self.ToString()
 }
 
-func (self USize16) Display() String {
+func (self U16) Display() String {
 	return self.ToString()
 }
 
-func (self USize32) Display() String {
+func (self U32) Display() String {
 	return self.ToString()
 }
 
-func (self USize64) Display() String {
+func (self U64) Display() String {
 	return self.ToString()
 }
 
-func (self Float32) Display() String {
+func (self F32) Display() String {
 	return self.ToString()
 }
 
-func (self Float64) Display() String {
+func (self F64) Display() String {
 	return self.ToString()
 }
 
@@ -61,7 +61,7 @@ func (self Byte) Display() String {
 	return self.ToString()
 }
 
-func (self Rune) Display() String {
+func (self Char) Display() String {
 	return self.ToString()
 }
 
@@ -99,56 +99,56 @@ func (self ISize) Debug() String {
 	return String(fmt.Sprintf("ISize(%s)", self.ToString()))
 }
 
-func (self ISize8) Debug() String {
-	return String(fmt.Sprintf("ISize8(%s)", self.ToString()))
+func (self I8) Debug() String {
+	return String(fmt.Sprintf("I8(%s)", self.ToString()))
 }
 
-func (self ISize16) Debug() String {
-	return String(fmt.Sprintf("ISize16(%s)", self.ToString()))
+func (self I16) Debug() String {
+	return String(fmt.Sprintf("I16(%s)", self.ToString()))
 }
 
-func (self ISize32) Debug() String {
-	return String(fmt.Sprintf("ISize32(%s)", self.ToString()))
+func (self I32) Debug() String {
+	return String(fmt.Sprintf("I32(%s)", self.ToString()))
 }
 
-func (self ISize64) Debug() String {
-	return String(fmt.Sprintf("ISize64(%s)", self.ToString()))
+func (self I64) Debug() String {
+	return String(fmt.Sprintf("I64(%s)", self.ToString()))
 }
 
 func (self USize) Debug() String {
 	return String(fmt.Sprintf("USize(%s)", self.ToString()))
 }
 
-func (self USize8) Debug() String {
-	return String(fmt.Sprintf("USize8(%s)", self.ToString()))
+func (self U8) Debug() String {
+	return String(fmt.Sprintf("U8(%s)", self.ToString()))
 }
 
-func (self USize16) Debug() String {
-	return String(fmt.Sprintf("USize16(%s)", self.ToString()))
+func (self U16) Debug() String {
+	return String(fmt.Sprintf("U16(%s)", self.ToString()))
 }
 
-func (self USize32) Debug() String {
-	return String(fmt.Sprintf("USize32(%s)", self.ToString()))
+func (self U32) Debug() String {
+	return String(fmt.Sprintf("U32(%s)", self.ToString()))
 }
 
-func (self USize64) Debug() String {
-	return String(fmt.Sprintf("USize64(%s)", self.ToString()))
+func (self U64) Debug() String {
+	return String(fmt.Sprintf("U64(%s)", self.ToString()))
 }
 
-func (self Float32) Debug() String {
-	return String(fmt.Sprintf("Float32(%s)", self.ToString()))
+func (self F32) Debug() String {
+	return String(fmt.Sprintf("F32(%s)", self.ToString()))
 }
 
-func (self Float64) Debug() String {
-	return String(fmt.Sprintf("Float64(%s)", self.ToString()))
+func (self F64) Debug() String {
+	return String(fmt.Sprintf("F64(%s)", self.ToString()))
 }
 
 func (self Byte) Debug() String {
 	return String(fmt.Sprintf("Byte(%s)", self.ToString()))
 }
 
-func (self Rune) Debug() String {
-	return String(fmt.Sprintf("Rune(%s)", self.ToString()))
+func (self Char) Debug() String {
+	return String(fmt.Sprintf("Char(%s)", self.ToString()))
 }
 
 func (self String) Debug() String {

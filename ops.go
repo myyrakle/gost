@@ -39,3 +39,8 @@ type MulAssign[T any] interface {
 type DivAssign[T any] interface {
 	DivAssign(rhs T)
 }
+
+// Add implements
+func (self ISize) Add(rhs ISize) ISize {
+	return self + rhs
+}
