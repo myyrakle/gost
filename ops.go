@@ -108,3 +108,68 @@ func (self Complex64) Add(rhs Complex64) Complex64 {
 func (self Complex128) Add(rhs Complex128) Complex128 {
 	return self + rhs
 }
+
+// Sub implements
+func (self ISize) Sub(rhs ISize) ISize {
+	return self - rhs
+}
+
+func (self I8) Sub(rhs I8) I8 {
+	return self - rhs
+}
+
+func (self I16) Sub(rhs I16) I16 {
+	return self - rhs
+}
+
+func (self I32) Sub(rhs I32) I32 {
+	return self - rhs
+}
+
+func (self I64) Sub(rhs I64) I64 {
+	return self - rhs
+}
+
+func (self USize) Sub(rhs USize) USize {
+	return self - rhs
+}
+
+func (self U8) Sub(rhs U8) U8 {
+	return self - rhs
+}
+
+func (self U16) Sub(rhs U16) U16 {
+	return self - rhs
+}
+
+func (self U32) Sub(rhs U32) U32 {
+	return self - rhs
+}
+
+func (self U64) Sub(rhs U64) U64 {
+	return self - rhs
+}
+
+func (self F32) Sub(rhs F32) F32 {
+	return self - rhs
+}
+
+func (self F64) Sub(rhs F64) F64 {
+	return self - rhs
+}
+
+func (self Byte) Sub(rhs Byte) Byte {
+	return self - rhs
+}
+
+func (self Char) Sub(rhs Char) Char {
+	return self - rhs
+}
+
+func (self Complex64) Sub(rhs Complex64) Complex64 {
+	return self - rhs
+}
+
+func (self Complex128) Sub(rhs Complex128) Complex128 {
+	return self - rhs
+}
