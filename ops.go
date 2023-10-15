@@ -180,7 +180,6 @@ func (self ISize) Mul(rhs ISize) ISize {
 }
 
 func (self I8) Mul(rhs I8) I8 {
-
 	return self * rhs
 }
 
@@ -307,81 +306,134 @@ func (self Complex128) Div(rhs Complex128) Complex128 {
 
 // AddAssign implements
 func (self *ISize) AddAssign(rhs ISize) {
-
 	*self += rhs
 }
 
 func (self *I8) AddAssign(rhs I8) {
-
 	*self += rhs
 }
 
 func (self *I16) AddAssign(rhs I16) {
-
 	*self += rhs
 }
 
 func (self *I32) AddAssign(rhs I32) {
-
 	*self += rhs
 }
 
 func (self *I64) AddAssign(rhs I64) {
-
 	*self += rhs
 }
 
 func (self *USize) AddAssign(rhs USize) {
-
 	*self += rhs
 }
 
 func (self *U8) AddAssign(rhs U8) {
-
 	*self += rhs
 }
 
 func (self *U16) AddAssign(rhs U16) {
-
 	*self += rhs
 }
 
 func (self *U32) AddAssign(rhs U32) {
-
 	*self += rhs
 }
 
 func (self *U64) AddAssign(rhs U64) {
-
 	*self += rhs
 }
 
 func (self *F32) AddAssign(rhs F32) {
-
 	*self += rhs
 }
 
 func (self *F64) AddAssign(rhs F64) {
-
 	*self += rhs
 }
 
 func (self *Byte) AddAssign(rhs Byte) {
-
 	*self += rhs
 }
 
 func (self *Char) AddAssign(rhs Char) {
+	*self += rhs
+}
 
+func (self *String) AddAssign(rhs String) {
 	*self += rhs
 }
 
 func (self *Complex64) AddAssign(rhs Complex64) {
-
 	*self += rhs
 }
 
 func (self *Complex128) AddAssign(rhs Complex128) {
-
 	*self += rhs
+}
+
+// SubAssign implements
+func (self *ISize) SubAssign(rhs ISize) {
+	*self -= rhs
+}
+
+func (self *I8) SubAssign(rhs I8) {
+	*self -= rhs
+}
+
+func (self *I16) SubAssign(rhs I16) {
+	*self -= rhs
+}
+
+func (self *I32) SubAssign(rhs I32) {
+	*self -= rhs
+}
+
+func (self *I64) SubAssign(rhs I64) {
+	*self -= rhs
+}
+
+func (self *USize) SubAssign(rhs USize) {
+	*self -= rhs
+}
+
+func (self *U8) SubAssign(rhs U8) {
+	*self -= rhs
+}
+
+func (self *U16) SubAssign(rhs U16) {
+	*self -= rhs
+}
+
+func (self *U32) SubAssign(rhs U32) {
+	*self -= rhs
+}
+
+func (self *U64) SubAssign(rhs U64) {
+	*self -= rhs
+}
+
+func (self *F32) SubAssign(rhs F32) {
+	*self -= rhs
+}
+
+func (self *F64) SubAssign(rhs F64) {
+	*self -= rhs
+}
+
+func (self *Byte) SubAssign(rhs Byte) {
+	*self -= rhs
+}
+
+func (self *Char) SubAssign(rhs Char) {
+	*self -= rhs
+}
+
+func (self *Complex64) SubAssign(rhs Complex64) {
+	*self -= rhs
+}
+
+func (self *Complex128) SubAssign(rhs Complex128) {
+	*self -= rhs
 }
