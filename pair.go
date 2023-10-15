@@ -58,3 +58,15 @@ func (p Pair[K, V]) Eq(other Pair[K, V]) Bool {
 
 	return keyEq && valueEq
 }
+
+// impl Ord for Pair
+func (p Pair[K, V]) Cmp(other Pair[K, V]) Ordering {
+	keyOrd := castToOrd[K](p.Key).Unwrap().Cmp(other.Key)
+
+	if keyOrd == OrderingEqual {
+		valueOrd := castToOrd[V](p.Value).Unwrap().Cmp(other.Value)
+		return valueOrd
+	} else {
+		return keyOrd
+	}
+}
