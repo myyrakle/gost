@@ -1,7 +1,19 @@
 package gost
 
+import "reflect"
+
 type Clone[T any] interface {
 	Clone() T
+}
+
+func castToClone[T any](value T) Option[Clone[T]] {
+	reflectedValue := reflect.ValueOf(value)
+
+	if casted, ok := reflectedValue.Interface().(Clone[T]); ok {
+		return Some[Clone[T]](casted)
+	} else {
+		return None[Clone[T]]()
+	}
 }
 
 func (self ISize) Clone() ISize {
