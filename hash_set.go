@@ -122,3 +122,21 @@ func (self HashSetIter[K]) Map(f func(K) K) Iterator[K] {
 		newVec.Push(f(value.Unwrap()))
 	}
 }
+
+// filter
+func (self HashSetIter[K]) Filter(f func(K) Bool) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		unwraped := value.Unwrap()
+		if f(unwraped) {
+			newVec.Push(unwraped)
+		}
+	}
+}
