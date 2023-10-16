@@ -96,3 +96,15 @@ func (self HashSet[K]) IntoIter() Iterator[K] {
 
 	return &HashSetIter[K]{vec: vec, position: 0}
 }
+
+// next
+func (self *HashSetIter[K]) Next() Option[K] {
+	if self.position >= self.vec.Len() {
+		return None[K]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[K](value)
+}
