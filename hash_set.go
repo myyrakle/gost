@@ -52,3 +52,10 @@ func (self *HashSet[K]) Insert(value K) Bool {
 	result := self.hashMap.Insert(value, struct{}{})
 	return result.IsNone()
 }
+
+// Removes a value from the set. Returns whether the value was present in the set.
+// The value may be any borrowed form of the set’s value type, but Hash and Eq on the borrowed form must match those for the value type.
+func (self *HashSet[K]) Remove(value K) Bool {
+	result := self.hashMap.Remove(value)
+	return result.IsSome()
+}
