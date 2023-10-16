@@ -13,3 +13,13 @@ func HashSetNew[K comparable]() HashSet[K] {
 func HashSetWithCapacity[K comparable](capacity ISize) HashSet[K] {
 	return HashSet[K]{hashMap: HashMapWithCapacity[K, struct{}](capacity)}
 }
+
+// As Slice
+func (self HashSet[K]) AsSlice() []K {
+	result := make([]K, 0, self.hashMap.Len())
+	for key, _ := range self.hashMap.data {
+		result = append(result, key)
+	}
+
+	return result
+}
