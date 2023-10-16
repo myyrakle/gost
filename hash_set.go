@@ -1,5 +1,7 @@
 package gost
 
+import "strings"
+
 type HashSet[K comparable] struct {
 	hashMap HashMap[K, struct{}]
 }
@@ -187,4 +189,21 @@ func (self HashSetIter[K]) CollectToLinkedList() LinkedList[K] {
 		}
 		list.PushBack(value.Unwrap())
 	}
+}
+
+// impl Display for HashSet
+func (self HashSet[K]) Display() String {
+	buffer := String("")
+	buffer += "HashSet{"
+
+	fields := []string{}
+	for key, _ := range self.hashMap.data {
+		fields = append(fields, string(Format("{}", key)))
+	}
+
+	buffer += String(strings.Join(fields, ", "))
+
+	buffer += "}"
+
+	return buffer
 }
