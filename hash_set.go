@@ -59,3 +59,8 @@ func (self *HashSet[K]) Remove(value K) Bool {
 	result := self.hashMap.Remove(value)
 	return result.IsSome()
 }
+
+// Clears the set, removing all values.
+func (self *HashSet[K]) Clear() {
+	self.hashMap.Clear()
+}
