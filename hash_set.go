@@ -28,3 +28,8 @@ func (self HashSet[K]) AsSlice() []K {
 func (self HashSet[K]) Len() ISize {
 	return self.hashMap.Len()
 }
+
+// Returns true if the set contains no elements.
+func (self HashSet[K]) IsEmpty() Bool {
+	return self.hashMap.IsEmpty()
+}
