@@ -75,3 +75,9 @@ func (self HashSet[K]) Get(value K) Option[K] {
 		return None[K]()
 	}
 }
+
+// Returns true if the set contains a value.
+// The value may be any borrowed form of the set’s value type, but Hash and Eq on the borrowed form must match those for the value type.
+func (self HashSet[K]) Contains(value K) Bool {
+	return self.hashMap.ContainsKey(value)
+}
