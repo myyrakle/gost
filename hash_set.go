@@ -19,7 +19,7 @@ func HashSetWithCapacity[K comparable](capacity ISize) HashSet[K] {
 // As Slice
 func (self HashSet[K]) AsSlice() []K {
 	result := make([]K, 0, self.hashMap.Len())
-	for key, _ := range self.hashMap.data {
+	for key := range self.hashMap.data {
 		result = append(result, key)
 	}
 
@@ -92,7 +92,7 @@ type HashSetIter[K comparable] struct {
 // into_iter
 func (self HashSet[K]) IntoIter() Iterator[K] {
 	vec := Vec[K]{}
-	for key, _ := range self.hashMap.data {
+	for key := range self.hashMap.data {
 		vec.Push(key)
 	}
 
@@ -197,7 +197,7 @@ func (self HashSet[K]) Display() String {
 	buffer += "HashSet{"
 
 	fields := []string{}
-	for key, _ := range self.hashMap.data {
+	for key := range self.hashMap.data {
 		fields = append(fields, string(Format("{}", key)))
 	}
 
@@ -206,4 +206,9 @@ func (self HashSet[K]) Display() String {
 	buffer += "}"
 
 	return buffer
+}
+
+// impl Debug for HashSet
+func (self HashSet[K]) Debug() String {
+	return self.Display()
 }
