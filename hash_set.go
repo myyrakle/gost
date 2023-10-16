@@ -23,3 +23,8 @@ func (self HashSet[K]) AsSlice() []K {
 
 	return result
 }
+
+// Returns the number of elements in the set.
+func (self HashSet[K]) Len() ISize {
+	return self.hashMap.Len()
+}
