@@ -64,3 +64,14 @@ func (self *HashSet[K]) Remove(value K) Bool {
 func (self *HashSet[K]) Clear() {
 	self.hashMap.Clear()
 }
+
+// Returns a reference to the value in the set, if any, that is equal to the given value.
+// The value may be any borrowed form of the set’s value type, but Hash and Eq on the borrowed form must match those for the value type.
+func (self HashSet[K]) Get(value K) Option[K] {
+	result := self.hashMap.Get(value)
+	if result.IsSome() {
+		return Some[K](value)
+	} else {
+		return None[K]()
+	}
+}
