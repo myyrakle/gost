@@ -24,6 +24,16 @@ func (self HashSet[K]) AsSlice() []K {
 	return result
 }
 
+// From Slice
+func HashSetFromSlice[K comparable](slice []K) HashSet[K] {
+	result := HashSetNew[K]()
+	for _, value := range slice {
+		result.Insert(value)
+	}
+
+	return result
+}
+
 // Returns the number of elements in the set.
 func (self HashSet[K]) Len() ISize {
 	return self.hashMap.Len()
