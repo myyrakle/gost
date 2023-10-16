@@ -18,7 +18,7 @@ func None[T any]() Option[T] {
 }
 
 // Returns true if the option is a Some value.
-func (self *Option[T]) IsSome() Bool {
+func (self Option[T]) IsSome() Bool {
 	return self.value != nil
 }
 
@@ -32,7 +32,7 @@ func (self *Option[T]) IsSomeAnd(f func(T) Bool) Bool {
 }
 
 // Returns true if the option is a None value.
-func (self *Option[T]) IsNone() Bool {
+func (self Option[T]) IsNone() Bool {
 	return self.value == nil
 }
 
