@@ -81,3 +81,18 @@ func (self HashSet[K]) Get(value K) Option[K] {
 func (self HashSet[K]) Contains(value K) Bool {
 	return self.hashMap.ContainsKey(value)
 }
+
+type HashSetIter[K comparable] struct {
+	vec      Vec[K]
+	position ISize
+}
+
+// into_iter
+func (self HashSet[K]) IntoIter() Iterator[K] {
+	vec := Vec[K]{}
+	for key, _ := range self.hashMap.data {
+		vec.Push(key)
+	}
+
+	return &HashSetIter[K]{vec: vec, position: 0}
+}
