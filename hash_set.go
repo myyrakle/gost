@@ -33,3 +33,12 @@ func (self HashSet[K]) Len() ISize {
 func (self HashSet[K]) IsEmpty() Bool {
 	return self.hashMap.IsEmpty()
 }
+
+// Adds a value to the set.
+// Returns whether the value was newly inserted. That is:
+// If the set did not previously contain this value, true is returned.
+// If the set already contained this value, false is returned, and the set is not modified: original value is not replaced, and the value passed as argument is dropped.
+func (self *HashSet[K]) Insert(value K) Bool {
+	result := self.hashMap.Insert(value, struct{}{})
+	return result.IsNone()
+}
