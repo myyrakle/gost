@@ -207,3 +207,8 @@ func (self HashSet[K]) Display() String {
 
 	return buffer
 }
+
+// impl Debug for HashSet
+func (self HashSet[K]) Debug() String {
+	return self.Display()
+}
