@@ -12,7 +12,7 @@ func HashSetNew[K comparable]() HashSet[K] {
 }
 
 // Creates an empty HashSet with at least the specified capacity.
-func HashSetWithCapacity[K comparable](capacity ISize) HashSet[K] {
+func HashSetWithCapacity[K comparable](capacity USize) HashSet[K] {
 	return HashSet[K]{hashMap: HashMapWithCapacity[K, struct{}](capacity)}
 }
 
@@ -37,7 +37,7 @@ func HashSetFromSlice[K comparable](slice []K) HashSet[K] {
 }
 
 // Returns the number of elements in the set.
-func (self HashSet[K]) Len() ISize {
+func (self HashSet[K]) Len() USize {
 	return self.hashMap.Len()
 }
 
@@ -86,7 +86,7 @@ func (self HashSet[K]) Contains(value K) Bool {
 
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
-	position ISize
+	position USize
 }
 
 // into_iter

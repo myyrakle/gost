@@ -53,15 +53,18 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 			},
 		}
 	}
-	return self.root.insert(key, value)
+	result := self.root.insert(key, value)
+	self.len++
+
+	return result
 }
 
 func (self *BTreeNodeRef[K, V]) insert(key K, value V) Option[V] {
 	if self._Type == _LEAF_OF_INTERNAL {
-		for i, key := range self.node.keys.AsSlice() {
-			if key == nil {
-				self.node.keys. = &key
-				self.node.values[i] = &value
+		for i, _key := range self.node.keys.AsSlice() {
+			if _key == nil {
+				self.node.keys.SetUnchecked(USize(i), &key)
+				self.node.values.SetUnchecked(USize(i), &value)
 				self.node.len++
 				return None[V]()
 			}

@@ -5,7 +5,7 @@ import "fmt"
 type LinkedList[T any] struct {
 	head *LinkedListNode[T]
 	tail *LinkedListNode[T]
-	len  ISize
+	len  USize
 }
 
 type LinkedListNode[T any] struct {
@@ -21,7 +21,7 @@ func LinkedListNew[T any]() LinkedList[T] {
 
 // Returns the length of the LinkedList.
 // This operation should compute in O(1) time.
-func (list LinkedList[T]) Len() ISize {
+func (list LinkedList[T]) Len() USize {
 	return list.len
 }
 
