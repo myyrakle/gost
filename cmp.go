@@ -23,7 +23,7 @@ func (self ISize) Cmp(rhs ISize) Ordering {
 	}
 }
 
-func (self ISize8) Cmp(rhs ISize8) Ordering {
+func (self I8) Cmp(rhs I8) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -33,7 +33,7 @@ func (self ISize8) Cmp(rhs ISize8) Ordering {
 	}
 }
 
-func (self ISize16) Cmp(rhs ISize16) Ordering {
+func (self I16) Cmp(rhs I16) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -43,7 +43,7 @@ func (self ISize16) Cmp(rhs ISize16) Ordering {
 	}
 }
 
-func (self ISize32) Cmp(rhs ISize32) Ordering {
+func (self I32) Cmp(rhs I32) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -53,7 +53,7 @@ func (self ISize32) Cmp(rhs ISize32) Ordering {
 	}
 }
 
-func (self ISize64) Cmp(rhs ISize64) Ordering {
+func (self I64) Cmp(rhs I64) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -73,7 +73,7 @@ func (self USize) Cmp(rhs USize) Ordering {
 	}
 }
 
-func (self USize8) Cmp(rhs USize8) Ordering {
+func (self U8) Cmp(rhs U8) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -83,7 +83,7 @@ func (self USize8) Cmp(rhs USize8) Ordering {
 	}
 }
 
-func (self USize16) Cmp(rhs USize16) Ordering {
+func (self U16) Cmp(rhs U16) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -93,7 +93,7 @@ func (self USize16) Cmp(rhs USize16) Ordering {
 	}
 }
 
-func (self USize32) Cmp(rhs USize32) Ordering {
+func (self U32) Cmp(rhs U32) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -103,7 +103,7 @@ func (self USize32) Cmp(rhs USize32) Ordering {
 	}
 }
 
-func (self USize64) Cmp(rhs USize64) Ordering {
+func (self U64) Cmp(rhs U64) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -113,7 +113,7 @@ func (self USize64) Cmp(rhs USize64) Ordering {
 	}
 }
 
-func (self Float32) Cmp(rhs Float32) Ordering {
+func (self F32) Cmp(rhs F32) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -123,7 +123,7 @@ func (self Float32) Cmp(rhs Float32) Ordering {
 	}
 }
 
-func (self Float64) Cmp(rhs Float64) Ordering {
+func (self F64) Cmp(rhs F64) Ordering {
 	if self < rhs {
 		return OrderingLess
 	} else if self > rhs {
@@ -163,7 +163,7 @@ func (self Byte) Cmp(rhs Byte) Ordering {
 	}
 }
 
-func (self Rune) Cmp(rhs Rune) Ordering {
+func (self Char) Cmp(rhs Char) Ordering {
 	if self == rhs {
 		return OrderingEqual
 	} else if self > rhs {
@@ -191,19 +191,19 @@ func (self ISize) Eq(rhs ISize) Bool {
 	return self == rhs
 }
 
-func (self ISize8) Eq(rhs ISize8) Bool {
+func (self I8) Eq(rhs I8) Bool {
 	return self == rhs
 }
 
-func (self ISize16) Eq(rhs ISize16) Bool {
+func (self I16) Eq(rhs I16) Bool {
 	return self == rhs
 }
 
-func (self ISize32) Eq(rhs ISize32) Bool {
+func (self I32) Eq(rhs I32) Bool {
 	return self == rhs
 }
 
-func (self ISize64) Eq(rhs ISize64) Bool {
+func (self I64) Eq(rhs I64) Bool {
 	return self == rhs
 }
 
@@ -211,27 +211,27 @@ func (self USize) Eq(rhs USize) Bool {
 	return self == rhs
 }
 
-func (self USize8) Eq(rhs USize8) Bool {
+func (self U8) Eq(rhs U8) Bool {
 	return self == rhs
 }
 
-func (self USize16) Eq(rhs USize16) Bool {
+func (self U16) Eq(rhs U16) Bool {
 	return self == rhs
 }
 
-func (self USize32) Eq(rhs USize32) Bool {
+func (self U32) Eq(rhs U32) Bool {
 	return self == rhs
 }
 
-func (self USize64) Eq(rhs USize64) Bool {
+func (self U64) Eq(rhs U64) Bool {
 	return self == rhs
 }
 
-func (self Float32) Eq(rhs Float32) Bool {
+func (self F32) Eq(rhs F32) Bool {
 	return self == rhs
 }
 
-func (self Float64) Eq(rhs Float64) Bool {
+func (self F64) Eq(rhs F64) Bool {
 	return self == rhs
 }
 
@@ -247,7 +247,7 @@ func (self Byte) Eq(rhs Byte) Bool {
 	return self == rhs
 }
 
-func (self Rune) Eq(rhs Rune) Bool {
+func (self Char) Eq(rhs Char) Bool {
 	return self == rhs
 }
 

@@ -1,23 +1,23 @@
 package gost
 
 type ISize int
-type ISize8 int8
-type ISize16 int16
-type ISize32 int32
-type ISize64 int64
+type I8 int8
+type I16 int16
+type I32 int32
+type I64 int64
 
 type USize uint
-type USize8 uint8
-type USize16 uint16
-type USize32 uint32
-type USize64 uint64
+type U8 uint8
+type U16 uint16
+type U32 uint32
+type U64 uint64
 
-type Float32 float32
-type Float64 float64
+type F32 float32
+type F64 float64
 
 type Byte byte
 
-type Rune rune
+type Char rune
 
 type String string
 
