@@ -28,8 +28,8 @@ type BTreeNodeRef[K Ord[K], V any] struct {
 }
 
 type BTreeNode[K Ord[K], V any] struct {
-	keys   []*K
-	values []*V
+	keys   Vec[*K]
+	values Vec[*V]
 
 	// The number of keys and values this node stores.
 	len uint16
@@ -43,15 +43,28 @@ func BTreeMapNew[K Ord[K], V any]() BTreeMap[K, V] {
 // Inserts a key-value pair into the map.
 // If the map did not have this key present, None is returned.
 // If the map did have this key present, the value is updated, and the old value is returned. The key is not updated, though; this matters for types that can be == without being identical. See the module-level documentation for more.
-func (m *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
-	if m.root == nil {
-		m.root = &BTreeNodeRef[K, V]{
+func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
+	if self.root == nil {
+		self.root = &BTreeNodeRef[K, V]{
 			_Type: _LEAF_OF_INTERNAL,
 			node: BTreeNode[K, V]{
-				keys:   make([]*K, _BTREE_CAPACITY),
-				values: make([]*V, _BTREE_CAPACITY),
+				keys:   VecWithLen[*K](_BTREE_CAPACITY),
+				values: VecWithLen[*V](_BTREE_CAPACITY),
 			},
 		}
 	}
-	return m.root.insert(key, value)
+	return self.root.insert(key, value)
+}
+
+func (self *BTreeNodeRef[K, V]) insert(key K, value V) Option[V] {
+	if self._Type == _LEAF_OF_INTERNAL {
+		for i, key := range self.node.keys.AsSlice() {
+			if key == nil {
+				self.node.keys. = &key
+				self.node.values[i] = &value
+				self.node.len++
+				return None[V]()
+			}
+		}
+	}
 }

@@ -148,6 +148,21 @@ func (self Vec[T]) GetUnchecked(index ISize) T {
 	return self.data[index]
 }
 
+// Set
+func (self *Vec[T]) Set(index ISize, value T) Option[T] {
+	if index < 0 || index >= self.Len() {
+		return Some[T](self.data[index])
+	} else {
+		self.data[index] = value
+		return None[T]()
+	}
+}
+
+// Set unchecked
+func (self *Vec[T]) SetUnchecked(index ISize, value T) {
+	self.data[index] = value
+}
+
 // Swaps two elements in the slice.
 // If a equals to b, it’s guaranteed that elements won’t change value.
 func (self *Vec[T]) Swap(a, b ISize) {
