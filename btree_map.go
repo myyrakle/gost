@@ -113,6 +113,12 @@ func (self *BTreeMap[K, V]) IsEmpty() Bool {
 	return self.len == 0
 }
 
+// Clears the map, removing all elements.
+func (self *BTreeMap[K, V]) Clear() {
+	self.root = nil
+	self.len = 0
+}
+
 func (self *BTreeMap[K, V]) Test() {
 	self.root._Traverse()
 }
