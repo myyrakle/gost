@@ -42,6 +42,7 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 			_Type:  _LEAF,
 			keys:   VecWithLen[K](_BTREE_CAPACITY),
 			values: VecWithLen[V](_BTREE_CAPACITY),
+			childs: VecWithLen[*BTreeNode[K, V]](_BTREE_CAPACITY + 1),
 			n:      1,
 		}
 
@@ -62,6 +63,7 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 				_MinimumDegree: _BTREE_CAPACITY,
 				keys:           VecWithLen[K](_BTREE_CAPACITY),
 				values:         VecWithLen[V](_BTREE_CAPACITY),
+				childs:         VecWithLen[*BTreeNode[K, V]](_BTREE_CAPACITY + 1),
 			}
 
 			// Make old root as child of new root
@@ -88,6 +90,10 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 	}
 }
 
+func (self *BTreeMap[K, V]) Test() {
+	self.root._Traverse()
+}
+
 // Function to traverse all nodes in a subtree rooted with this node
 func (self BTreeNode[K, V]) _Traverse() {
 	// There are n keys and n+1 children, traverse through n keys
@@ -98,9 +104,11 @@ func (self BTreeNode[K, V]) _Traverse() {
 		// If this is not leaf, then before printing key[i],
 		// traverse the subtree rooted with child C[i].
 		if self._Type != _LEAF {
-			self.childs.GetUnchecked(i)._Traverse()
+			if self.childs.GetUnchecked(i) != nil {
+				self.childs.GetUnchecked(i)._Traverse()
+			}
 		}
-		Println("{}", self.keys.GetUnchecked(i))
+		Println("{}, {}", self.keys.GetUnchecked(i), self.values.GetUnchecked(i))
 		i++
 	}
 }
@@ -177,16 +185,16 @@ func (self *BTreeMap[K, V]) _Insert(key K, value V) {
 // function is called
 func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 	// Initialize index as index of rightmost element
-	i := USize(self.n - 1)
+	i := self.n - 1
 
 	// If this is a leaf node
 	if self._Type == _LEAF {
 		// The following loop does two things
 		// a) Finds the location of new key to be inserted
 		// b) Moves all greater keys to one place ahead
-		for i >= 0 && self.keys.GetUnchecked(i).Cmp(key) == OrderingGreater {
-			self.keys.SetUnchecked(USize(i+1), self.keys.GetUnchecked(i))
-			self.values.SetUnchecked(USize(i+1), self.values.GetUnchecked(i))
+		for i >= 0 && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingGreater {
+			self.keys.SetUnchecked(USize(i+1), self.keys.GetUnchecked(USize(i)))
+			self.values.SetUnchecked(USize(i+1), self.values.GetUnchecked(USize(i)))
 			i--
 		}
 
@@ -197,29 +205,29 @@ func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 		self.n++
 	} else { // If this node is not leaf
 		// Find the child which is going to have the new key
-		for i >= 0 && self.keys.GetUnchecked(i).Cmp(key) == OrderingGreater {
+		for i >= 0 && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingGreater {
 			i--
 		}
 
 		// See if the found child is full
-		if self.childs.GetUnchecked(i+1).keys.Len() == _BTREE_CAPACITY {
+		if self.childs.GetUnchecked(USize(i+1)).keys.Len() == _BTREE_CAPACITY {
 			// If the child is full, then split it
-			self.splitChild(i+1, self.childs.GetUnchecked(i+1))
+			self.splitChild(i+1, self.childs.GetUnchecked(USize(i+1)))
 
 			// After split, the middle key of C[i] goes up and
 			// C[i] is splitted into two.  See which of the two
 			// is going to have the new key
-			if self.keys.GetUnchecked(i+1).Cmp(key) == OrderingLess {
+			if self.keys.GetUnchecked(USize(i+1)).Cmp(key) == OrderingLess {
 				i++
 			}
 		}
-		self.childs.GetUnchecked(i+1)._InsertNonFull(key, value)
+		self.childs.GetUnchecked(USize(i+1))._InsertNonFull(key, value)
 	}
 }
 
 // A utility function to split the child y of this node
 // Note that y must be full when this function is called
-func (self *BTreeNode[K, V]) splitChild(i USize, y *BTreeNode[K, V]) {
+func (self *BTreeNode[K, V]) splitChild(i int, y *BTreeNode[K, V]) {
 	// Create a new node which is going to store (t-1) keys
 	// of y
 	z := &BTreeNode[K, V]{
@@ -246,23 +254,23 @@ func (self *BTreeNode[K, V]) splitChild(i USize, y *BTreeNode[K, V]) {
 
 	// Since this node is going to have a new child,
 	// create space of new child
-	for j := self.keys.Len(); j >= i+1; j-- {
-		self.childs.SetUnchecked(USize(j+1), self.childs.GetUnchecked(j))
+	for j := self.n; j >= i+1; j-- {
+		self.childs.SetUnchecked(USize(j+1), self.childs.GetUnchecked(USize(j)))
 	}
 
 	// Link the new child to this node
-	self.childs.SetUnchecked(i+1, z)
+	self.childs.SetUnchecked(USize(i+1), z)
 
 	// A key of y will move to this node. Find location of
 	// new key and move all greater keys one space ahead
-	for j := self.keys.Len() - 1; j >= i; j-- {
-		self.keys.SetUnchecked(USize(j+1), self.keys.GetUnchecked(j))
-		self.values.SetUnchecked(USize(j+1), self.values.GetUnchecked(j))
+	for j := self.n; j >= i; j-- {
+		self.keys.SetUnchecked(USize(j+1), self.keys.GetUnchecked(USize(j)))
+		self.values.SetUnchecked(USize(j+1), self.values.GetUnchecked(USize(j)))
 	}
 
 	// Copy the middle key of y to this node
-	self.keys.SetUnchecked(i, y.keys.GetUnchecked(USize(self._MinimumDegree-1)))
-	self.values.SetUnchecked(i, y.values.GetUnchecked(USize(self._MinimumDegree-1)))
+	self.keys.SetUnchecked(USize(i), y.keys.GetUnchecked(USize(self._MinimumDegree-1)))
+	self.values.SetUnchecked(USize(i), y.values.GetUnchecked(USize(self._MinimumDegree-1)))
 
 	// Increment count of keys in this node
 	self.n++
