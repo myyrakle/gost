@@ -119,18 +119,18 @@ func (self *BTreeMap[K, V]) Clear() {
 	self.len = 0
 }
 
-// Returns a reference to the value corresponding to the key.
-func (self *BTreeMap[K, V]) Get(key K) Option[*V] {
+// Returns value corresponding to the key.
+func (self *BTreeMap[K, V]) Get(key K) Option[V] {
 	if self.root == nil {
-		return None[*V]()
+		return None[V]()
 	}
 
 	result, index := self.root._Search(key)
 	if result.IsNone() {
-		return None[*V]()
+		return None[V]()
 	}
 
-	return Some(&result.Unwrap().values.data[index])
+	return Some(result.Unwrap().values.data[index])
 }
 
 // Removes a key from the map, returning the value at the key if the key was previously in the map.
