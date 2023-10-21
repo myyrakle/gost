@@ -33,3 +33,15 @@ func (self *BTreeSet[K]) Insert(key K) Bool {
 		return true
 	}
 }
+
+// If the set contains an element equal to the value, removes it from the set and drops it. Returns whether such an element was present.
+// The value may be any borrowed form of the set’s element type, but the ordering on the borrowed form must match the ordering on the element type.
+func (self *BTreeSet[K]) Remove(key K) Bool {
+	result := self._treemap.Remove(key)
+
+	if result.IsSome() {
+		return true
+	} else {
+		return false
+	}
+}
