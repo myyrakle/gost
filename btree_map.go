@@ -163,10 +163,7 @@ func (self *BTreeMap[K, V]) Remove(key K) Option[V] {
 	}
 }
 
-func (self *BTreeMap[K, V]) Test() {
-	self.root._Traverse()
-}
-
+// Debug only
 // Function to traverse all nodes in a subtree rooted with this node
 func (self BTreeNode[K, V]) _Traverse() {
 	// There are n keys and n+1 children, traverse through n keys
