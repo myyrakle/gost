@@ -119,6 +119,20 @@ func (self *BTreeMap[K, V]) Clear() {
 	self.len = 0
 }
 
+// The key may be any borrowed form of the map’s key type, but the ordering on the borrowed form must match the ordering on the key type.
+func (self *BTreeMap[K, V]) Get(key K) Option[*V] {
+	if self.root == nil {
+		return None[*V]()
+	}
+
+	result, index := self.root._Search(key)
+	if result.IsNone() {
+		return None[*V]()
+	}
+
+	return Some(&result.Unwrap().values.data[index])
+}
+
 func (self *BTreeMap[K, V]) Test() {
 	self.root._Traverse()
 }
