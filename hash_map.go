@@ -60,12 +60,12 @@ func (self *HashMap[K, V]) Clear() {
 }
 
 // Returns a reference to the value corresponding to the key.
-func (self HashMap[K, V]) Get(key K) Option[V] {
+func (self HashMap[K, V]) Get(key K) Option[*V] {
 	value, ok := self.data[key]
 	if ok {
-		return Some(value)
+		return Some(&value)
 	} else {
-		return None[V]()
+		return None[*V]()
 	}
 }
 
