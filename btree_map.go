@@ -7,7 +7,6 @@ type _NodeType int8
 
 const _LEAF = _NodeType(0)
 const _INTERNAL = _NodeType(1)
-const _ROOT = _NodeType(2)
 
 type BTreeMap[K Ord[K], V any] struct {
 	root *BTreeNode[K, V]
