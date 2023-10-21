@@ -90,6 +90,11 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 	}
 }
 
+// Returns the number of elements in the map.
+func (self *BTreeMap[K, V]) Len() uint {
+	return self.len
+}
+
 func (self *BTreeMap[K, V]) Test() {
 	self.root._Traverse()
 }
@@ -114,7 +119,7 @@ func (self BTreeNode[K, V]) _Traverse() {
 }
 
 // Function to search key k in subtree rooted with this node
-func (self BTreeNode[K, V]) _Search(key K) Option[V] {
+func (self BTreeNode[K, V]) _Search(key K) (Option[*BTreeNode[K, V]], uint) {
 	// Find the first key greater than or equal to k
 	i := USize(0)
 	for i < self.keys.Len() && key.Cmp(self.keys.GetUnchecked(i)) == OrderingGreater {
@@ -123,12 +128,12 @@ func (self BTreeNode[K, V]) _Search(key K) Option[V] {
 
 	// If the found key is equal to k, return this node
 	if i < self.keys.Len() && key.Cmp(self.keys.GetUnchecked(i)) == OrderingEqual {
-		return Some[V](self.values.GetUnchecked(i))
+		return Some[*BTreeNode[K, V]](&self), uint(i)
 	}
 
 	// If key is not found here and this is a leaf node
 	if self._Type == _LEAF {
-		return None[V]()
+		return None[*BTreeNode[K, V]](), 0
 	}
 
 	// Go to the appropriate child
@@ -228,13 +233,15 @@ func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 // A utility function to split the child y of this node
 // Note that y must be full when this function is called
 func (self *BTreeNode[K, V]) splitChild(i int, y *BTreeNode[K, V]) {
-	// Create a new node which is going to store (t-1) keys
-	// of y
+	// Create a new node which is going to store (t-1) keys of y
 	z := &BTreeNode[K, V]{
 		_Type:          y._Type,
 		_MinimumDegree: y._MinimumDegree,
+		keys:           VecWithLen[K](_BTREE_CAPACITY),
+		values:         VecWithLen[V](_BTREE_CAPACITY),
+		childs:         VecWithLen[*BTreeNode[K, V]](_BTREE_CAPACITY + 1),
 	}
-	z.n = z._MinimumDegree - 1
+	z.n = self._MinimumDegree - 1
 
 	// Copy the last (t-1) keys of y to z
 	for j := 0; j < z._MinimumDegree; j++ {
