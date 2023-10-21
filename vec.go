@@ -17,23 +17,23 @@ func VecNew[T any]() Vec[T] {
 }
 
 // Constructs a new, empty Vec<T> with at least the specified capacity.
-func VecWithCapacity[T any](capacity ISize) Vec[T] {
+func VecWithCapacity[T any](capacity USize) Vec[T] {
 	return Vec[T]{data: make([]T, 0, capacity)}
 }
 
 // Constructs a new, empty Vec<T> with at least the specified capacity.
-func VecWithLen[T any](len ISize) Vec[T] {
+func VecWithLen[T any](len USize) Vec[T] {
 	return Vec[T]{data: make([]T, len)}
 }
 
 // Returns the total number of elements the vector can hold without reallocating.
-func (self Vec[T]) Capacity() ISize {
-	return ISize(cap(self.data))
+func (self Vec[T]) Capacity() USize {
+	return USize(cap(self.data))
 }
 
 // Returns the number of elements in the vector, also referred to as its ‘length’.
-func (self Vec[T]) Len() ISize {
-	return ISize(len(self.data))
+func (self Vec[T]) Len() USize {
+	return USize(len(self.data))
 }
 
 // Returns true if the vector contains no elements.
@@ -42,7 +42,7 @@ func (self Vec[T]) IsEmpty() Bool {
 }
 
 // Reserves capacity for at least additional more elements to be inserted in the given Vec<T>. The collection may reserve more space to speculatively avoid frequent reallocations. After calling reserve, capacity will be greater than or equal to self.len() + additional. Does nothing if capacity is already sufficient.
-func (self *Vec[T]) Reserve(additional ISize) {
+func (self *Vec[T]) Reserve(additional USize) {
 	if self.Capacity() < self.Len()+additional {
 		self.data = append(self.data, make([]T, additional)...)
 	}
@@ -81,7 +81,7 @@ func (self Vec[T]) AsSlice() []T {
 }
 
 // Inserts an element at position index within the vector, shifting all elements after it to the right.
-func (self *Vec[T]) Insert(index ISize, value T) {
+func (self *Vec[T]) Insert(index USize, value T) {
 	self.data = append(self.data, value)
 	copy(self.data[index+1:], self.data[index:])
 	self.data[index] = value
@@ -134,7 +134,7 @@ func (self *Vec[T]) Dedup() {
 // Returns a reference to an element or subslice depending on the type of index.
 // If given a position, returns a reference to the element at that position or None if out of bounds.
 // If given a range, returns the subslice corresponding to that range, or None if out of bounds.
-func (self Vec[T]) Get(index ISize) Option[T] {
+func (self Vec[T]) Get(index USize) Option[T] {
 	if index < 0 || index >= self.Len() {
 		return None[T]()
 	} else {
@@ -144,20 +144,35 @@ func (self Vec[T]) Get(index ISize) Option[T] {
 
 // Returns a reference to an element or subslice, without doing bounds checking.
 // For a safe alternative see get.
-func (self Vec[T]) GetUnchecked(index ISize) T {
+func (self Vec[T]) GetUnchecked(index USize) T {
 	return self.data[index]
+}
+
+// Set
+func (self *Vec[T]) Set(index USize, value T) Option[T] {
+	if index < 0 || index >= self.Len() {
+		return Some[T](self.data[index])
+	} else {
+		self.data[index] = value
+		return None[T]()
+	}
+}
+
+// Set unchecked
+func (self *Vec[T]) SetUnchecked(index USize, value T) {
+	self.data[index] = value
 }
 
 // Swaps two elements in the slice.
 // If a equals to b, it’s guaranteed that elements won’t change value.
-func (self *Vec[T]) Swap(a, b ISize) {
+func (self *Vec[T]) Swap(a, b USize) {
 	self.data[a], self.data[b] = self.data[b], self.data[a]
 }
 
 // Reverses the order of elements in the slice, in place.
 func (self *Vec[T]) Reverse() {
 	for i := 0; i < len(self.data)/2; i++ {
-		self.Swap(ISize(i), ISize(len(self.data)-1-i))
+		self.Swap(USize(i), USize(len(self.data)-1-i))
 	}
 }
 
@@ -174,7 +189,7 @@ func (self Vec[T]) Contains(value T) Bool {
 }
 
 // Binary searches this slice for a given element. If the slice is not sorted, the returned result is unspecified and meaningless.
-func (self Vec[T]) BinarySearch(value T) Option[ISize] {
+func (self Vec[T]) BinarySearch(value T) Option[USize] {
 	low := 0
 	high := len(self.data) - 1
 
@@ -195,17 +210,17 @@ func (self Vec[T]) BinarySearch(value T) Option[ISize] {
 			}
 		case OrderingEqual:
 			{
-				return Some[ISize](ISize(mid))
+				return Some[USize](USize(mid))
 			}
 		}
 	}
 
-	return None[ISize]()
+	return None[USize]()
 }
 
 // Binary searches this slice with a comparator function.
 // The comparator function should return an order code that indicates whether its argument is Less, Equal or Greater the desired target. If the slice is not sorted or if the comparator function does not implement an order consistent with the sort order of the underlying slice, the returned result is unspecified and meaningless.
-func (self Vec[T]) BinarySearchBy(f func(T) Ordering) Option[ISize] {
+func (self Vec[T]) BinarySearchBy(f func(T) Ordering) Option[USize] {
 	low := 0
 	high := len(self.data) - 1
 
@@ -224,12 +239,12 @@ func (self Vec[T]) BinarySearchBy(f func(T) Ordering) Option[ISize] {
 			}
 		case OrderingEqual:
 			{
-				return Some[ISize](ISize(mid))
+				return Some[USize](USize(mid))
 			}
 		}
 	}
 
-	return None[ISize]()
+	return None[USize]()
 }
 
 // Fills self with elements by cloning value.
@@ -299,7 +314,7 @@ func (self *Vec[T]) SortUnstableBy(compare func(T, T) Ordering) {
 
 type VecIter[T any] struct {
 	vec      Vec[T]
-	position ISize
+	position USize
 }
 
 // into_iter

@@ -12,7 +12,7 @@ func HashMapNew[K comparable, V any]() HashMap[K, V] {
 }
 
 // Creates an empty HashMap with at least the specified capacity.
-func HashMapWithCapacity[K comparable, V any](capacity ISize) HashMap[K, V] {
+func HashMapWithCapacity[K comparable, V any](capacity USize) HashMap[K, V] {
 	return HashMap[K, V]{data: make(map[K]V, capacity)}
 }
 
@@ -22,8 +22,8 @@ func (self HashMap[K, V]) AsMap() map[K]V {
 }
 
 // Returns the number of elements in the map.
-func (self HashMap[K, V]) Len() ISize {
-	return ISize(len(self.data))
+func (self HashMap[K, V]) Len() USize {
+	return USize(len(self.data))
 }
 
 // Returns true if the map contains no elements.
@@ -59,7 +59,7 @@ func (self *HashMap[K, V]) Clear() {
 	self.data = map[K]V{}
 }
 
-// Returns a reference to the value corresponding to the key.
+// Returns value corresponding to the key.
 func (self HashMap[K, V]) Get(key K) Option[V] {
 	value, ok := self.data[key]
 	if ok {
@@ -77,7 +77,7 @@ func (self HashMap[K, V]) ContainsKey(key K) Bool {
 
 type HashMapIter[K comparable, V any] struct {
 	vec      Vec[Pair[K, V]]
-	position ISize
+	position USize
 }
 
 // into_iter
@@ -183,7 +183,7 @@ func (self HashMapIter[K, V]) CollectToLinkedList() LinkedList[Pair[K, V]] {
 
 type HashMapKeys[K any] struct {
 	vec      Vec[K]
-	position ISize
+	position USize
 }
 
 // An iterator visiting all keys in arbitrary order. The iterator element type is K.
@@ -289,7 +289,7 @@ func (self HashMapKeys[K]) CollectToLinkedList() LinkedList[K] {
 
 type HashMapValues[V any] struct {
 	vec      Vec[V]
-	position ISize
+	position USize
 }
 
 // An iterator visiting all values in arbitrary order. The iterator element type is V.
