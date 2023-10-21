@@ -82,9 +82,11 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 
 			// Change root
 			self.root = newRoot
+			self.len++
 			return None[V]()
 		} else /* If root is not full, call insertNonFull for root */ {
 			self.root._InsertNonFull(key, value)
+			self.len++
 			return None[V]()
 		}
 	}
