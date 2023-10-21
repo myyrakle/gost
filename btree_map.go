@@ -92,9 +92,25 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 	}
 }
 
+// Returns true if the map contains a value for the specified key.
+// The key may be any borrowed form of the map’s key type, but the ordering on the borrowed form must match the ordering on the key type.
+func (self *BTreeMap[K, V]) ContainsKey(key K) bool {
+	if self.root == nil {
+		return false
+	}
+
+	result, _ := self.root._Search(key)
+	return bool(result.IsSome())
+}
+
 // Returns the number of elements in the map.
 func (self *BTreeMap[K, V]) Len() uint {
 	return self.len
+}
+
+// Returns true if the map contains no elements.
+func (self *BTreeMap[K, V]) IsEmpty() bool {
+	return self.len == 0
 }
 
 func (self *BTreeMap[K, V]) Test() {
