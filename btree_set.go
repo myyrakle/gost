@@ -51,3 +51,7 @@ func (self *BTreeSet[K]) IsEmpty() Bool {
 	return self._treemap.IsEmpty()
 }
 
+// Returns the number of elements in the set.
+func (self *BTreeSet[K]) Len() USize {
+	return self._treemap.Len()
+}
