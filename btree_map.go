@@ -119,7 +119,7 @@ func (self *BTreeMap[K, V]) Clear() {
 	self.len = 0
 }
 
-// The key may be any borrowed form of the map’s key type, but the ordering on the borrowed form must match the ordering on the key type.
+// Returns a reference to the value corresponding to the key.
 func (self *BTreeMap[K, V]) Get(key K) Option[*V] {
 	if self.root == nil {
 		return None[*V]()
@@ -319,4 +319,274 @@ func (self *BTreeNode[K, V]) splitChild(i int, y *BTreeNode[K, V]) {
 
 	// Increment count of keys in this node
 	self.n++
+}
+
+// A utility function that returns the index of the first key that is
+// greater than or equal to k
+func (self BTreeNode[K, V]) _FindKey(key K) int {
+	i := 0
+	for i < self.n && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingLess {
+		i++
+	}
+	return i
+}
+
+// A function to remove the key k from the sub-tree rooted with this node
+func (self *BTreeNode[K, V]) _Remove(key K) {
+	i := self._FindKey(key)
+
+	// The key to be removed is present in this node
+	if i < self.n && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingEqual {
+		if self._Type == _LEAF {
+			// If the key is in a leaf node - removeFromLeaf is called
+			self._RemoveFromLeaf(i)
+		} else {
+			// If the key is in a non-leaf node - removeFromNonLeaf is called
+			self._RemoveFromNonLeaf(i)
+		}
+	} else {
+		// If this node is a leaf node, then the key is not present in tree
+		if self._Type == _LEAF {
+			return
+		}
+
+		// The key to be removed is present in the sub-tree rooted with this node
+		// The flag indicates whether the key is present in the sub-tree rooted
+		// with the last child of this node
+		flag := Bool(false)
+		if i == self.n {
+			flag = true
+		}
+
+		// If the child where the key is supposed to exist has less that t keys,
+		// we fill that child
+		if self.childs.GetUnchecked(USize(i)).n < self._MinimumDegree {
+			self._Fill(i)
+		}
+
+		// If the last child has been merged, it must have merged with the previous
+		// child and so we recurse on the (i-1)th child. Else, we recurse on the
+		// (i)th child which now has atleast t keys
+		if flag && i > self.n {
+			self.childs.GetUnchecked(USize(i - 1))._Remove(key)
+		} else {
+			self.childs.GetUnchecked(USize(i))._Remove(key)
+		}
+	}
+}
+
+// A function to remove the idx-th key from this node - which is a leaf node
+func (self *BTreeNode[K, V]) _RemoveFromLeaf(idx int) {
+	// Move all the keys after the idx-th pos one place backward
+	for i := idx + 1; i < self.n; i++ {
+		self.keys.SetUnchecked(USize(i-1), self.keys.GetUnchecked(USize(i)))
+		self.values.SetUnchecked(USize(i-1), self.values.GetUnchecked(USize(i)))
+	}
+
+	// Reduce the count of keys
+	self.n--
+}
+
+// A function to remove the idx-th key from this node - which is a non-leaf node
+func (self *BTreeNode[K, V]) _RemoveFromNonLeaf(idx int) {
+	key := self.keys.GetUnchecked(USize(idx))
+
+	// If the child that precedes k (C[idx]) has atleast t keys,
+	// find the predecessor 'pred' of k in the subtree rooted at
+	// C[idx]. Replace k by pred. Recursively delete pred
+	// in C[idx]
+	if self.childs.GetUnchecked(USize(idx)).n >= self._MinimumDegree {
+		pred := self._GetPred(idx)
+		self.keys.SetUnchecked(USize(idx), pred.keys.GetUnchecked(USize(pred.n-1)))
+		self.values.SetUnchecked(USize(idx), pred.values.GetUnchecked(USize(pred.n-1)))
+		child := self.childs.GetUnchecked(USize(idx))
+		child._Remove(pred.keys.GetUnchecked(USize(pred.n - 1)))
+	} else if self.childs.GetUnchecked(USize(idx+1)).n >= self._MinimumDegree {
+		// If the child C[idx] has less that t keys, examine C[idx+1].
+		// If C[idx+1] has atleast t keys, find the successor 'succ' of k in
+		// the subtree rooted at C[idx+1]
+		// Replace k by succ
+		// Recursively delete succ in C[idx+1]
+		succ := self._GetSucc(idx)
+		self.keys.SetUnchecked(USize(idx), succ.keys.GetUnchecked(0))
+		self.values.SetUnchecked(USize(idx), succ.values.GetUnchecked(0))
+		self.childs.GetUnchecked(USize(idx + 1))._Remove(succ.keys.GetUnchecked(0))
+	} else {
+		// If both C[idx] and C[idx+1] has less that t keys,merge k and all of C[idx+1]
+		// into C[idx]
+		// Now C[idx] contains 2t-1 keys
+		// Free C[idx+1] and recursively delete k from C[idx]
+		self._Merge(idx)
+		self.childs.GetUnchecked(USize(idx))._Remove(key)
+	}
+}
+
+// A function to get predecessor of keys[idx]
+func (self BTreeNode[K, V]) _GetPred(idx int) *BTreeNode[K, V] {
+	// Keep moving to the right most node until we reach a leaf
+	curr := self.childs.GetUnchecked(USize(idx))
+	for curr._Type != _LEAF {
+		curr = curr.childs.GetUnchecked(USize(curr.n))
+	}
+
+	// Return the last key of the leaf
+	return curr
+}
+
+// A function to get successor of keys[idx]
+func (self BTreeNode[K, V]) _GetSucc(idx int) *BTreeNode[K, V] {
+	// Keep moving the left most node starting from C[idx+1] until we reach a leaf
+	curr := self.childs.GetUnchecked(USize(idx + 1))
+	for curr._Type != _LEAF {
+		curr = curr.childs.GetUnchecked(0)
+	}
+
+	// Return the first key of the leaf
+	return curr
+}
+
+// A function to fill child C[idx] which has less than t-1 keys
+func (self *BTreeNode[K, V]) _Fill(idx int) {
+	// If the previous child(C[idx-1]) has more than t-1 keys, borrow a key
+	// from that child
+	if idx != 0 && self.childs.GetUnchecked(USize(idx-1)).n >= self._MinimumDegree {
+		self._BorrowFromPrev(idx)
+	} else if idx != self.n && self.childs.GetUnchecked(USize(idx+1)).n >= self._MinimumDegree {
+		/* If the next child(C[idx+1]) has more than t-1 keys, borrow a key from that child */
+		self._BorrowFromNext(idx)
+	} else {
+		// Merge C[idx] with its sibling
+		// If C[idx] is the last child, merge it with with its previous sibling
+		// Otherwise merge it with its next sibling
+		if idx != self.n {
+			self._Merge(idx)
+		} else {
+			self._Merge(idx - 1)
+		}
+	}
+}
+
+// A function to borrow a key from C[idx-1] and insert it
+// into C[idx]
+func (self *BTreeNode[K, V]) _BorrowFromPrev(idx int) {
+	child := self.childs.GetUnchecked(USize(idx))
+	sibling := self.childs.GetUnchecked(USize(idx - 1))
+
+	// The last key from C[idx-1] goes up to the parent and key[idx-1]
+	// from parent is inserted as the first key in C[idx]. Thus, the  loses
+	// sibling one key and child gains one key
+
+	// Moving all key in C[idx] one step ahead
+	for i := child.n - 1; i >= 0; i-- {
+		child.keys.SetUnchecked(USize(i+1), child.keys.GetUnchecked(USize(i)))
+		child.values.SetUnchecked(USize(i+1), child.values.GetUnchecked(USize(i)))
+	}
+
+	// If C[idx] is not a leaf, move all its child pointers one step ahead
+	if child._Type != _LEAF {
+		for i := child.n; i >= 0; i-- {
+			child.childs.SetUnchecked(USize(i+1), child.childs.GetUnchecked(USize(i)))
+		}
+	}
+
+	// Setting child's first key equal to keys[idx-1] from the current node
+	child.keys.SetUnchecked(0, self.keys.GetUnchecked(USize(idx-1)))
+	child.values.SetUnchecked(0, self.values.GetUnchecked(USize(idx-1)))
+
+	// Moving sibling's last child as C[idx]'s first child
+	if child._Type != _LEAF {
+		child.childs.SetUnchecked(0, sibling.childs.GetUnchecked(USize(sibling.n)))
+	}
+
+	// Moving the key from the sibling to the parent
+	// This reduces the number of keys in the sibling
+	self.keys.SetUnchecked(USize(idx-1), sibling.keys.GetUnchecked(USize(sibling.n-1)))
+	self.values.SetUnchecked(USize(idx-1), sibling.values.GetUnchecked(USize(sibling.n-1)))
+
+	child.n++
+	sibling.n--
+}
+
+// A function to borrow a key from the C[idx+1] and place
+// it in C[idx]
+func (self *BTreeNode[K, V]) _BorrowFromNext(idx int) {
+	child := self.childs.GetUnchecked(USize(idx))
+	sibling := self.childs.GetUnchecked(USize(idx + 1))
+
+	// keys[idx] is inserted as the last key in C[idx]
+	child.keys.SetUnchecked(USize(child.n), self.keys.GetUnchecked(USize(idx)))
+	child.values.SetUnchecked(USize(child.n), self.values.GetUnchecked(USize(idx)))
+
+	// Sibling's first child is inserted as the last child
+	// into C[idx]
+	if child._Type != _LEAF {
+		child.childs.SetUnchecked(USize(child.n+1), sibling.childs.GetUnchecked(0))
+	}
+
+	//The first key from sibling is inserted into keys[idx]
+	self.keys.SetUnchecked(USize(idx), sibling.keys.GetUnchecked(0))
+	self.values.SetUnchecked(USize(idx), sibling.values.GetUnchecked(0))
+
+	// Moving all keys in sibling one step behind
+	for i := 1; i < sibling.n; i++ {
+		sibling.keys.SetUnchecked(USize(i-1), sibling.keys.GetUnchecked(USize(i)))
+		sibling.values.SetUnchecked(USize(i-1), sibling.values.GetUnchecked(USize(i)))
+	}
+
+	// Moving the child pointers one step behind
+	if sibling._Type != _LEAF {
+		for i := 1; i <= sibling.n; i++ {
+			sibling.childs.SetUnchecked(USize(i-1), sibling.childs.GetUnchecked(USize(i)))
+		}
+	}
+
+	// Increasing and decreasing the key count of C[idx] and C[idx+1]
+	// respectively
+	child.n++
+	sibling.n--
+}
+
+// A function to merge C[idx] with C[idx+1]
+// C[idx+1] is freed after merging
+func (self *BTreeNode[K, V]) _Merge(idx int) {
+	child := self.childs.GetUnchecked(USize(idx))
+	sibling := self.childs.GetUnchecked(USize(idx + 1))
+
+	// Pulling a key from the current node and inserting it into (t-1)th
+	// position of C[idx]
+	child.keys.SetUnchecked(USize(self._MinimumDegree-1), self.keys.GetUnchecked(USize(idx)))
+	child.values.SetUnchecked(USize(self._MinimumDegree-1), self.values.GetUnchecked(USize(idx)))
+
+	// Copying the keys from C[idx+1] to C[idx] at the end
+	for i := 0; i < sibling.n; i++ {
+		child.keys.SetUnchecked(USize(i+self._MinimumDegree), sibling.keys.GetUnchecked(USize(i)))
+		child.values.SetUnchecked(USize(i+self._MinimumDegree), sibling.values.GetUnchecked(USize(i)))
+	}
+
+	// Copying the child pointers from C[idx+1] to C[idx]
+	if child._Type != _LEAF {
+		for i := 0; i <= sibling.n; i++ {
+			child.childs.SetUnchecked(USize(i+self._MinimumDegree), sibling.childs.GetUnchecked(USize(i)))
+		}
+	}
+
+	// Moving all keys after idx in the current node one step before -
+	// to fill the gap created by moving keys[idx] to C[idx]
+	for i := idx + 1; i < self.n; i++ {
+		self.keys.SetUnchecked(USize(i-1), self.keys.GetUnchecked(USize(i)))
+		self.values.SetUnchecked(USize(i-1), self.values.GetUnchecked(USize(i)))
+	}
+
+	// Moving the child pointers after (idx+1) in the current node one
+	// step before
+	for i := idx + 2; i <= self.n; i++ {
+		self.childs.SetUnchecked(USize(i-1), self.childs.GetUnchecked(USize(i)))
+	}
+
+	// Updating the key count of child and the current node
+	child.n += sibling.n + 1
+	self.n--
+
+	// Freeing the memory occupied by sibling
+	sibling = nil
 }
