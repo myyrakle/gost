@@ -133,6 +133,36 @@ func (self *BTreeMap[K, V]) Get(key K) Option[*V] {
 	return Some(&result.Unwrap().values.data[index])
 }
 
+// Removes a key from the map, returning the value at the key if the key was previously in the map.
+// The key may be any borrowed form of the map’s key type, but the ordering on the borrowed form must match the ordering on the key type.
+func (self *BTreeMap[K, V]) Remove(key K) Option[V] {
+	if self.root == nil {
+		return None[V]()
+	}
+
+	result, index := self.root._Search(key)
+
+	// Call the remove function for root
+	self.root._Remove(key)
+
+	// If the root node has 0 keys, make its first child as the new root
+	//  if it has a child, otherwise set root as NULL
+	if self.root.n == 0 {
+		if self.root._Type == _LEAF {
+			self.root = nil
+		} else {
+			self.root = self.root.childs.GetUnchecked(0)
+		}
+	}
+
+	if result.IsNone() {
+		return None[V]()
+	} else {
+		self.len--
+		return Some(result.Unwrap().values.data[index])
+	}
+}
+
 func (self *BTreeMap[K, V]) Test() {
 	self.root._Traverse()
 }
