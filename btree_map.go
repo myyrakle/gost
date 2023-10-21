@@ -42,10 +42,12 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 			_Type:  _LEAF,
 			keys:   VecWithLen[K](_BTREE_CAPACITY),
 			values: VecWithLen[V](_BTREE_CAPACITY),
+			n:      1,
 		}
 
 		self.root.keys.SetUnchecked(0, key)
 		self.root.values.SetUnchecked(0, value)
+
 		self.len = 1
 		return None[V]()
 	} else /* If tree is not empty */ {
@@ -58,6 +60,8 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 			newRoot := &BTreeNode[K, V]{
 				_Type:          _INTERNAL,
 				_MinimumDegree: _BTREE_CAPACITY,
+				keys:           VecWithLen[K](_BTREE_CAPACITY),
+				values:         VecWithLen[V](_BTREE_CAPACITY),
 			}
 
 			// Make old root as child of new root
@@ -173,7 +177,7 @@ func (self *BTreeMap[K, V]) _Insert(key K, value V) {
 // function is called
 func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 	// Initialize index as index of rightmost element
-	i := self.keys.Len() - 1
+	i := USize(self.n - 1)
 
 	// If this is a leaf node
 	if self._Type == _LEAF {
@@ -189,6 +193,8 @@ func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 		// Insert the new key at found location
 		self.keys.SetUnchecked(USize(i+1), key)
 		self.values.SetUnchecked(USize(i+1), value)
+
+		self.n++
 	} else { // If this node is not leaf
 		// Find the child which is going to have the new key
 		for i >= 0 && self.keys.GetUnchecked(i).Cmp(key) == OrderingGreater {
