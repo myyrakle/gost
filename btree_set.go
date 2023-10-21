@@ -45,3 +45,9 @@ func (self *BTreeSet[K]) Remove(key K) Bool {
 		return false
 	}
 }
+
+// Returns true if the set contains no elements.
+func (self *BTreeSet[K]) IsEmpty() Bool {
+	return self._treemap.IsEmpty()
+}
+
