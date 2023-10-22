@@ -731,3 +731,17 @@ func (self BTreeMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 func (self BTreeMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
 	return self.vec
 }
+
+// Collect to LinkedList
+func (self BTreeMapIter[K, V]) CollectToLinkedList() LinkedList[Pair[K, V]] {
+	list := LinkedListNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
