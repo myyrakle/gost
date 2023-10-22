@@ -55,3 +55,9 @@ func (self *BTreeSet[K]) IsEmpty() Bool {
 func (self *BTreeSet[K]) Len() USize {
 	return self._treemap.Len()
 }
+
+type BTreeSetIter[K Ord[K]] struct {
+	vec      Vec[K]
+	position USize
+}
+
