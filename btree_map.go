@@ -1,6 +1,8 @@
 package gost
 
-import "strings"
+import (
+	"strings"
+)
 
 const _B = 6
 const _BTREE_CAPACITY = _B*2 - 1
@@ -283,7 +285,13 @@ func (self BTreeNode[K, V]) _Search(key K) (Option[*BTreeNode[K, V]], uint) {
 	}
 
 	// Go to the appropriate child
-	return self.childs.GetUnchecked(i)._Search(key)
+	child := self.childs.GetUnchecked(i)
+
+	if child != nil {
+		return child._Search(key)
+	} else {
+		return None[*BTreeNode[K, V]](), 0
+	}
 }
 
 // The main function that inserts a new key in this B-Tree
