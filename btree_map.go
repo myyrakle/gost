@@ -1027,6 +1027,11 @@ func (self BTreeMap[K, V]) Display() String {
 
 	for i := USize(0); i < keys.Len(); i++ {
 		key := keys.GetUnchecked(i)
+
+		if self.Get(key).IsNone() {
+			continue
+		}
+
 		value := self.Get(key).Unwrap()
 
 		fields = append(fields, string(Format("{}: {}", key, value)))
