@@ -681,3 +681,20 @@ func (self *BTreeMapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair
 		newVec.Push(f(value.Unwrap()))
 	}
 }
+
+// filter
+func (self *BTreeMapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V]] {
+	newVec := VecNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
+	}
+}
