@@ -797,3 +797,16 @@ func (self *BTreeMapKeys[K]) Next() Option[K] {
 	return Some(result)
 }
 
+// map
+func (self *BTreeMapKeys[K]) Map(f func(K) K) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
