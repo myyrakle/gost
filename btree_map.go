@@ -727,3 +727,7 @@ func (self BTreeMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 		i--
 	}
 }
+
+func (self BTreeMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
+	return self.vec
+}
