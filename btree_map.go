@@ -827,3 +827,16 @@ func (self *BTreeMapKeys[K]) Filter(f func(K) Bool) Iterator[K] {
 		}
 	}
 }
+
+// fold
+func (self *BTreeMapKeys[K]) Fold(init K, f func(K, K) K) K {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
