@@ -269,6 +269,7 @@ func (self HashMapKeys[K]) Rev() Iterator[K] {
 	}
 }
 
+// Collect to Vec
 func (self HashMapKeys[K]) CollectToVec() Vec[K] {
 	return self.vec
 }
@@ -375,6 +376,7 @@ func (self HashMapValues[V]) Rev() Iterator[V] {
 	}
 }
 
+// Collect to Vec
 func (self HashMapValues[V]) CollectToVec() Vec[V] {
 	return self.vec
 }

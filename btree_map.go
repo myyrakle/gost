@@ -1,5 +1,7 @@
 package gost
 
+import "strings"
+
 const _B = 6
 const _BTREE_CAPACITY = _B*2 - 1
 
@@ -180,6 +182,78 @@ func (self BTreeNode[K, V]) _Traverse() {
 		Println("{}, {}", self.keys.GetUnchecked(i), self.values.GetUnchecked(i))
 		i++
 	}
+}
+
+// To Vec[Pair[K, V]]
+func (self BTreeNode[K, V]) _ToVec() Vec[Pair[K, V]] {
+	vec := Vec[Pair[K, V]]{}
+
+	// There are n keys and n+1 children, traverse through n keys
+	// and first n children
+
+	i := USize(0)
+	for i < self.keys.Len() {
+		// If this is not leaf, then before printing key[i],
+		// traverse the subtree rooted with child C[i].
+		if self._Type != _LEAF {
+			if self.childs.GetUnchecked(i) != nil {
+				childsVec := self.childs.GetUnchecked(i)._ToVec()
+				vec.Append(&childsVec)
+			}
+		}
+		vec.Push(Pair[K, V]{Key: self.keys.GetUnchecked(i), Value: self.values.GetUnchecked(i)})
+		i++
+	}
+
+	return vec
+}
+
+// To Vec[K]
+func (self BTreeNode[K, V]) _ToKeyVec() Vec[K] {
+	vec := Vec[K]{}
+
+	// There are n keys and n+1 children, traverse through n keys
+	// and first n children
+
+	i := USize(0)
+	for i < self.keys.Len() {
+		// If this is not leaf, then before printing key[i],
+		// traverse the subtree rooted with child C[i].
+		if self._Type != _LEAF {
+			if self.childs.GetUnchecked(i) != nil {
+				childsVec := self.childs.GetUnchecked(i)._ToKeyVec()
+				vec.Append(&childsVec)
+			}
+		}
+		vec.Push(self.keys.GetUnchecked(i))
+		i++
+	}
+
+	return vec
+}
+
+// To Vec[V]
+func (self BTreeNode[K, V]) _ToValueVec() Vec[V] {
+	vec := Vec[V]{}
+
+	// There are n keys and n+1 children, traverse through n keys
+	// and first n children
+
+	i := USize(0)
+	for i < self.keys.Len() {
+		// If this is not leaf, then before printing key[i],
+		// traverse the subtree rooted with child C[i].
+		if self._Type != _LEAF {
+			if self.childs.GetUnchecked(i) != nil {
+				childsVec := self.childs.GetUnchecked(i)._ToValueVec()
+				vec.Append(&childsVec)
+			}
+		}
+		vec.Push(self.values.GetUnchecked(i))
+		i++
+	}
+
+	return vec
 }
 
 // Function to search key k in subtree rooted with this node
@@ -615,4 +689,349 @@ func (self *BTreeNode[K, V]) _Merge(idx int) {
 
 	// Freeing the memory occupied by sibling
 	sibling = nil
+}
+
+type BTreeMapIter[K Ord[K], V any] struct {
+	vec      Vec[Pair[K, V]]
+	position USize
+}
+
+// into_iter
+func (self BTreeMap[K, V]) IntoIter() Iterator[Pair[K, V]] {
+	vec := Vec[Pair[K, V]]{}
+
+	if self.root != nil {
+		vec = self.root._ToVec()
+	}
+
+	return &BTreeMapIter[K, V]{vec: vec, position: 0}
+}
+
+// next
+func (self *BTreeMapIter[K, V]) Next() Option[Pair[K, V]] {
+	if self.position >= self.vec.Len() {
+		return None[Pair[K, V]]()
+	}
+
+	result := self.vec.GetUnchecked(self.position)
+	self.position++
+	return Some(result)
+}
+
+// map
+func (self *BTreeMapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K, V]] {
+	newVec := VecNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self *BTreeMapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K, V]] {
+	newVec := VecNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
+	}
+}
+
+// fold
+func (self *BTreeMapIter[K, V]) Fold(init Pair[K, V], f func(Pair[K, V], Pair[K, V]) Pair[K, V]) Pair[K, V] {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self BTreeMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
+	newVec := VecWithLen[Pair[K, V]](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+func (self BTreeMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
+	return self.vec
+}
+
+// Collect to LinkedList
+func (self BTreeMapIter[K, V]) CollectToLinkedList() LinkedList[Pair[K, V]] {
+	list := LinkedListNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
+
+type BTreeMapKeys[K any] struct {
+	vec      Vec[K]
+	position USize
+}
+
+// An iterator visiting all keys in arbitrary order. The iterator element type is K.
+func (self BTreeMap[K, V]) Keys() Iterator[K] {
+	vec := Vec[K]{}
+
+	if self.root != nil {
+		vec = self.root._ToKeyVec()
+	}
+
+	return &BTreeMapKeys[K]{vec: vec, position: 0}
+}
+
+// next
+func (self *BTreeMapKeys[K]) Next() Option[K] {
+	if self.position >= self.vec.Len() {
+		return None[K]()
+	}
+
+	result := self.vec.GetUnchecked(self.position)
+	self.position++
+	return Some(result)
+}
+
+// map
+func (self *BTreeMapKeys[K]) Map(f func(K) K) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self *BTreeMapKeys[K]) Filter(f func(K) Bool) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
+	}
+}
+
+// fold
+func (self *BTreeMapKeys[K]) Fold(init K, f func(K, K) K) K {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self BTreeMapKeys[K]) Rev() Iterator[K] {
+	newVec := VecWithLen[K](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+// Collect to Vec
+func (self BTreeMapKeys[K]) CollectToVec() Vec[K] {
+	return self.vec
+}
+
+// Collect to LinkedList
+func (self BTreeMapKeys[K]) CollectToLinkedList() LinkedList[K] {
+	list := LinkedListNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
+
+type BTreeMapValues[V any] struct {
+	vec      Vec[V]
+	position USize
+}
+
+// An iterator visiting all values in arbitrary order. The iterator element type is V.
+func (self BTreeMap[K, V]) Values() Iterator[V] {
+	vec := Vec[V]{}
+
+	if self.root != nil {
+		vec = self.root._ToValueVec()
+	}
+
+	return &BTreeMapValues[V]{vec: vec, position: 0}
+}
+
+// next
+func (self *BTreeMapValues[V]) Next() Option[V] {
+	if self.position >= self.vec.Len() {
+		return None[V]()
+	}
+
+	result := self.vec.GetUnchecked(self.position)
+	self.position++
+	return Some(result)
+}
+
+// map
+func (self *BTreeMapValues[V]) Map(f func(V) V) Iterator[V] {
+	newVec := VecNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self *BTreeMapValues[V]) Filter(f func(V) Bool) Iterator[V] {
+	newVec := VecNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
+	}
+}
+
+// fold
+func (self *BTreeMapValues[V]) Fold(init V, f func(V, V) V) V {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self BTreeMapValues[V]) Rev() Iterator[V] {
+	newVec := VecWithLen[V](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+// Collect to Vec
+func (self BTreeMapValues[V]) CollectToVec() Vec[V] {
+	return self.vec
+}
+
+// Collect to LinkedList
+func (self BTreeMapValues[V]) CollectToLinkedList() LinkedList[V] {
+	list := LinkedListNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
+
+// impl Display for BTreeMap
+func (self BTreeMap[K, V]) Display() String {
+	keys := self.Keys().CollectToVec()
+
+	buffer := String("")
+	buffer += "BTreeMap{"
+
+	fields := []string{}
+
+	for i := USize(0); i < keys.Len(); i++ {
+		key := keys.GetUnchecked(i)
+		value := self.Get(key).Unwrap()
+
+		fields = append(fields, string(Format("{}: {}", key, value)))
+	}
+
+	buffer += String(strings.Join(fields, ", "))
+
+	buffer += "}"
+
+	return buffer
+}
+
+// impl Debug for HashMap
+func (self BTreeMap[K, V]) Debug() String {
+	return self.Display()
 }
