@@ -61,3 +61,9 @@ type BTreeSetIter[K Ord[K]] struct {
 	position USize
 }
 
+// into_iter
+func (self *BTreeSet[K]) IntoIter() BTreeSetIter[K] {
+	keys := self._treemap.root._ToKeyVec()
+
+	return &HashSetIter[K]{vec: keys, position: 0}
+}
