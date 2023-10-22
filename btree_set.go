@@ -1,5 +1,7 @@
 package gost
 
+import "strings"
+
 type BTreeSet[K Ord[K]] struct {
 	_treemap *BTreeMap[K, struct{}]
 }
@@ -62,10 +64,10 @@ type BTreeSetIter[K Ord[K]] struct {
 }
 
 // into_iter
-func (self *BTreeSet[K]) IntoIter() BTreeSetIter[K] {
+func (self *BTreeSet[K]) IntoIter() Iterator[K] {
 	keys := self._treemap.root._ToKeyVec()
 
-	return &HashSetIter[K]{vec: keys, position: 0}
+	return &BTreeSetIter[K]{vec: keys, position: 0}
 }
 
 // next
@@ -157,4 +159,26 @@ func (self BTreeSetIter[K]) CollectToLinkedList() LinkedList[K] {
 		}
 		list.PushBack(value.Unwrap())
 	}
+}
+
+// impl Display for BTreeSet
+func (self BTreeSet[K]) Display() String {
+	keys := self.IntoIter().CollectToVec()
+
+	buffer := String("")
+	buffer += "BTreeSet{"
+
+	fields := []string{}
+
+	for i := USize(0); i < keys.Len(); i++ {
+		key := keys.GetUnchecked(i)
+
+		fields = append(fields, string(Format("{}", key)))
+	}
+
+	buffer += String(strings.Join(fields, ", "))
+
+	buffer += "}"
+
+	return buffer
 }
