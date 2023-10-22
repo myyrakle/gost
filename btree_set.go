@@ -81,7 +81,7 @@ func (self *BTreeSetIter[K]) Next() Option[K] {
 }
 
 // map
-func (self HashSetIter[K]) Map(f func(K) K) Iterator[K] {
+func (self BTreeSetIter[K]) Map(f func(K) K) Iterator[K] {
 	newVec := VecNew[K]()
 
 	for {
@@ -91,5 +91,22 @@ func (self HashSetIter[K]) Map(f func(K) K) Iterator[K] {
 			return newVec.IntoIter()
 		}
 		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self BTreeSetIter[K]) Filter(f func(K) Bool) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
 	}
 }
