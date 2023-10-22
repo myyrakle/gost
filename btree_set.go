@@ -3,7 +3,7 @@ package gost
 import "strings"
 
 type BTreeSet[K Ord[K]] struct {
-	_treemap *BTreeMap[K, struct{}]
+	_treemap BTreeMap[K, struct{}]
 }
 
 // Creates an empty BTreeSet.
