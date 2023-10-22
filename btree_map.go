@@ -991,3 +991,17 @@ func (self BTreeMapValues[V]) Rev() Iterator[V] {
 func (self BTreeMapValues[V]) CollectToVec() Vec[V] {
 	return self.vec
 }
+
+// Collect to LinkedList
+func (self BTreeMapValues[V]) CollectToLinkedList() LinkedList[V] {
+	list := LinkedListNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
