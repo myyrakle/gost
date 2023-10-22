@@ -986,3 +986,8 @@ func (self BTreeMapValues[V]) Rev() Iterator[V] {
 		i--
 	}
 }
+
+// Collect to Vec
+func (self BTreeMapValues[V]) CollectToVec() Vec[V] {
+	return self.vec
+}
