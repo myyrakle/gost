@@ -810,3 +810,20 @@ func (self *BTreeMapKeys[K]) Map(f func(K) K) Iterator[K] {
 		newVec.Push(f(value.Unwrap()))
 	}
 }
+
+// filter
+func (self *BTreeMapKeys[K]) Filter(f func(K) Bool) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
+	}
+}
