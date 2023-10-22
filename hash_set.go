@@ -172,7 +172,7 @@ func (self HashSetIter[K]) Rev() Iterator[K] {
 	}
 }
 
-// collect
+// Collect to Vec
 func (self HashSetIter[K]) CollectToVec() Vec[K] {
 	return self.vec
 }

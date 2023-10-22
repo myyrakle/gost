@@ -1,5 +1,7 @@
 package gost
 
+import "strings"
+
 type BTreeSet[K Ord[K]] struct {
 	_treemap *BTreeMap[K, struct{}]
 }
@@ -54,4 +56,134 @@ func (self *BTreeSet[K]) IsEmpty() Bool {
 // Returns the number of elements in the set.
 func (self *BTreeSet[K]) Len() USize {
 	return self._treemap.Len()
+}
+
+type BTreeSetIter[K Ord[K]] struct {
+	vec      Vec[K]
+	position USize
+}
+
+// into_iter
+func (self *BTreeSet[K]) IntoIter() Iterator[K] {
+	keys := self._treemap.root._ToKeyVec()
+
+	return &BTreeSetIter[K]{vec: keys, position: 0}
+}
+
+// next
+func (self *BTreeSetIter[K]) Next() Option[K] {
+	if self.position >= self.vec.Len() {
+		return None[K]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[K](value)
+}
+
+// map
+func (self BTreeSetIter[K]) Map(f func(K) K) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
+
+// filter
+func (self BTreeSetIter[K]) Filter(f func(K) Bool) Iterator[K] {
+	newVec := VecNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+
+		if f(value.Unwrap()) {
+			newVec.Push(value.Unwrap())
+		}
+	}
+}
+
+// fold
+func (self BTreeSetIter[K]) Fold(init K, f func(K, K) K) K {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
+
+// rev
+func (self BTreeSetIter[K]) Rev() Iterator[K] {
+	newVec := VecWithLen[K](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
+
+// Collect to Vec
+func (self BTreeSetIter[K]) CollectToVec() Vec[K] {
+	return self.vec
+}
+
+// Collect to LinkedList
+func (self BTreeSetIter[K]) CollectToLinkedList() LinkedList[K] {
+	list := LinkedListNew[K]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return list
+		}
+		list.PushBack(value.Unwrap())
+	}
+}
+
+// impl Display for BTreeSet
+func (self BTreeSet[K]) Display() String {
+	keys := self.IntoIter().CollectToVec()
+
+	buffer := String("")
+	buffer += "BTreeSet{"
+
+	fields := []string{}
+
+	for i := USize(0); i < keys.Len(); i++ {
+		key := keys.GetUnchecked(i)
+
+		fields = append(fields, string(Format("{}", key)))
+	}
+
+	buffer += String(strings.Join(fields, ", "))
+
+	buffer += "}"
+
+	return buffer
+}
+
+// impl Debug for BTreeSet
+func (self BTreeSet[K]) Debug() String {
+	return self.Display()
 }
