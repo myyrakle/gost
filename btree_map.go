@@ -230,6 +230,30 @@ func (self BTreeNode[K, V]) _ToKeyVec() Vec[K] {
 	return vec
 }
 
+// To Vec[V]
+func (self BTreeNode[K, V]) _ToValueVec() Vec[V] {
+	vec := Vec[V]{}
+
+	// There are n keys and n+1 children, traverse through n keys
+	// and first n children
+
+	i := USize(0)
+	for i < self.keys.Len() {
+		// If this is not leaf, then before printing key[i],
+		// traverse the subtree rooted with child C[i].
+		if self._Type != _LEAF {
+			if self.childs.GetUnchecked(i) != nil {
+				childsVec := self.childs.GetUnchecked(i)._ToValueVec()
+				vec.Append(&childsVec)
+			}
+		}
+		vec.Push(self.values.GetUnchecked(i))
+		i++
+	}
+
+	return vec
+}
+
 // Function to search key k in subtree rooted with this node
 func (self BTreeNode[K, V]) _Search(key K) (Option[*BTreeNode[K, V]], uint) {
 	// Find the first key greater than or equal to k
@@ -879,4 +903,15 @@ func (self BTreeMapKeys[K]) CollectToLinkedList() LinkedList[K] {
 type BTreeMapValues[V any] struct {
 	vec      Vec[V]
 	position USize
+}
+
+// An iterator visiting all values in arbitrary order. The iterator element type is V.
+func (self BTreeMap[K, V]) Values() Iterator[V] {
+	vec := Vec[V]{}
+
+	if self.root != nil {
+		vec = self.root._ToValueVec()
+	}
+
+	return &BTreeMapValues[V]{vec: vec, position: 0}
 }
