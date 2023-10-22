@@ -182,3 +182,8 @@ func (self BTreeSet[K]) Display() String {
 
 	return buffer
 }
+
+// impl Debug for BTreeSet
+func (self BTreeSet[K]) Debug() String {
+	return self.Display()
+}
