@@ -1,5 +1,7 @@
 package gost
 
+import "strings"
+
 const _B = 6
 const _BTREE_CAPACITY = _B*2 - 1
 
@@ -1004,4 +1006,27 @@ func (self BTreeMapValues[V]) CollectToLinkedList() LinkedList[V] {
 		}
 		list.PushBack(value.Unwrap())
 	}
+}
+
+// impl Display for BTreeMap
+func (self BTreeMap[K, V]) Display() String {
+	keys := self.Keys().CollectToVec()
+
+	buffer := String("")
+	buffer += "BTreeMap{"
+
+	fields := []string{}
+
+	for i := USize(0); i < keys.Len(); i++ {
+		key := keys.GetUnchecked(i)
+		value := self.Get(key).Unwrap()
+
+		fields = append(fields, string(Format("{}: {}", key, value)))
+	}
+
+	buffer += String(strings.Join(fields, ", "))
+
+	buffer += "}"
+
+	return buffer
 }
