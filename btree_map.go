@@ -915,3 +915,14 @@ func (self BTreeMap[K, V]) Values() Iterator[V] {
 
 	return &BTreeMapValues[V]{vec: vec, position: 0}
 }
+
+// next
+func (self *BTreeMapValues[V]) Next() Option[V] {
+	if self.position >= self.vec.Len() {
+		return None[V]()
+	}
+
+	result := self.vec.GetUnchecked(self.position)
+	self.position++
+	return Some(result)
+}
