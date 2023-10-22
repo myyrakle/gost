@@ -785,3 +785,15 @@ func (self BTreeMap[K, V]) Keys() Iterator[K] {
 
 	return &BTreeMapKeys[K]{vec: vec, position: 0}
 }
+
+// next
+func (self *BTreeMapKeys[K]) Next() Option[K] {
+	if self.position >= self.vec.Len() {
+		return None[K]()
+	}
+
+	result := self.vec.GetUnchecked(self.position)
+	self.position++
+	return Some(result)
+}
+
