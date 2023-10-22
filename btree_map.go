@@ -53,8 +53,16 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 		self.len = 1
 		return None[V]()
 	} else /* If tree is not empty */ {
+
+		result, index := self.root._Search(key)
+
 		// If exists, update value
-		// TODO: implement update
+		if result.IsSome() {
+			node := result.Unwrap()
+			oldValue := node.values.GetUnchecked(USize(index))
+			node.values.SetUnchecked(USize(index), value)
+			return Some[V](oldValue)
+		}
 
 		// If root is full, then tree grows in height
 		if self.root.n == _BTREE_CAPACITY {
@@ -1019,6 +1027,11 @@ func (self BTreeMap[K, V]) Display() String {
 
 	for i := USize(0); i < keys.Len(); i++ {
 		key := keys.GetUnchecked(i)
+
+		if self.Get(key).IsNone() {
+			continue
+		}
+
 		value := self.Get(key).Unwrap()
 
 		fields = append(fields, string(Format("{}: {}", key, value)))
