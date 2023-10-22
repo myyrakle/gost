@@ -875,3 +875,8 @@ func (self BTreeMapKeys[K]) CollectToLinkedList() LinkedList[K] {
 		list.PushBack(value.Unwrap())
 	}
 }
+
+type BTreeMapValues[V any] struct {
+	vec      Vec[V]
+	position USize
+}
