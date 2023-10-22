@@ -21,8 +21,8 @@ type BTreeNode[K Ord[K], V any] struct {
 	_Type          _NodeType
 	_MinimumDegree int // Minimum degree (defines the range for number of keys)
 
-	keys   Vec[K]
-	values Vec[V]
+	keys   Vec[*K]
+	values Vec[*V]
 
 	n int // Current number of keys
 
@@ -43,14 +43,14 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 		// Allocate memory for root
 		self.root = &BTreeNode[K, V]{
 			_Type:  _LEAF,
-			keys:   VecWithLen[K](_BTREE_CAPACITY),
-			values: VecWithLen[V](_BTREE_CAPACITY),
+			keys:   VecWithLen[*K](_BTREE_CAPACITY),
+			values: VecWithLen[*V](_BTREE_CAPACITY),
 			childs: VecWithLen[*BTreeNode[K, V]](_BTREE_CAPACITY + 1),
 			n:      1,
 		}
 
-		self.root.keys.SetUnchecked(0, key)
-		self.root.values.SetUnchecked(0, value)
+		self.root.keys.SetUnchecked(0, &key)
+		self.root.values.SetUnchecked(0, &value)
 
 		self.len = 1
 		return None[V]()
@@ -226,7 +226,7 @@ func (self BTreeNode[K, V]) _ToKeyVec() Vec[K] {
 	// and first n children
 
 	i := USize(0)
-	for i < self.keys.Len() {
+	for i < self.keys.Len() && i < USize(self.n) {
 		// If this is not leaf, then before printing key[i],
 		// traverse the subtree rooted with child C[i].
 		if self._Type != _LEAF {
