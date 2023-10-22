@@ -840,3 +840,19 @@ func (self *BTreeMapKeys[K]) Fold(init K, f func(K, K) K) K {
 		init = f(init, value.Unwrap())
 	}
 }
+
+// rev
+func (self BTreeMapKeys[K]) Rev() Iterator[K] {
+	newVec := VecWithLen[K](self.vec.Len())
+	i := self.vec.Len() - 1
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.AsSlice()[i] = value.Unwrap()
+		i--
+	}
+}
