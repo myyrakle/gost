@@ -698,3 +698,16 @@ func (self *BTreeMapIter[K, V]) Filter(f func(Pair[K, V]) Bool) Iterator[Pair[K,
 		}
 	}
 }
+
+// fold
+func (self *BTreeMapIter[K, V]) Fold(init Pair[K, V], f func(Pair[K, V], Pair[K, V]) Pair[K, V]) Pair[K, V] {
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return init
+		}
+
+		init = f(init, value.Unwrap())
+	}
+}
