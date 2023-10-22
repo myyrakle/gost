@@ -667,3 +667,17 @@ func (self *BTreeMapIter[K, V]) Next() Option[Pair[K, V]] {
 	self.position++
 	return Some(result)
 }
+
+// map
+func (self *BTreeMapIter[K, V]) Map(f func(Pair[K, V]) Pair[K, V]) Iterator[Pair[K, V]] {
+	newVec := VecNew[Pair[K, V]]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
