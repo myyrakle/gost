@@ -139,3 +139,8 @@ func (self BTreeSetIter[K]) Rev() Iterator[K] {
 		i--
 	}
 }
+
+// Collect to Vec
+func (self BTreeSetIter[K]) CollectToVec() Vec[K] {
+	return self.vec
+}
