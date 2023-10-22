@@ -926,3 +926,17 @@ func (self *BTreeMapValues[V]) Next() Option[V] {
 	self.position++
 	return Some(result)
 }
+
+// map
+func (self *BTreeMapValues[V]) Map(f func(V) V) Iterator[V] {
+	newVec := VecNew[V]()
+
+	for {
+		value := self.Next()
+
+		if value.IsNone() {
+			return newVec.IntoIter()
+		}
+		newVec.Push(f(value.Unwrap()))
+	}
+}
