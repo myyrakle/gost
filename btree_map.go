@@ -1030,3 +1030,8 @@ func (self BTreeMap[K, V]) Display() String {
 
 	return buffer
 }
+
+// impl Debug for HashMap
+func (self BTreeMap[K, V]) Debug() String {
+	return self.Display()
+}
