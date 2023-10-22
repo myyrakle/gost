@@ -62,8 +62,8 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 		if result.IsSome() {
 			node := result.Unwrap()
 			oldValue := node.values.GetUnchecked(USize(index))
-			node.values.SetUnchecked(USize(index), value)
-			return Some[V](oldValue)
+			node.values.SetUnchecked(USize(index), &value)
+			return Some[V](*oldValue)
 		}
 
 		// If root is full, then tree grows in height
@@ -72,8 +72,8 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 			newRoot := &BTreeNode[K, V]{
 				_Type:          _INTERNAL,
 				_MinimumDegree: _BTREE_CAPACITY,
-				keys:           VecWithLen[K](_BTREE_CAPACITY),
-				values:         VecWithLen[V](_BTREE_CAPACITY),
+				keys:           VecWithLen[*K](_BTREE_CAPACITY),
+				values:         VecWithLen[*V](_BTREE_CAPACITY),
 				childs:         VecWithLen[*BTreeNode[K, V]](_BTREE_CAPACITY + 1),
 			}
 
@@ -86,7 +86,7 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 			// New root has two children now.  Decide which of the
 			// two children is going to have new key
 			i := USize(0)
-			if newRoot.keys.GetUnchecked(0).Cmp(key) == OrderingLess {
+			if (*newRoot.keys.GetUnchecked(0)).Cmp(key) == OrderingLess {
 				i++
 			}
 			newRoot.childs.GetUnchecked(i)._InsertNonFull(key, value)
@@ -141,7 +141,7 @@ func (self *BTreeMap[K, V]) Get(key K) Option[V] {
 		return None[V]()
 	}
 
-	return Some(result.Unwrap().values.data[index])
+	return Some(*result.Unwrap().values.data[index])
 }
 
 // Removes a key from the map, returning the value at the key if the key was previously in the map.
@@ -170,7 +170,7 @@ func (self *BTreeMap[K, V]) Remove(key K) Option[V] {
 		return None[V]()
 	} else {
 		self.len--
-		return Some(result.Unwrap().values.data[index])
+		return Some(*result.Unwrap().values.data[index])
 	}
 }
 
@@ -211,7 +211,10 @@ func (self BTreeNode[K, V]) _ToVec() Vec[Pair[K, V]] {
 				vec.Append(&childsVec)
 			}
 		}
-		vec.Push(Pair[K, V]{Key: self.keys.GetUnchecked(i), Value: self.values.GetUnchecked(i)})
+
+		if self.keys.GetUnchecked(i) != nil {
+			vec.Push(Pair[K, V]{Key: *self.keys.GetUnchecked(i), Value: *self.values.GetUnchecked(i)})
+		}
 		i++
 	}
 
@@ -235,7 +238,12 @@ func (self BTreeNode[K, V]) _ToKeyVec() Vec[K] {
 				vec.Append(&childsVec)
 			}
 		}
-		vec.Push(self.keys.GetUnchecked(i))
+
+		key := self.keys.GetUnchecked(i)
+
+		if key != nil {
+			vec.Push(*key)
+		}
 		i++
 	}
 
@@ -259,7 +267,11 @@ func (self BTreeNode[K, V]) _ToValueVec() Vec[V] {
 				vec.Append(&childsVec)
 			}
 		}
-		vec.Push(self.values.GetUnchecked(i))
+
+		value := self.values.GetUnchecked(i)
+		if value != nil {
+			vec.Push(*value)
+		}
 		i++
 	}
 
@@ -270,12 +282,12 @@ func (self BTreeNode[K, V]) _ToValueVec() Vec[V] {
 func (self BTreeNode[K, V]) _Search(key K) (Option[*BTreeNode[K, V]], uint) {
 	// Find the first key greater than or equal to k
 	i := USize(0)
-	for i < self.keys.Len() && key.Cmp(self.keys.GetUnchecked(i)) == OrderingGreater {
+	for i < self.keys.Len() && self.keys.GetUnchecked(i) != nil && key.Cmp(*self.keys.GetUnchecked(i)) == OrderingGreater {
 		i++
 	}
 
 	// If the found key is equal to k, return this node
-	if i < self.keys.Len() && key.Cmp(self.keys.GetUnchecked(i)) == OrderingEqual {
+	if i < self.keys.Len() && self.keys.GetUnchecked(i) != nil && key.Cmp(*self.keys.GetUnchecked(i)) == OrderingEqual {
 		return Some[*BTreeNode[K, V]](&self), uint(i)
 	}
 
@@ -301,11 +313,11 @@ func (self *BTreeMap[K, V]) _Insert(key K, value V) {
 		// Allocate memory for root
 		self.root = &BTreeNode[K, V]{
 			_Type:  _LEAF,
-			keys:   VecWithCapacity[K](_BTREE_CAPACITY),
-			values: VecWithCapacity[V](_BTREE_CAPACITY),
+			keys:   VecWithCapacity[*K](_BTREE_CAPACITY),
+			values: VecWithCapacity[*V](_BTREE_CAPACITY),
 		}
-		self.root.keys.Push(key)
-		self.root.values.Push(value)
+		self.root.keys.Push(&key)
+		self.root.values.Push(&value)
 		self.len = 1
 	} else { // If tree is not empty
 		// If root is full, then tree grows in height
@@ -313,8 +325,8 @@ func (self *BTreeMap[K, V]) _Insert(key K, value V) {
 			// Allocate memory for new root
 			newRoot := &BTreeNode[K, V]{
 				_Type:  _INTERNAL,
-				keys:   VecWithCapacity[K](_BTREE_CAPACITY),
-				values: VecWithCapacity[V](_BTREE_CAPACITY),
+				keys:   VecWithCapacity[*K](_BTREE_CAPACITY),
+				values: VecWithCapacity[*V](_BTREE_CAPACITY),
 			}
 
 			// Make old root as child of new root
@@ -326,7 +338,7 @@ func (self *BTreeMap[K, V]) _Insert(key K, value V) {
 			// New root has two children now.  Decide which of the
 			// two children is going to have new key
 			i := USize(0)
-			if newRoot.keys.GetUnchecked(0).Cmp(key) == OrderingLess {
+			if (*newRoot.keys.GetUnchecked(0)).Cmp(key) == OrderingLess {
 				i++
 			}
 			newRoot.childs.GetUnchecked(i)._InsertNonFull(key, value)
@@ -351,20 +363,20 @@ func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 		// The following loop does two things
 		// a) Finds the location of new key to be inserted
 		// b) Moves all greater keys to one place ahead
-		for i >= 0 && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingGreater {
+		for i >= 0 && self.keys.GetUnchecked(USize(i)) != nil && (*self.keys.GetUnchecked(USize(i))).Cmp(key) == OrderingGreater {
 			self.keys.SetUnchecked(USize(i+1), self.keys.GetUnchecked(USize(i)))
 			self.values.SetUnchecked(USize(i+1), self.values.GetUnchecked(USize(i)))
 			i--
 		}
 
 		// Insert the new key at found location
-		self.keys.SetUnchecked(USize(i+1), key)
-		self.values.SetUnchecked(USize(i+1), value)
+		self.keys.SetUnchecked(USize(i+1), &key)
+		self.values.SetUnchecked(USize(i+1), &value)
 
 		self.n++
 	} else { // If this node is not leaf
 		// Find the child which is going to have the new key
-		for i >= 0 && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingGreater {
+		for i >= 0 && self.keys.GetUnchecked(USize(i)) != nil && (*self.keys.GetUnchecked(USize(i))).Cmp(key) == OrderingGreater {
 			i--
 		}
 
@@ -376,7 +388,7 @@ func (self *BTreeNode[K, V]) _InsertNonFull(key K, value V) {
 			// After split, the middle key of C[i] goes up and
 			// C[i] is splitted into two.  See which of the two
 			// is going to have the new key
-			if self.keys.GetUnchecked(USize(i+1)).Cmp(key) == OrderingLess {
+			if self.keys.GetUnchecked(USize(i+1)) != nil && (*self.keys.GetUnchecked(USize(i + 1))).Cmp(key) == OrderingLess {
 				i++
 			}
 		}
@@ -391,8 +403,8 @@ func (self *BTreeNode[K, V]) splitChild(i int, y *BTreeNode[K, V]) {
 	z := &BTreeNode[K, V]{
 		_Type:          y._Type,
 		_MinimumDegree: y._MinimumDegree,
-		keys:           VecWithLen[K](_BTREE_CAPACITY),
-		values:         VecWithLen[V](_BTREE_CAPACITY),
+		keys:           VecWithLen[*K](_BTREE_CAPACITY),
+		values:         VecWithLen[*V](_BTREE_CAPACITY),
 		childs:         VecWithLen[*BTreeNode[K, V]](_BTREE_CAPACITY + 1),
 	}
 	z.n = self._MinimumDegree - 1
@@ -441,7 +453,7 @@ func (self *BTreeNode[K, V]) splitChild(i int, y *BTreeNode[K, V]) {
 // greater than or equal to k
 func (self BTreeNode[K, V]) _FindKey(key K) int {
 	i := 0
-	for i < self.n && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingLess {
+	for i < self.n && self.keys.GetUnchecked(USize(i)) != nil && (*self.keys.GetUnchecked(USize(i))).Cmp(key) == OrderingLess {
 		i++
 	}
 	return i
@@ -452,7 +464,7 @@ func (self *BTreeNode[K, V]) _Remove(key K) {
 	i := self._FindKey(key)
 
 	// The key to be removed is present in this node
-	if i < self.n && self.keys.GetUnchecked(USize(i)).Cmp(key) == OrderingEqual {
+	if i < self.n && self.keys.GetUnchecked(USize(i)) != nil && (*self.keys.GetUnchecked(USize(i))).Cmp(key) == OrderingEqual {
 		if self._Type == _LEAF {
 			// If the key is in a leaf node - removeFromLeaf is called
 			self._RemoveFromLeaf(i)
@@ -496,7 +508,9 @@ func (self *BTreeNode[K, V]) _RemoveFromLeaf(idx int) {
 	// Move all the keys after the idx-th pos one place backward
 	for i := idx + 1; i < self.n; i++ {
 		self.keys.SetUnchecked(USize(i-1), self.keys.GetUnchecked(USize(i)))
+		self.keys.SetUnchecked(USize(i), nil)
 		self.values.SetUnchecked(USize(i-1), self.values.GetUnchecked(USize(i)))
+		self.values.SetUnchecked(USize(i), nil)
 	}
 
 	// Reduce the count of keys
@@ -516,7 +530,7 @@ func (self *BTreeNode[K, V]) _RemoveFromNonLeaf(idx int) {
 		self.keys.SetUnchecked(USize(idx), pred.keys.GetUnchecked(USize(pred.n-1)))
 		self.values.SetUnchecked(USize(idx), pred.values.GetUnchecked(USize(pred.n-1)))
 		child := self.childs.GetUnchecked(USize(idx))
-		child._Remove(pred.keys.GetUnchecked(USize(pred.n - 1)))
+		child._Remove(*pred.keys.GetUnchecked(USize(pred.n - 1)))
 	} else if self.childs.GetUnchecked(USize(idx+1)).n >= self._MinimumDegree {
 		// If the child C[idx] has less that t keys, examine C[idx+1].
 		// If C[idx+1] has atleast t keys, find the successor 'succ' of k in
@@ -526,14 +540,14 @@ func (self *BTreeNode[K, V]) _RemoveFromNonLeaf(idx int) {
 		succ := self._GetSucc(idx)
 		self.keys.SetUnchecked(USize(idx), succ.keys.GetUnchecked(0))
 		self.values.SetUnchecked(USize(idx), succ.values.GetUnchecked(0))
-		self.childs.GetUnchecked(USize(idx + 1))._Remove(succ.keys.GetUnchecked(0))
+		self.childs.GetUnchecked(USize(idx + 1))._Remove(*succ.keys.GetUnchecked(0))
 	} else {
 		// If both C[idx] and C[idx+1] has less that t keys,merge k and all of C[idx+1]
 		// into C[idx]
 		// Now C[idx] contains 2t-1 keys
 		// Free C[idx+1] and recursively delete k from C[idx]
 		self._Merge(idx)
-		self.childs.GetUnchecked(USize(idx))._Remove(key)
+		self.childs.GetUnchecked(USize(idx))._Remove(*key)
 	}
 }
 
