@@ -67,3 +67,15 @@ func (self *BTreeSet[K]) IntoIter() BTreeSetIter[K] {
 
 	return &HashSetIter[K]{vec: keys, position: 0}
 }
+
+// next
+func (self *BTreeSetIter[K]) Next() Option[K] {
+	if self.position >= self.vec.Len() {
+		return None[K]()
+	}
+
+	value := self.vec.GetUnchecked(self.position)
+	self.position++
+
+	return Some[K](value)
+}
