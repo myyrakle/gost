@@ -1,6 +1,9 @@
 package gost
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type HashSet[K comparable] struct {
 	hashMap HashMap[K, struct{}]
@@ -216,4 +219,22 @@ func (self HashSet[K]) Debug() String {
 // impl AsRef for HashSet
 func (self HashSet[K]) AsRef() *HashSet[K] {
 	return &self
+}
+
+// impl Clone for HashSet
+func (self HashSet[K]) Clone() HashSet[K] {
+	result := HashSetNew[K]()
+	for key := range self.hashMap.data {
+		cloneKey := castToClone[K](key)
+
+		if cloneKey.IsSome() {
+			result.Insert(cloneKey.Unwrap().Clone())
+		} else {
+			typeName := getTypeName(key)
+			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
+		}
+
+	}
+
+	return result
 }
