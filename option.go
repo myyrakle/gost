@@ -242,3 +242,8 @@ func (self Option[T]) Display() String {
 func (self Option[T]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for Option
+func (self Option[T]) AsRef() *Option[T] {
+	return &self
+}
