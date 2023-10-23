@@ -416,3 +416,8 @@ func (self HashMap[K, V]) Display() String {
 func (self HashMap[K, V]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for HashMap
+func (self HashMap[K, V]) AsRef() *HashMap[K, V] {
+	return &self
+}
