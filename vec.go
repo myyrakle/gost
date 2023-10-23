@@ -448,3 +448,8 @@ func (self Vec[T]) Display() String {
 func (self Vec[T]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for Vec
+func (self Vec[T]) AsRef() *Vec[T] {
+	return &self
+}
