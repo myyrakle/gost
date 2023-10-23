@@ -18,3 +18,7 @@ func (self *Mutex[T]) Lock() *T {
 	self.lock.Lock()
 	return self.value
 }
+
+func (self *Mutex[T]) Unlock() {
+	self.lock.Unlock()
+}
