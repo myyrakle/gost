@@ -232,6 +232,9 @@ func (self Result[T]) AsRef() *Result[T] {
 
 // impl Clone for Result
 func (self Result[T]) Clone() Result[T] {
-	e := castToClone(*self.ok).Unwrap()
-	return Ok[T](e.Clone())
+	if self.IsOk() {
+		return Ok[T](castToClone[T](*self.ok).Unwrap().Clone())
+	} else {
+		return Err[T](self.err)
+	}
 }
