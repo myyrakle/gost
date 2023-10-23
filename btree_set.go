@@ -187,3 +187,8 @@ func (self BTreeSet[K]) Display() String {
 func (self BTreeSet[K]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for BTreeSet
+func (self BTreeSet[K]) AsRef() *BTreeSet[K] {
+	return &self
+}
