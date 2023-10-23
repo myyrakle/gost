@@ -334,3 +334,8 @@ func (self LinkedList[T]) Display() String {
 func (self LinkedList[T]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for LinkedList
+func (self LinkedList[T]) AsRef() *LinkedList[T] {
+	return &self
+}
