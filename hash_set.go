@@ -233,7 +233,6 @@ func (self HashSet[K]) Clone() HashSet[K] {
 			typeName := getTypeName(key)
 			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
 		}
-
 	}
 
 	return result
