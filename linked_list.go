@@ -339,3 +339,29 @@ func (self LinkedList[T]) Debug() String {
 func (self LinkedList[T]) AsRef() *LinkedList[T] {
 	return &self
 }
+
+// impl Clone for LinkedList
+func (self LinkedList[T]) Clone() LinkedList[T] {
+	newList := LinkedListNew[T]()
+
+	iter := self.IntoIter()
+	for {
+		wrapped := iter.Next()
+
+		if wrapped.IsNone() {
+			break
+		}
+		e := wrapped.Unwrap()
+
+		clone := castToClone(e)
+		if clone.IsSome() {
+			newList.PushBack(clone.Unwrap().Clone())
+		} else {
+			typeName := getTypeName(e)
+
+			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
+		}
+	}
+
+	return newList
+}
