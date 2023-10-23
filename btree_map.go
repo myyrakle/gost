@@ -1070,3 +1070,8 @@ func (self BTreeMap[K, V]) Display() String {
 func (self BTreeMap[K, V]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for BTreeMap
+func (self BTreeMap[K, V]) AsRef() *BTreeMap[K, V] {
+	return &self
+}

@@ -70,3 +70,8 @@ func (p Pair[K, V]) Cmp(other Pair[K, V]) Ordering {
 		return keyOrd
 	}
 }
+
+// impl AsRef for Pair
+func (p Pair[K, V]) AsRef() *Pair[K, V] {
+	return &p
+}

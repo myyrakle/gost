@@ -212,3 +212,8 @@ func (self HashSet[K]) Display() String {
 func (self HashSet[K]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for HashSet
+func (self HashSet[K]) AsRef() *HashSet[K] {
+	return &self
+}
