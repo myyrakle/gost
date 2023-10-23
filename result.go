@@ -224,3 +224,8 @@ func (self Result[T]) Display() String {
 func (self Result[T]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for Result
+func (self Result[T]) AsRef() *Result[T] {
+	return &self
+}
