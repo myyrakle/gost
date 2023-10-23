@@ -247,3 +247,36 @@ func (self Option[T]) Debug() String {
 func (self Option[T]) AsRef() *Option[T] {
 	return &self
 }
+
+// impl Clone for Option
+func (self Option[T]) Clone() Option[T] {
+	if self.IsNone() {
+		return None[T]()
+	} else {
+		return Some[T](castToClone[T](*self.value).Unwrap().Clone())
+	}
+}
+
+type _InternalOption[T any] struct {
+	value *T
+}
+
+func (self _InternalOption[T]) IsSome() Bool {
+	return self.value != nil
+}
+
+func (self _InternalOption[T]) IsNone() Bool {
+	return self.value == nil
+}
+
+func (self _InternalOption[T]) Unwrap() T {
+	return *self.value
+}
+
+func _Some[T any](value T) _InternalOption[T] {
+	return _InternalOption[T]{value: &value}
+}
+
+func _None[T any]() _InternalOption[T] {
+	return _InternalOption[T]{value: nil}
+}

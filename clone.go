@@ -6,13 +6,13 @@ type Clone[T any] interface {
 	Clone() T
 }
 
-func castToClone[T any](value T) Option[Clone[T]] {
+func castToClone[T any](value T) _InternalOption[Clone[T]] {
 	reflectedValue := reflect.ValueOf(value)
 
 	if casted, ok := reflectedValue.Interface().(Clone[T]); ok {
-		return Some[Clone[T]](casted)
+		return _Some[Clone[T]](casted)
 	} else {
-		return None[Clone[T]]()
+		return _None[Clone[T]]()
 	}
 }
 

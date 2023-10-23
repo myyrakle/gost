@@ -453,3 +453,15 @@ func (self Vec[T]) Debug() String {
 func (self Vec[T]) AsRef() *Vec[T] {
 	return &self
 }
+
+// impl Clone for Vec
+func (self Vec[T]) Clone() Vec[T] {
+	cloned := VecWithLen[T](self.Len())
+
+	for i := USize(0); i < self.Len(); i++ {
+		e := castToClone(self.data[i]).Unwrap()
+		cloned.SetUnchecked(USize(i), e.Clone())
+	}
+
+	return cloned
+}

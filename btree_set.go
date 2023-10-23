@@ -1,6 +1,9 @@
 package gost
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type BTreeSet[K Ord[K]] struct {
 	_treemap BTreeMap[K, struct{}]
@@ -191,4 +194,28 @@ func (self BTreeSet[K]) Debug() String {
 // impl AsRef for BTreeSet
 func (self BTreeSet[K]) AsRef() *BTreeSet[K] {
 	return &self
+}
+
+// impl Clone for BTreeSet
+func (self BTreeSet[K]) Clone() BTreeSet[K] {
+	newSet := BTreeSetNew[K]()
+
+	for {
+		value := self.IntoIter().Next()
+
+		if value.IsNone() {
+			return newSet
+		}
+
+		e := value.Unwrap()
+
+		clone := castToClone[K](e)
+
+		if clone.IsNone() {
+			typeName := getTypeName(e)
+			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
+		} else {
+			newSet.Insert(clone.Unwrap().Clone())
+		}
+	}
 }

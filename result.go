@@ -229,3 +229,12 @@ func (self Result[T]) Debug() String {
 func (self Result[T]) AsRef() *Result[T] {
 	return &self
 }
+
+// impl Clone for Result
+func (self Result[T]) Clone() Result[T] {
+	if self.IsOk() {
+		return Ok[T](castToClone[T](*self.ok).Unwrap().Clone())
+	} else {
+		return Err[T](self.err)
+	}
+}
