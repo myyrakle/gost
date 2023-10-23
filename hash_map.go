@@ -1,6 +1,9 @@
 package gost
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type HashMap[K comparable, V any] struct {
 	data map[K]V
@@ -420,4 +423,26 @@ func (self HashMap[K, V]) Debug() String {
 // impl AsRef for HashMap
 func (self HashMap[K, V]) AsRef() *HashMap[K, V] {
 	return &self
+}
+
+// impl Clone for HashMap
+func (self HashMap[K, V]) Clone() HashMap[K, V] {
+	newMap := HashMapNew[K, V]()
+
+	for key, value := range self.data {
+		cloneKey := castToClone[K](key)
+		cloneValue := castToClone[V](value)
+
+		if cloneKey.IsNone() {
+			typeName := getTypeName(key)
+			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
+		} else if cloneValue.IsNone() {
+			typeName := getTypeName(value)
+			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
+		}
+
+		newMap.Insert(cloneKey.Unwrap().Clone(), cloneValue.Unwrap().Clone())
+	}
+
+	return newMap
 }
