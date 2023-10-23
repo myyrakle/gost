@@ -13,3 +13,8 @@ func MutexNew[T any](value T) Mutex[T] {
 		lock:  sync.Mutex{},
 	}
 }
+
+func (self *Mutex[T]) Lock() *T {
+	self.lock.Lock()
+	return self.value
+}
