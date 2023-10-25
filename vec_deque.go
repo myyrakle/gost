@@ -29,3 +29,7 @@ func VecDequeWithCapacity[T any](capacity uint) VecDeque[T] {
 func (self VecDeque[T]) Len() USize {
 	return USize(self.len)
 }
+
+func (self VecDeque[T]) _IsFull() bool {
+	return self.len == uint(len(self.buffer))
+}
