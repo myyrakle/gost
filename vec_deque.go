@@ -37,7 +37,7 @@ func (self *VecDeque[T]) PushFront(value T) {
 		self._Grow()
 	}
 
-	self.head = self._WrapAdd(self.head, -1)
+	self.head = self._WrapSub(self.head, 1)
 	self.buffer[self.head] = value
 	self.len++
 }
