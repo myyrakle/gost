@@ -8,8 +8,8 @@ const (
 // A double-ended queue implemented with a growable ring buffer.
 type VecDeque[T any] struct {
 	buffer []T
-	len    uint
-	head   uint
+	len    USize
+	head   USize
 }
 
 // Creates an empty VecDeque.
@@ -26,12 +26,22 @@ func VecDequeWithCapacity[T any](capacity uint) VecDeque[T] {
 	return VecDeque[T]{buffer: make([]T, capacity), len: 0, head: 0}
 }
 
+// Returns the number of elements in the vecdeque, also referred to as its ‘length’.
 func (self VecDeque[T]) Len() USize {
 	return USize(self.len)
 }
 
+// Appends an element to the back of the deque.
+func (self *VecDeque[T]) PushBack(value T) {
+	if self._IsFull() {
+		self._Grow()
+	}
+
+	self.len++
+}
+
 func (self VecDeque[T]) _IsFull() bool {
-	return self.len == uint(len(self.buffer))
+	return self.len == USize(len(self.buffer))
 }
 
 func (self *VecDeque[T]) _Grow() {
@@ -50,4 +60,20 @@ func (self *VecDeque[T]) _Grow() {
 	if self._IsFull() {
 		panic("VecDeque._Grow: VecDeque is full")
 	}
+}
+
+func _WrapIndex(logicalIndex USize, capacity USize) USize {
+	if logicalIndex >= capacity {
+		return logicalIndex - capacity
+	} else {
+		return logicalIndex
+	}
+}
+
+func (self VecDeque[T]) _WrapAdd(index USize, addend USize) USize {
+	return _WrapIndex(index+addend, USize(len(self.buffer)))
+}
+
+func (self VecDeque[T]) _ToPhysicalIndex(index USize) USize {
+	return self._WrapAdd(self.head, index)
 }
