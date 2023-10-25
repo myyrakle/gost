@@ -33,3 +33,21 @@ func (self VecDeque[T]) Len() USize {
 func (self VecDeque[T]) _IsFull() bool {
 	return self.len == uint(len(self.buffer))
 }
+
+func (self *VecDeque[T]) _Grow() {
+	if !self._IsFull() {
+		panic("VecDeque._Grow: VecDeque is not full")
+	}
+
+	oldCapacity := uint(len(self.buffer))
+	newCapacity := oldCapacity * 2
+
+	newBuffer := make([]T, newCapacity)
+	copy(newBuffer, self.buffer)
+
+	self.buffer = newBuffer
+
+	if self._IsFull() {
+		panic("VecDeque._Grow: VecDeque is full")
+	}
+}
