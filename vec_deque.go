@@ -31,12 +31,24 @@ func (self VecDeque[T]) Len() USize {
 	return USize(self.len)
 }
 
+// Prepends an element to the deque.
+func (self *VecDeque[T]) PushFront(value T) {
+	if self._IsFull() {
+		self._Grow()
+	}
+
+	self.head = self._WrapAdd(self.head, -1)
+	self.buffer[self.head] = value
+	self.len++
+}
+
 // Appends an element to the back of the deque.
 func (self *VecDeque[T]) PushBack(value T) {
 	if self._IsFull() {
 		self._Grow()
 	}
 
+	self.head = self._WrapAdd(self.head, self.len)
 	self.buffer[self._ToPhysicalIndex(self.len)] = value
 	self.len++
 }
