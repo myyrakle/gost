@@ -37,6 +37,7 @@ func (self *VecDeque[T]) PushBack(value T) {
 		self._Grow()
 	}
 
+	self.buffer[self._ToPhysicalIndex(self.len)] = value
 	self.len++
 }
 
@@ -71,7 +72,7 @@ func _WrapIndex(logicalIndex USize, capacity USize) USize {
 }
 
 func (self VecDeque[T]) _WrapAdd(index USize, addend USize) USize {
-	return _WrapIndex(index+addend, USize(len(self.buffer)))
+	return _WrapIndex(index.WrappingAdd(addend), USize(len(self.buffer)))
 }
 
 func (self VecDeque[T]) _ToPhysicalIndex(index USize) USize {
