@@ -25,3 +25,7 @@ func VecDequeWithCapacity[T any](capacity uint) VecDeque[T] {
 
 	return VecDeque[T]{buffer: make([]T, capacity), len: 0, head: 0}
 }
+
+func (self VecDeque[T]) Len() USize {
+	return USize(self.len)
+}
