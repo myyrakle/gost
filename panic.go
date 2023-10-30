@@ -20,8 +20,17 @@ func AssertEq[T Eq[T]](lhs T, rhs T, message String, args ...any) {
 }
 
 // Asserts that two expressions are not equal to each other
-func AssertNotEq[T Eq[T]](lhs T, rhs T, message String, args ...any) {
+func AssertNe[T Eq[T]](lhs T, rhs T, message String, args ...any) {
 	if lhs.Eq(rhs) {
 		panic(Format(message, args...))
+	}
+}
+
+// Indicates unimplemented code by panicking with a message of “not implemented”.
+func Unimplemented(messages ...String) {
+	if len(messages) == 0 {
+		panic("not implemented")
+	} else {
+		panic(messages[0])
 	}
 }
