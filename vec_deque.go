@@ -80,9 +80,70 @@ func (self *VecDeque[T]) _Grow() {
 
 	self.buffer = newBuffer
 
+	self._HandleCapacityIncrease(USize(oldCapacity))
+
 	if self._IsFull() {
 		panic("VecDeque._Grow: VecDeque is full")
 	}
+}
+
+func (self *VecDeque[T]) _HandleCapacityIncrease(oldCapacity USize) {
+	newCapacity := USize(len(self.buffer))
+	if newCapacity < oldCapacity {
+		panic("VecDeque._HandleCapacityIncrease: newCapacity < oldCapacity")
+	}
+
+	// Move the shortest contiguous section of the ring buffer
+	//
+	// H := head
+	// L := last element (`self.to_physical_idx(self.len - 1)`)
+	//
+	//    H           L
+	//   [o o o o o o o . ]
+	//    H           L
+	// A [o o o o o o o . . . . . . . . . ]
+	//        L H
+	//   [o o o o o o o o ]
+	//          H           L
+	// B [. . . o o o o o o o . . . . . . ]
+	//              L H
+	//   [o o o o o o o o ]
+	//            L                   H
+	// C [o o o o o . . . . . . . . . o o ]
+
+	// can't use is_contiguous() because the capacity is already updated.
+	if self.head <= oldCapacity-self.len {
+		// A
+		// Nop
+	} else {
+		headLen := oldCapacity - self.head
+		tailLen := self.len - headLen
+
+		if headLen > tailLen && newCapacity-oldCapacity >= tailLen {
+			// B
+			// self.copy_nonoverlapping(0, old_capacity, tail_len);
+			copy(self.buffer[oldCapacity:], self.buffer[:tailLen])
+		} else {
+			// C
+			newHead := newCapacity - headLen
+			self._Copy(self.head, newHead, headLen)
+			self.head = newHead
+		}
+	}
+}
+
+func (self *VecDeque[T]) _Copy(src USize, dst USize, len USize) {
+	// unsafe {
+	// 	ptr::copy(self.ptr().add(src), self.ptr().add(dst), len);
+	// }
+
+	copy(self.buffer[src:], self.buffer[dst:dst+len])
+}
+
+func (self *VecDeque[T]) _CopyNonoverlapping() {
+	// unsafe {
+	// 	ptr::copy_nonoverlapping(self.ptr().add(src), self.ptr().add(dst), len);
+	// }
 }
 
 func _WrapIndex(logicalIndex USize, capacity USize) USize {
