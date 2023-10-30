@@ -34,3 +34,12 @@ func Unimplemented(messages ...String) {
 		panic(messages[0])
 	}
 }
+
+// Indicates unreachable code.
+func Unreachable(messages ...String) {
+	if len(messages) == 0 {
+		panic("unreachable")
+	} else {
+		panic(messages[0])
+	}
+}
