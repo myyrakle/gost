@@ -365,3 +365,41 @@ func (self LinkedList[T]) Clone() LinkedList[T] {
 
 	return newList
 }
+
+// impl Eq for LinkedList
+func (self LinkedList[T]) Eq(rhs LinkedList[T]) Bool {
+	if self.Len() != rhs.Len() {
+		return false
+	}
+
+	iter1 := self.IntoIter()
+	iter2 := rhs.IntoIter()
+
+	for {
+		wrapped1 := iter1.Next()
+		wrapped2 := iter2.Next()
+
+		if wrapped1.IsNone() {
+			break
+		}
+		if wrapped2.IsNone() {
+			break
+		}
+
+		e1 := wrapped1.Unwrap()
+		e2 := wrapped2.Unwrap()
+
+		eq := castToEq(e1)
+		if eq.IsSome() {
+			if !eq.Unwrap().Eq(e2) {
+				return false
+			}
+		} else {
+			typeName := getTypeName(e1)
+
+			panic(fmt.Sprintf("'%s' does not implement Eq[%s]", typeName, typeName))
+		}
+	}
+
+	return true
+}

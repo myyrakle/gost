@@ -238,3 +238,14 @@ func (self Result[T]) Clone() Result[T] {
 		return Err[T](self.err)
 	}
 }
+
+// impl Eq for Result
+func (self Result[T]) Eq(rhs Result[T]) Bool {
+	if self.IsOk() && rhs.IsOk() {
+		return castToEq[T](*self.ok).Unwrap().Eq(*rhs.ok)
+	} else if self.IsErr() && rhs.IsErr() {
+		return self.err == rhs.err
+	} else {
+		return false
+	}
+}

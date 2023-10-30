@@ -237,3 +237,18 @@ func (self HashSet[K]) Clone() HashSet[K] {
 
 	return result
 }
+
+// impl Eq for HashSet
+func (self HashSet[K]) Eq(rhs HashSet[K]) Bool {
+	if self.hashMap.Len() != rhs.hashMap.Len() {
+		return false
+	}
+
+	for key := range self.hashMap.data {
+		if !rhs.Contains(key) {
+			return false
+		}
+	}
+
+	return true
+}

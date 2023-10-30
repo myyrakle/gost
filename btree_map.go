@@ -1075,3 +1075,30 @@ func (self BTreeMap[K, V]) Debug() String {
 func (self BTreeMap[K, V]) AsRef() *BTreeMap[K, V] {
 	return &self
 }
+
+// impl Eq for BTreeMap
+func (self BTreeMap[K, V]) Eq(other *BTreeMap[K, V]) bool {
+	if self.Len() != other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+		eachPair := value.Unwrap()
+
+		if !other.ContainsKey(eachPair.Key) {
+			return false
+		}
+
+		foundPair := other.Get(eachPair.Key).Unwrap()
+
+		if !castToEq(foundPair).Unwrap().Eq(eachPair.Value) {
+			return false
+		}
+	}
+}

@@ -446,3 +446,24 @@ func (self HashMap[K, V]) Clone() HashMap[K, V] {
 
 	return newMap
 }
+
+// impl Eq for HashMap
+func (self HashMap[K, V]) Eq(rhs HashMap[K, V]) Bool {
+	if self.Len() != rhs.Len() {
+		return false
+	}
+
+	for key, value := range self.data {
+		rhsValue, ok := rhs.data[key]
+
+		if !ok {
+			return false
+		}
+
+		if !castToEq[V](value).Unwrap().Eq(rhsValue) {
+			return false
+		}
+	}
+
+	return true
+}

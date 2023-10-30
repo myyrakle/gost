@@ -219,3 +219,23 @@ func (self BTreeSet[K]) Clone() BTreeSet[K] {
 		}
 	}
 }
+
+// impl Eq for BTreeSet
+func (self BTreeSet[K]) Eq(other BTreeSet[K]) Bool {
+	if self.Len() != other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
