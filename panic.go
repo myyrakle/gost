@@ -11,3 +11,10 @@ func Assert(condition Bool, message String, args ...any) {
 		panic(Format(message, args...))
 	}
 }
+
+// Asserts that two expressions are equal to each other
+func AssertEq[T Eq[T]](lhs T, rhs T, message String, args ...any) {
+	if !lhs.Eq(rhs) {
+		panic(Format(message, args...))
+	}
+}
