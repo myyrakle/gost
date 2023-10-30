@@ -226,8 +226,9 @@ func (self BTreeSet[K]) Eq(other BTreeSet[K]) Bool {
 		return false
 	}
 
+	iter := self.IntoIter()
 	for {
-		value := self.IntoIter().Next()
+		value := iter.Next()
 
 		if value.IsNone() {
 			return true
