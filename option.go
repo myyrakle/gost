@@ -257,6 +257,17 @@ func (self Option[T]) Clone() Option[T] {
 	}
 }
 
+// impl Eq for Option
+func (self Option[T]) Eq(rhs Option[T]) Bool {
+	if self.IsNone() && rhs.IsNone() {
+		return true
+	} else if self.IsSome() && rhs.IsSome() {
+		return castToEq[T](*self.value).Unwrap().Eq(*rhs.value)
+	} else {
+		return false
+	}
+}
+
 type _InternalOption[T any] struct {
 	value *T
 }

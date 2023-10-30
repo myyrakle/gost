@@ -252,12 +252,12 @@ func (self Char) Eq(rhs Char) Bool {
 	return self == rhs
 }
 
-func castToEq[T any](value T) Option[Eq[T]] {
+func castToEq[T any](value T) _InternalOption[Eq[T]] {
 	reflectedValue := reflect.ValueOf(value)
 
 	if casted, ok := reflectedValue.Interface().(Eq[T]); ok {
-		return Some[Eq[T]](casted)
+		return _Some[Eq[T]](casted)
 	} else {
-		return None[Eq[T]]()
+		return _None[Eq[T]]()
 	}
 }
