@@ -465,3 +465,18 @@ func (self Vec[T]) Clone() Vec[T] {
 
 	return cloned
 }
+
+// impl Eq for Vec
+func (self Vec[T]) Eq(other Vec[T]) Bool {
+	if self.Len() != other.Len() {
+		return false
+	}
+
+	for i := USize(0); i < self.Len(); i++ {
+		if !castToEq(self.data[i]).Unwrap().Eq(other.data[i]) {
+			return false
+		}
+	}
+
+	return true
+}

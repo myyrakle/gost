@@ -11,6 +11,7 @@ const OrderingGreater Ordering = Ordering(1)
 
 type Ord[T any] interface {
 	Cmp(rhs T) Ordering
+	Eq[T]
 }
 
 func (self ISize) Cmp(rhs ISize) Ordering {
