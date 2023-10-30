@@ -43,3 +43,12 @@ func Unreachable(messages ...String) {
 		panic(messages[0])
 	}
 }
+
+// Indicates unfinished code.
+func Todo(messages ...String) {
+	if len(messages) == 0 {
+		panic("todo")
+	} else {
+		panic(messages[0])
+	}
+}
