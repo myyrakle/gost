@@ -18,3 +18,10 @@ func AssertEq[T Eq[T]](lhs T, rhs T, message String, args ...any) {
 		panic(Format(message, args...))
 	}
 }
+
+// Asserts that two expressions are not equal to each other
+func AssertNotEq[T Eq[T]](lhs T, rhs T, message String, args ...any) {
+	if lhs.Eq(rhs) {
+		panic(Format(message, args...))
+	}
+}
