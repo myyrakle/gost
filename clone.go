@@ -2,6 +2,7 @@ package gost
 
 import "reflect"
 
+// A common trait for the ability to explicitly duplicate an object.
 type Clone[T any] interface {
 	Clone() T
 }
