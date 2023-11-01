@@ -1,6 +1,6 @@
 # gost
 
-![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.7.2-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+![](https://img.shields.io/badge/language-Go-00ADD8) ![](https://img.shields.io/badge/version-v0.7.3-brightgreen) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ![](./etc/gorris.jpg)
 
@@ -11,7 +11,7 @@ Experience the true taste of Rust in Go
 ## Install
 
 ```
-go get github.com/myyrakle/gost@v0.7.2
+go get github.com/myyrakle/gost@v0.7.3
 ```
 
 ## Example

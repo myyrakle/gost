@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// Format trait for an empty format, {}
 type Display[T any] interface {
 	Display() String
 }
@@ -91,6 +92,8 @@ func castToDisplay[T any](value T) Option[Display[T]] {
 	}
 }
 
+// ? formatting.
+// Debug should format the output in a programmer-facing, debugging context.
 type Debug[T any] interface {
 	Debug() string
 }

@@ -2,6 +2,7 @@ package gost
 
 import "fmt"
 
+// Pair is a tuple of two values.
 type Pair[K any, V any] struct {
 	Key   K
 	Value V
