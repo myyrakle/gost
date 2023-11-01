@@ -12,6 +12,7 @@ type _NodeType int8
 const _LEAF = _NodeType(0)
 const _INTERNAL = _NodeType(1)
 
+// An ordered map based on a B-Tree.
 type BTreeMap[K Ord[K], V any] struct {
 	root *BTreeNode[K, V]
 	len  uint
@@ -37,6 +38,13 @@ func BTreeMapNew[K Ord[K], V any]() BTreeMap[K, V] {
 // Inserts a key-value pair into the map.
 // If the map did not have this key present, None is returned.
 // If the map did have this key present, the value is updated, and the old value is returned. The key is not updated, though; this matters for types that can be == without being identical. See the module-level documentation for more.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	gost.AssertEq(someMap.Insert(gost.String("foo"), gost.I32(1)), None[gost.I32]())
+//	gost.AssertEq(someMap.IsEmpty(), gost.Bool(false)))
+//
+//	someMap.Insert(gost.String("foo"), gost.I32(2))
+//	gost.AssertEq(someMap.Insert(gost.String("foo"), gost.I32(3)), Some[gost.I32](gost.I32(2)))
 func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 	// If tree is empty
 	if self.root == nil {
@@ -105,6 +113,10 @@ func (self *BTreeMap[K, V]) Insert(key K, value V) Option[V] {
 
 // Returns true if the map contains a value for the specified key.
 // The key may be any borrowed form of the map’s key type, but the ordering on the borrowed form must match the ordering on the key type.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	gost.AssertEq(someMap.ContainsKey(gost.String("foo")), gost.Bool(true))
 func (self *BTreeMap[K, V]) ContainsKey(key K) Bool {
 	if self.root == nil {
 		return false
@@ -115,22 +127,39 @@ func (self *BTreeMap[K, V]) ContainsKey(key K) Bool {
 }
 
 // Returns the number of elements in the map.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	gost.AssertEq(someMap.Len(), gost.USize(1))
 func (self *BTreeMap[K, V]) Len() USize {
 	return USize(self.len)
 }
 
 // Returns true if the map contains no elements.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	gost.AssertEq(someMap.IsEmpty(), gost.Bool(false))
 func (self *BTreeMap[K, V]) IsEmpty() Bool {
 	return self.len == 0
 }
 
 // Clears the map, removing all elements.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	someMap.Clear()
+//	gost.AssertEq(someMap.IsEmpty(), gost.Bool(true))
 func (self *BTreeMap[K, V]) Clear() {
 	self.root = nil
 	self.len = 0
 }
 
 // Returns value corresponding to the key.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	gost.AssertEq(someMap.Get(gost.String("foo")), Some[gost.I32](gost.I32(1)))
 func (self *BTreeMap[K, V]) Get(key K) Option[V] {
 	if self.root == nil {
 		return None[V]()
@@ -146,6 +175,10 @@ func (self *BTreeMap[K, V]) Get(key K) Option[V] {
 
 // Removes a key from the map, returning the value at the key if the key was previously in the map.
 // The key may be any borrowed form of the map’s key type, but the ordering on the borrowed form must match the ordering on the key type.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	gost.AssertEq(someMap.Remove(gost.String("foo")), Some[gost.I32](gost.I32(1)))
 func (self *BTreeMap[K, V]) Remove(key K) Option[V] {
 	if self.root == nil {
 		return None[V]()
@@ -808,6 +841,7 @@ func (self BTreeMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 	}
 }
 
+// Collect to Vec
 func (self BTreeMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
 	return self.vec
 }
@@ -826,12 +860,20 @@ func (self BTreeMapIter[K, V]) CollectToLinkedList() LinkedList[Pair[K, V]] {
 	}
 }
 
+// An iterator visiting all keys in arbitrary order. The iterator element type is K.
 type BTreeMapKeys[K any] struct {
 	vec      Vec[K]
 	position USize
 }
 
 // An iterator visiting all keys in arbitrary order. The iterator element type is K.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	someMap.Insert(gost.String("bar"), gost.I32(2))
+//	someMap.Insert(gost.String("baz"), gost.I32(3))
+//	keys := someMap.Keys().CollectToVec()
+//	gost.AssertEq(keys.Len(), gost.USize(3))
 func (self BTreeMap[K, V]) Keys() Iterator[K] {
 	vec := Vec[K]{}
 
@@ -932,12 +974,20 @@ func (self BTreeMapKeys[K]) CollectToLinkedList() LinkedList[K] {
 	}
 }
 
+// An iterator visiting all values in arbitrary order. The iterator element type is V.
 type BTreeMapValues[V any] struct {
 	vec      Vec[V]
 	position USize
 }
 
 // An iterator visiting all values in arbitrary order. The iterator element type is V.
+//
+//	someMap := gost.BTreeMapNew[gost.String, gost.I32]()
+//	someMap.Insert(gost.String("foo"), gost.I32(1))
+//	someMap.Insert(gost.String("bar"), gost.I32(2))
+//	someMap.Insert(gost.String("baz"), gost.I32(3))
+//	values := someMap.Values().CollectToVec()
+//	gost.AssertEq(values.Len(), gost.USize(3))
 func (self BTreeMap[K, V]) Values() Iterator[V] {
 	vec := Vec[V]{}
 
