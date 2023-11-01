@@ -9,6 +9,7 @@ const OrderingLess Ordering = Ordering(-1)
 const OrderingEqual Ordering = Ordering(0)
 const OrderingGreater Ordering = Ordering(1)
 
+// Trait for types that form a total order.
 type Ord[T any] interface {
 	Cmp(rhs T) Ordering
 	Eq[T]
@@ -184,6 +185,7 @@ func castToOrd[T any](value T) Option[Ord[T]] {
 	}
 }
 
+// Trait for equality comparisons which are equivalence relations.
 type Eq[T any] interface {
 	Eq(rhs T) Bool
 }
