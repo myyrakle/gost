@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// A unordered set based on a HashMap.
 type HashSet[K comparable] struct {
 	hashMap HashMap[K, struct{}]
 }
@@ -40,11 +41,22 @@ func HashSetFromSlice[K comparable](slice []K) HashSet[K] {
 }
 
 // Returns the number of elements in the set.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	gost.AssertEq(set.Len(), gost.USize(2))
 func (self HashSet[K]) Len() USize {
 	return self.hashMap.Len()
 }
 
 // Returns true if the set contains no elements.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	gost.Assert(set.IsEmpty())
+//
+//	set.Insert(gost.I32(1))
+//	gost.Assert(!set.IsEmpty())
 func (self HashSet[K]) IsEmpty() Bool {
 	return self.hashMap.IsEmpty()
 }
@@ -53,6 +65,10 @@ func (self HashSet[K]) IsEmpty() Bool {
 // Returns whether the value was newly inserted. That is:
 // If the set did not previously contain this value, true is returned.
 // If the set already contained this value, false is returned, and the set is not modified: original value is not replaced, and the value passed as argument is dropped.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	gost.Assert(set.Insert(gost.I32(1)))
+//	gost.Assert(!set.Insert(gost.I32(1)))
 func (self *HashSet[K]) Insert(value K) Bool {
 	result := self.hashMap.Insert(value, struct{}{})
 	return result.IsNone()
@@ -60,18 +76,36 @@ func (self *HashSet[K]) Insert(value K) Bool {
 
 // Removes a value from the set. Returns whether the value was present in the set.
 // The value may be any borrowed form of the set’s value type, but Hash and Eq on the borrowed form must match those for the value type.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	gost.Assert(set.Remove(gost.I32(1)))
+//	gost.Assert(!set.Remove(gost.I32(3)))
 func (self *HashSet[K]) Remove(value K) Bool {
 	result := self.hashMap.Remove(value)
 	return result.IsSome()
 }
 
 // Clears the set, removing all values.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	set.Clear()
+//	gost.Assert(set.IsEmpty())
 func (self *HashSet[K]) Clear() {
 	self.hashMap.Clear()
 }
 
 // Returns a reference to the value in the set, if any, that is equal to the given value.
 // The value may be any borrowed form of the set’s value type, but Hash and Eq on the borrowed form must match those for the value type.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	gost.Assert(set.Get(gost.I32(1)).IsSome())
+//	gost.Assert(set.Get(gost.I32(3)).IsNone())
 func (self HashSet[K]) Get(value K) Option[K] {
 	result := self.hashMap.Get(value)
 	if result.IsSome() {
@@ -83,10 +117,17 @@ func (self HashSet[K]) Get(value K) Option[K] {
 
 // Returns true if the set contains a value.
 // The value may be any borrowed form of the set’s value type, but Hash and Eq on the borrowed form must match those for the value type.
+//
+//	set := gost.HashSetNew[gost.I32]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	gost.Assert(set.Contains(gost.I32(1)))
+//	gost.Assert(!set.Contains(gost.I32(3)))
 func (self HashSet[K]) Contains(value K) Bool {
 	return self.hashMap.ContainsKey(value)
 }
 
+// Returns true if the set contains an element equal to the value.
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
 	position USize
