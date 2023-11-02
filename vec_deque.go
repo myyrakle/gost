@@ -486,3 +486,18 @@ func (self VecDeque[T]) Clone() *VecDeque[T] {
 
 	return &cloned
 }
+
+// impl Eq for Vec
+func (self VecDeque[T]) Eq(other VecDeque[T]) Bool {
+	if self.Len() != other.Len() {
+		return false
+	}
+
+	for i := USize(0); i < self.Len(); i++ {
+		if !castToEq(self.Get(i).Unwrap()).Unwrap().Eq(other.Get(i).Unwrap()) {
+			return false
+		}
+	}
+
+	return true
+}
