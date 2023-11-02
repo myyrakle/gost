@@ -48,13 +48,12 @@ func (self *VecDeque[T]) PushBack(value T) {
 		self._Grow()
 	}
 
-	self.head = self._WrapAdd(self.head, self.len)
 	self.buffer[self._ToPhysicalIndex(self.len)] = value
 	self.len++
 }
 
-// / Provides a reference to the element at the given index.
-// / Element at index 0 is the front of the queue.
+// Provides a reference to the element at the given index.
+// Element at index 0 is the front of the queue.
 func (self VecDeque[T]) Get(index USize) Option[T] {
 	if index >= self.Len() {
 		return None[T]()
@@ -63,6 +62,7 @@ func (self VecDeque[T]) Get(index USize) Option[T] {
 	return Some[T](self.buffer[uint(self._ToPhysicalIndex(index))])
 }
 
+// Returns `true` if the buffer is at full capacity.
 func (self VecDeque[T]) _IsFull() bool {
 	return self.len == USize(len(self.buffer))
 }
@@ -146,6 +146,7 @@ func (self *VecDeque[T]) _CopyNonoverlapping() {
 	// }
 }
 
+// / Returns the index in the underlying buffer for a given logical element index.
 func _WrapIndex(logicalIndex USize, capacity USize) USize {
 	if logicalIndex >= capacity {
 		return logicalIndex - capacity
@@ -154,10 +155,16 @@ func _WrapIndex(logicalIndex USize, capacity USize) USize {
 	}
 }
 
-func (self VecDeque[T]) _WrapAdd(index USize, subtrahend USize) USize {
-	return _WrapIndex(index.WrappingSub(subtrahend), USize(len(self.buffer)))
+// Returns the index in the underlying buffer for a given logical element
+// index + addend.
+func (self VecDeque[T]) _WrapAdd(index USize, addend USize) USize {
+	capacity := USize(len(self.buffer))
+
+	return _WrapIndex(index.WrappingAdd(addend), capacity)
 }
 
+// Returns the index in the underlying buffer for a given logical element
+// index - subtrahend.
 func (self VecDeque[T]) _WrapSub(index USize, subtrahend USize) USize {
 	capacity := USize(len(self.buffer))
 
