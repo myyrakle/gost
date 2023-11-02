@@ -355,7 +355,7 @@ type VecDequeIter[T any] struct {
 
 // into_iter
 func (self VecDeque[T]) IntoIter() Iterator[T] {
-	return &VecDequeIter[T]{deque: self, position: 0}
+	return &VecDequeIter[T]{deque: &self, position: 0}
 }
 
 // next
@@ -382,7 +382,7 @@ func (self *VecDequeIter[T]) Map(f func(T) T) Iterator[T] {
 }
 
 // filter
-func (self *VecDequeIter[T]) Filter(f func(T) bool) Iterator[T] {
+func (self *VecDequeIter[T]) Filter(f func(T) Bool) Iterator[T] {
 	newDeque := VecDequeWithCapacity[T](self.deque.Capacity())
 
 	for i := USize(0); i < self.deque.Len(); i++ {
@@ -437,4 +437,31 @@ func (self *VecDequeIter[T]) CollectToLinkedList() LinkedList[T] {
 	}
 
 	return newLinkedList
+}
+
+// impl Display for VecDeque
+func (self VecDeque[T]) Display() String {
+	buffer := String("")
+	buffer += "VecDeque["
+
+	for i := USize(0); i < self.Len(); i++ {
+		e := self.Get(i).Unwrap()
+
+		display := castToDisplay(e)
+		if display.IsSome() {
+			buffer += display.Unwrap().Display()
+		} else {
+			typeName := getTypeName(e)
+
+			panic(fmt.Sprintf("'%s' does not implement Display[%s]", typeName, typeName))
+		}
+
+		if i != self.Len()-1 {
+			buffer += ", "
+		}
+	}
+
+	buffer += "]"
+
+	return String(buffer)
 }
