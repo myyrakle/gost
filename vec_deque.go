@@ -91,6 +91,23 @@ func (self *VecDeque[T]) PushBack(value T) {
 	self.len++
 }
 
+// Removes the last element from the deque and returns it, or `None` if it is empty.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.PopBack(), gost.Some[gost.I32](gost.I32(4)))
+//	gost.AssertEqual(deque.PopBack(), gost.Some[gost.I32](gost.I32(3)))
+//	gost.AssertEqual(deque.PopBack(), gost.None[gost.I32]())
+func (self *VecDeque[T]) PopBack() Option[T] {
+	if self.IsEmpty() {
+		return None[T]()
+	}
+
+	self.len--
+	return Some[T](self.buffer[self._ToPhysicalIndex(self.len)])
+}
+
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
 //
