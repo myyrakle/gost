@@ -200,6 +200,7 @@ func (self *VecDeque[T]) Clear() {
 	self.buffer = make([]T, _VECDEQUE_INITIAL_CAPACITY)
 }
 
+// Require `impl Eq[T] for T`
 // Returns true if the deque contains an element equal to the given value.
 // This operation is O(n).
 // Note that if you have a sorted VecDeque, binary_search may be faster.
@@ -344,4 +345,10 @@ func (self VecDeque[T]) _WrapSub(index USize, subtrahend USize) USize {
 
 func (self VecDeque[T]) _ToPhysicalIndex(index USize) USize {
 	return self._WrapAdd(self.head, index)
+}
+
+// iterator for VecDeque
+type VecDequeIter[T any] struct {
+	deque *VecDeque[T]
+	index USize
 }
