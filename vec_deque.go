@@ -38,6 +38,16 @@ func (self VecDeque[T]) Len() USize {
 	return USize(self.len)
 }
 
+// Returns true if the deque is empty.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.IsEmpty(), gost.Bool(false))
+func (self VecDeque[T]) IsEmpty() Bool {
+	return self.len == 0
+}
+
 // Returns the number of elements the deque can hold without reallocating.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
