@@ -470,3 +470,8 @@ func (self VecDeque[T]) Display() String {
 func (self VecDeque[T]) Debug() String {
 	return self.Display()
 }
+
+// impl AsRef for VecDeque
+func (self VecDeque[T]) AsRef() *VecDeque[T] {
+	return &self
+}
