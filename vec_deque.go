@@ -60,6 +60,28 @@ func (self VecDeque[T]) Capacity() USize {
 	return USize(len(self.buffer))
 }
 
+// Reserves capacity for at least additional more elements to be inserted in the given deque.
+// The collection may reserve more space to speculatively avoid frequent reallocations.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	deque.Reserve(gost.USize(8))
+//	gost.AssertEqual(deque.Capacity(), gost.USize(8))
+func (self *VecDeque[T]) Reserve(additional USize) {
+	// TODO: overflow check
+	oldCapacity := self.Capacity()
+	newCapacity := oldCapacity + additional
+
+	if newCapacity > oldCapacity {
+		newBuffer := make([]T, newCapacity)
+		copy(newBuffer, self.buffer)
+		self.buffer = newBuffer
+
+		self._HandleCapacityIncrease(oldCapacity)
+	}
+}
+
 // Prepends an element to the deque.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
