@@ -83,12 +83,30 @@ func (self *VecDeque[T]) PushBack(value T) {
 
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.Get(gost.USize(0)), gost.Some[gost.I32](gost.I32(3)))
 func (self VecDeque[T]) Get(index USize) Option[T] {
 	if index >= self.Len() {
 		return None[T]()
 	}
 
 	return Some[T](self.buffer[uint(self._ToPhysicalIndex(index))])
+}
+
+// Clears the deque, removing all values.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	deque.Clear()
+//	gost.AssertEqual(deque.Len(), gost.USize(0))
+func (self *VecDeque[T]) Clear() {
+	self.len = 0
+	self.head = 0
+	self.buffer = make([]T, _VECDEQUE_INITIAL_CAPACITY)
 }
 
 // Returns `true` if the buffer is at full capacity.
