@@ -167,6 +167,16 @@ func (self VecDeque[T]) Get(index USize) Option[T] {
 	return Some[T](self.buffer[uint(self._ToPhysicalIndex(index))])
 }
 
+// Provides a reference to the back element, or None if the deque is empty.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.Back(), gost.Some[gost.I32](gost.I32(4)))
+func (self VecDeque[T]) Back() Option[T] {
+	return self.Get(self.Len().WrappingSub(1))
+}
+
 // Clears the deque, removing all values.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
