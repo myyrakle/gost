@@ -1,5 +1,7 @@
 package gost
 
+import "fmt"
+
 const (
 	_VECDEQUE_INITIAL_CAPACITY uint = 7 // 2^3 - 1
 	_VECDEQUE_MINIMUM_CAPACITY uint = 1 // 2 - 1
@@ -102,7 +104,7 @@ func (self *VecDeque[T]) _Grow() {
 		panic("VecDeque._Grow: VecDeque is not full")
 	}
 
-	oldCapacity := uint(len(self.buffer))
+	oldCapacity := USize(len(self.buffer))
 	newCapacity := oldCapacity * 2
 
 	newBuffer := make([]T, newCapacity)
@@ -110,7 +112,10 @@ func (self *VecDeque[T]) _Grow() {
 
 	self.buffer = newBuffer
 
-	self._HandleCapacityIncrease(USize(oldCapacity))
+	fmt.Println("#$", self.buffer)
+	self._HandleCapacityIncrease(oldCapacity)
+
+	fmt.Println("%%%%", self.buffer)
 
 	if self._IsFull() {
 		panic("VecDeque._Grow: VecDeque is full")
@@ -166,16 +171,14 @@ func (self *VecDeque[T]) _HandleCapacityIncrease(oldCapacity USize) {
 	}
 }
 
+// Copies a contiguous block of memory len long from src to dst
 func (self *VecDeque[T]) _Copy(src USize, dst USize, len USize) {
-	// unsafe {
-	// 	ptr::copy(self.ptr().add(src), self.ptr().add(dst), len);
-	// }
-
-	copy(self.buffer[src:], self.buffer[dst:dst+len])
+	copy(self.buffer[dst:dst+len], self.buffer[src:])
 }
 
+// Copies a contiguous block of memory len long from src to dst
 func (self *VecDeque[T]) _CopyNonoverlapping(src USize, dst USize, len USize) {
-	copy(self.buffer[src:], self.buffer[dst:dst+len])
+	copy(self.buffer[dst:dst+len], self.buffer[src:])
 }
 
 // / Returns the index in the underlying buffer for a given logical element index.
