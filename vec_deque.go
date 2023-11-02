@@ -465,3 +465,8 @@ func (self VecDeque[T]) Display() String {
 
 	return String(buffer)
 }
+
+// impl Debug for VecDeque
+func (self VecDeque[T]) Debug() String {
+	return self.Display()
+}
