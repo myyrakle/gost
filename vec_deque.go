@@ -475,3 +475,14 @@ func (self VecDeque[T]) Debug() String {
 func (self VecDeque[T]) AsRef() *VecDeque[T] {
 	return &self
 }
+
+// impl Clone for VecDeque
+func (self VecDeque[T]) Clone() *VecDeque[T] {
+	cloned := VecDequeWithCapacity[T](self.Capacity())
+
+	for i := USize(0); i < self.Len(); i++ {
+		cloned.PushBack(self.Get(i).Unwrap())
+	}
+
+	return &cloned
+}
