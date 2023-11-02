@@ -27,11 +27,21 @@ func VecDequeWithCapacity[T any](capacity uint) VecDeque[T] {
 }
 
 // Returns the number of elements in the vecdeque, also referred to as its ‘length’.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.Len(), gost.USize(2))
 func (self VecDeque[T]) Len() USize {
 	return USize(self.len)
 }
 
 // Prepends an element to the deque.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushFront(gost.I32(3))
+//	deque.PushFront(gost.I32(4))
+//	gost.AssertEqual(deque.Len(), gost.USize(2))
 func (self *VecDeque[T]) PushFront(value T) {
 	if self._IsFull() {
 		self._Grow()
@@ -43,6 +53,11 @@ func (self *VecDeque[T]) PushFront(value T) {
 }
 
 // Appends an element to the back of the deque.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.Len(), gost.USize(2))
 func (self *VecDeque[T]) PushBack(value T) {
 	if self._IsFull() {
 		self._Grow()
