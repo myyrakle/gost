@@ -36,6 +36,18 @@ func (self VecDeque[T]) Len() USize {
 	return USize(self.len)
 }
 
+// Returns the number of elements the deque can hold without reallocating.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	deque.Reserve(gost.USize(8))
+//	gost.AssertEqual(deque.Capacity(), gost.USize(8))
+//	gost.AssertEqual(deque.Len(), gost.USize(2))
+func (self VecDeque[T]) Capacity() USize {
+	return USize(len(self.buffer))
+}
+
 // Prepends an element to the deque.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
@@ -82,6 +94,9 @@ func (self VecDeque[T]) _IsFull() bool {
 	return self.len == USize(len(self.buffer))
 }
 
+// Double the buffer size.
+// This method is inline(never), so we expect it to only be called in cold paths.
+// This may panic or abort
 func (self *VecDeque[T]) _Grow() {
 	if !self._IsFull() {
 		panic("VecDeque._Grow: VecDeque is not full")
@@ -102,6 +117,8 @@ func (self *VecDeque[T]) _Grow() {
 	}
 }
 
+// Frobs the head and tail sections around to handle the fact that we just reallocated.
+// Unsafe because it trusts old_capacity.
 func (self *VecDeque[T]) _HandleCapacityIncrease(oldCapacity USize) {
 	newCapacity := USize(len(self.buffer))
 	if newCapacity < oldCapacity {
@@ -136,11 +153,13 @@ func (self *VecDeque[T]) _HandleCapacityIncrease(oldCapacity USize) {
 
 		if headLen > tailLen && newCapacity-oldCapacity >= tailLen {
 			// B
-			// self.copy_nonoverlapping(0, old_capacity, tail_len);
-			copy(self.buffer[oldCapacity:], self.buffer[:tailLen])
+			self._CopyNonoverlapping(USize(0), oldCapacity, tailLen)
 		} else {
 			// C
 			newHead := newCapacity - headLen
+
+			// can't use copy_nonoverlapping here, because if e.g. head_len = 2
+			// and new_capacity = old_capacity + 1, then the heads overlap.
 			self._Copy(self.head, newHead, headLen)
 			self.head = newHead
 		}
@@ -155,10 +174,8 @@ func (self *VecDeque[T]) _Copy(src USize, dst USize, len USize) {
 	copy(self.buffer[src:], self.buffer[dst:dst+len])
 }
 
-func (self *VecDeque[T]) _CopyNonoverlapping() {
-	// unsafe {
-	// 	ptr::copy_nonoverlapping(self.ptr().add(src), self.ptr().add(dst), len);
-	// }
+func (self *VecDeque[T]) _CopyNonoverlapping(src USize, dst USize, len USize) {
+	copy(self.buffer[src:], self.buffer[dst:dst+len])
 }
 
 // / Returns the index in the underlying buffer for a given logical element index.
