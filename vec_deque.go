@@ -380,3 +380,17 @@ func (self *VecDequeIter[T]) Map(f func(T) T) Iterator[T] {
 
 	return newDeque.IntoIter()
 }
+
+// filter
+func (self *VecDequeIter[T]) Filter(f func(T) bool) Iterator[T] {
+	newDeque := VecDequeWithCapacity[T](self.deque.Capacity())
+
+	for i := USize(0); i < self.deque.Len(); i++ {
+		value := self.deque.Get(i).Unwrap()
+		if f(value) {
+			newDeque.PushBack(value)
+		}
+	}
+
+	return newDeque.IntoIter()
+}
