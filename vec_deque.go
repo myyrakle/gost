@@ -177,6 +177,16 @@ func (self VecDeque[T]) Back() Option[T] {
 	return self.Get(self.Len().WrappingSub(1))
 }
 
+// Provides a reference to the front element, or None if the deque is empty.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.Front(), gost.Some[gost.I32](gost.I32(3)))
+func (self VecDeque[T]) Front() Option[T] {
+	return self.Get(0)
+}
+
 // Clears the deque, removing all values.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
