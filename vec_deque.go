@@ -416,3 +416,14 @@ func (self *VecDequeIter[T]) Rev() Iterator[T] {
 
 	return newDeque.IntoIter()
 }
+
+// collect to Vec
+func (self *VecDequeIter[T]) Collect() Vec[T] {
+	newVec := VecWithCapacity[T](self.deque.Capacity())
+
+	for i := USize(0); i < self.deque.Len(); i++ {
+		newVec.Push(self.deque.Get(i).Unwrap())
+	}
+
+	return newVec
+}
