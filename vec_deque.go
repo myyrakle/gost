@@ -394,3 +394,14 @@ func (self *VecDequeIter[T]) Filter(f func(T) bool) Iterator[T] {
 
 	return newDeque.IntoIter()
 }
+
+// fold
+func (self *VecDequeIter[T]) Fold(initial T, f func(T, T) T) T {
+	accumulator := initial
+
+	for i := USize(0); i < self.deque.Len(); i++ {
+		accumulator = f(accumulator, self.deque.Get(i).Unwrap())
+	}
+
+	return accumulator
+}
