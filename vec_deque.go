@@ -352,3 +352,8 @@ type VecDequeIter[T any] struct {
 	deque *VecDeque[T]
 	index USize
 }
+
+// into_iter
+func (self VecDequeIter[T]) IntoIter() Iterator[T] {
+	return &VecDequeIter[T]{deque: self, position: 0}
+}
