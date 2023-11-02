@@ -200,6 +200,33 @@ func (self *VecDeque[T]) Clear() {
 	self.buffer = make([]T, _VECDEQUE_INITIAL_CAPACITY)
 }
 
+// Returns true if the deque contains an element equal to the given value.
+// This operation is O(n).
+// Note that if you have a sorted VecDeque, binary_search may be faster.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//	gost.AssertEqual(deque.Contains(gost.I32(3)), gost.Bool(true))
+//	gost.AssertEqual(deque.Contains(gost.I32(4)), gost.Bool(true))
+//	gost.AssertEqual(deque.Contains(gost.I32(5)), gost.Bool(false))
+func (self VecDeque[T]) Contains(value T) Bool {
+	equalableValue := castToEq(value)
+
+	if equalableValue.IsNone() {
+		typeName := getTypeName(value)
+		panic(fmt.Sprintf("'%s' does not implement Eq[%s]", typeName, typeName))
+	}
+
+	for i := USize(0); i < self.Len(); i++ {
+		if equalableValue.Unwrap().Eq(self.Get(i).Unwrap()) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Returns `true` if the buffer is at full capacity.
 func (self VecDeque[T]) _IsFull() bool {
 	return self.len == USize(len(self.buffer))
