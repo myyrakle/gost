@@ -418,7 +418,7 @@ func (self *VecDequeIter[T]) Rev() Iterator[T] {
 }
 
 // collect to Vec
-func (self *VecDequeIter[T]) Collect() Vec[T] {
+func (self *VecDequeIter[T]) CollectToVec() Vec[T] {
 	newVec := VecWithCapacity[T](self.deque.Capacity())
 
 	for i := USize(0); i < self.deque.Len(); i++ {
@@ -426,4 +426,15 @@ func (self *VecDequeIter[T]) Collect() Vec[T] {
 	}
 
 	return newVec
+}
+
+// collect to LinkedList
+func (self *VecDequeIter[T]) CollectToLinkedList() LinkedList[T] {
+	newLinkedList := LinkedListNew[T]()
+
+	for i := USize(0); i < self.deque.Len(); i++ {
+		newLinkedList.PushBack(self.deque.Get(i).Unwrap())
+	}
+
+	return newLinkedList
 }
