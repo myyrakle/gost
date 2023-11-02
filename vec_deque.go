@@ -183,7 +183,7 @@ func (self VecDeque[T]) _WrapAdd(index USize, addend USize) USize {
 func (self VecDeque[T]) _WrapSub(index USize, subtrahend USize) USize {
 	capacity := USize(len(self.buffer))
 
-	return _WrapIndex(index.WrappingAdd(subtrahend).WrappingAdd(capacity), capacity)
+	return _WrapIndex(index.WrappingSub(subtrahend).WrappingAdd(capacity), capacity)
 }
 
 func (self VecDeque[T]) _ToPhysicalIndex(index USize) USize {
