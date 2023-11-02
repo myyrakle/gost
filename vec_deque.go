@@ -3,8 +3,8 @@ package gost
 import "fmt"
 
 const (
-	_VECDEQUE_INITIAL_CAPACITY uint = 7 // 2^3 - 1
-	_VECDEQUE_MINIMUM_CAPACITY uint = 1 // 2 - 1
+	_VECDEQUE_INITIAL_CAPACITY USize = 7 // 2^3 - 1
+	_VECDEQUE_MINIMUM_CAPACITY USize = 1 // 2 - 1
 )
 
 // A double-ended queue implemented with a growable ring buffer.
@@ -20,7 +20,7 @@ func VecDequeNew[T any]() VecDeque[T] {
 }
 
 // Creates an empty VecDeque with at least the specified capacity.
-func VecDequeWithCapacity[T any](capacity uint) VecDeque[T] {
+func VecDequeWithCapacity[T any](capacity USize) VecDeque[T] {
 	if capacity < _VECDEQUE_MINIMUM_CAPACITY {
 		capacity = _VECDEQUE_MINIMUM_CAPACITY
 	}
@@ -354,7 +354,7 @@ type VecDequeIter[T any] struct {
 }
 
 // into_iter
-func (self VecDequeIter[T]) IntoIter() Iterator[T] {
+func (self VecDeque[T]) IntoIter() Iterator[T] {
 	return &VecDequeIter[T]{deque: self, position: 0}
 }
 
@@ -368,4 +368,15 @@ func (self *VecDequeIter[T]) Next() Option[T] {
 	self.position++
 
 	return value
+}
+
+// map
+func (self *VecDequeIter[T]) Map(f func(T) T) Iterator[T] {
+	newDeque := VecDequeWithCapacity[T](self.deque.Capacity())
+
+	for i := USize(0); i < self.deque.Len(); i++ {
+		newDeque.PushBack(f(self.deque.Get(i).Unwrap()))
+	}
+
+	return newDeque.IntoIter()
 }
