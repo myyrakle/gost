@@ -349,11 +349,23 @@ func (self VecDeque[T]) _ToPhysicalIndex(index USize) USize {
 
 // iterator for VecDeque
 type VecDequeIter[T any] struct {
-	deque *VecDeque[T]
-	index USize
+	deque    *VecDeque[T]
+	position USize
 }
 
 // into_iter
 func (self VecDequeIter[T]) IntoIter() Iterator[T] {
 	return &VecDequeIter[T]{deque: self, position: 0}
+}
+
+// next
+func (self *VecDequeIter[T]) Next() Option[T] {
+	if self.position >= self.deque.Len() {
+		return None[T]()
+	}
+
+	value := self.deque.Get(self.position)
+	self.position++
+
+	return value
 }
