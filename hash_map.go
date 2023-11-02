@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// A hash map
 type HashMap[K comparable, V any] struct {
 	data map[K]V
 }
@@ -25,17 +26,33 @@ func (self HashMap[K, V]) AsMap() map[K]V {
 }
 
 // Returns the number of elements in the map.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	gost.AssertEq(map.Len(), gost.USize(0))
+//
+//	map.Insert(gost.I32(1), gost.I32(2))
+//	gost.AssertEq(map.Len(), gost.USize(1))
 func (self HashMap[K, V]) Len() USize {
 	return USize(len(self.data))
 }
 
 // Returns true if the map contains no elements.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	gost.Assert(map.IsEmpty())
+//
+//	map.Insert(gost.I32(1), gost.I32(2))
+//	gost.Assert(!map.IsEmpty())
 func (self HashMap[K, V]) IsEmpty() Bool {
 	return self.Len() == 0
 }
 
 // Inserts a key-value pair into the map.
 // If the map did not have this key present, None is returned.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	gost.Assert(map.Insert(gost.I32(1), gost.I32(2)).IsNone())
+//	gost.AssertEq(map.Insert(gost.I32(1), gost.I32(3)), gost.Some[gost.I32](gost.I32(2)))
 func (self *HashMap[K, V]) Insert(key K, value V) Option[V] {
 	old, ok := self.data[key]
 	self.data[key] = value
@@ -47,6 +64,10 @@ func (self *HashMap[K, V]) Insert(key K, value V) Option[V] {
 }
 
 // Removes a key from the map, returning the value at the key if the key was previously in the map.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	gost.Assert(map.Insert(gost.I32(1), gost.I32(2)).IsNone())
+//	gost.AssertEq(map.Insert(gost.I32(1), gost.I32(3)), gost.Some[gost.I32](gost.I32(2)))
 func (self *HashMap[K, V]) Remove(key K) Option[V] {
 	old, ok := self.data[key]
 	delete(self.data, key)
@@ -58,11 +79,20 @@ func (self *HashMap[K, V]) Remove(key K) Option[V] {
 }
 
 // Clears the map, removing all key-value pairs. Keeps the allocated memory for reuse.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	map.Insert(gost.I32(1), gost.I32(2))
+//	map.Clear()
+//	gost.Assert(map.IsEmpty())
 func (self *HashMap[K, V]) Clear() {
 	self.data = map[K]V{}
 }
 
 // Returns value corresponding to the key.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	map.Insert(gost.I32(1), gost.I32(2))
+//	gost.AssertEq(map.Get(gost.I32(1)), gost.Some[gost.I32](gost.I32(2)))
 func (self HashMap[K, V]) Get(key K) Option[V] {
 	value, ok := self.data[key]
 	if ok {
@@ -73,11 +103,17 @@ func (self HashMap[K, V]) Get(key K) Option[V] {
 }
 
 // Returns true if the map contains a value for the specified key.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	map.Insert(gost.I32(1), gost.I32(2))
+//	gost.Assert(map.ContainsKey(gost.I32(1)))
+//	gost.Assert(!map.ContainsKey(gost.I32(3)))
 func (self HashMap[K, V]) ContainsKey(key K) Bool {
 	_, ok := self.data[key]
 	return Bool(ok)
 }
 
+// Returns true if the map contains a value for the specified value.
 type HashMapIter[K comparable, V any] struct {
 	vec      Vec[Pair[K, V]]
 	position USize
@@ -166,6 +202,7 @@ func (self HashMapIter[K, V]) Rev() Iterator[Pair[K, V]] {
 	}
 }
 
+// Collect to Vec
 func (self HashMapIter[K, V]) CollectToVec() Vec[Pair[K, V]] {
 	return self.vec
 }
@@ -184,12 +221,20 @@ func (self HashMapIter[K, V]) CollectToLinkedList() LinkedList[Pair[K, V]] {
 	}
 }
 
+// An iterator visiting all keys in arbitrary order. The iterator element type is K.
 type HashMapKeys[K any] struct {
 	vec      Vec[K]
 	position USize
 }
 
 // An iterator visiting all keys in arbitrary order. The iterator element type is K.
+//
+//	map := gost.HashMapNew[Int, Int]()
+//	map.Insert(gost.I32(1), gost.I32(2))
+//	map.Insert(gost.I32(3), gost.I32(4))
+//	map.Insert(gost.I32(5), gost.I32(6))
+//	keys := map.Keys()
+//	gost.AssertEq(keys.Next(), gost.Some[gost.I32](gost.I32(1)))
 func (self HashMap[K, V]) Keys() Iterator[K] {
 	vec := Vec[K]{}
 	for key := range self.data {
@@ -291,6 +336,7 @@ func (self HashMapKeys[K]) CollectToLinkedList() LinkedList[K] {
 	}
 }
 
+// An iterator visiting all values in arbitrary order. The iterator element type is V.
 type HashMapValues[V any] struct {
 	vec      Vec[V]
 	position USize
@@ -445,4 +491,25 @@ func (self HashMap[K, V]) Clone() HashMap[K, V] {
 	}
 
 	return newMap
+}
+
+// impl Eq for HashMap
+func (self HashMap[K, V]) Eq(rhs HashMap[K, V]) Bool {
+	if self.Len() != rhs.Len() {
+		return false
+	}
+
+	for key, value := range self.data {
+		rhsValue, ok := rhs.data[key]
+
+		if !ok {
+			return false
+		}
+
+		if !castToEq[V](value).Unwrap().Eq(rhsValue) {
+			return false
+		}
+	}
+
+	return true
 }

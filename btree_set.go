@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// A ordered set based on a B-Tree.
 type BTreeSet[K Ord[K]] struct {
 	_treemap BTreeMap[K, struct{}]
 }
@@ -15,12 +16,24 @@ func BTreeSetNew[K Ord[K]]() BTreeSet[K] {
 }
 
 // Clears the set, removing all elements.
+//
+//	set := gost.BTreeSetNew[Int]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	set.Clear()
+//	gost.AssertEq(set.Len(), gost.USize(0))
 func (self *BTreeSet[K]) Clear() {
 	self._treemap.Clear()
 }
 
 // Returns true if the set contains an element equal to the value.
 // The value may be any borrowed form of the set’s element type, but the ordering on the borrowed form must match the ordering on the element type.
+//
+//	set := gost.BTreeSetNew[Int]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	gost.Assert(set.Contains(gost.I32(1)))
+//	gost.Assert(!set.Contains(gost.I32(3)))
 func (self *BTreeSet[K]) Contains(key K) Bool {
 	return self._treemap.ContainsKey(key)
 }
@@ -29,6 +42,10 @@ func (self *BTreeSet[K]) Contains(key K) Bool {
 // Returns whether the value was newly inserted. That is:
 // If the set did not previously contain an equal value, true is returned.
 // If the set already contained an equal value, false is returned, and the entry is not updated.
+//
+//	set := gost.BTreeSetNew[Int]()
+//	gost.Assert(set.Insert(gost.I32(1)))
+//	gost.Assert(!set.Insert(gost.I32(1)))
 func (self *BTreeSet[K]) Insert(key K) Bool {
 	result := self._treemap.Insert(key, struct{}{})
 
@@ -41,6 +58,12 @@ func (self *BTreeSet[K]) Insert(key K) Bool {
 
 // If the set contains an element equal to the value, removes it from the set and drops it. Returns whether such an element was present.
 // The value may be any borrowed form of the set’s element type, but the ordering on the borrowed form must match the ordering on the element type.
+//
+//	set := gost.BTreeSetNew[Int]()
+//	set.Insert(gost.I32(1))
+//	set.Insert(gost.I32(2))
+//	gost.Assert(set.Remove(gost.I32(1)))
+//	gost.Assert(!set.Remove(gost.I32(3)))
 func (self *BTreeSet[K]) Remove(key K) Bool {
 	result := self._treemap.Remove(key)
 
@@ -52,15 +75,28 @@ func (self *BTreeSet[K]) Remove(key K) Bool {
 }
 
 // Returns true if the set contains no elements.
+//
+//	set := gost.BTreeSetNew[Int]()
+//	gost.Assert(set.IsEmpty())
+//
+//	set.Insert(gost.I32(1))
+//	gost.Assert(!set.IsEmpty())
 func (self *BTreeSet[K]) IsEmpty() Bool {
 	return self._treemap.IsEmpty()
 }
 
 // Returns the number of elements in the set.
+//
+//	set := gost.BTreeSetNew[Int]()
+//	gost.AssertEq(set.Len(), gost.USize(0))
+//
+//	set.Insert(gost.I32(1))
+//	gost.AssertEq(set.Len(), gost.USize(1))
 func (self *BTreeSet[K]) Len() USize {
 	return self._treemap.Len()
 }
 
+// Returns an iterator over the set.
 type BTreeSetIter[K Ord[K]] struct {
 	vec      Vec[K]
 	position USize
@@ -216,6 +252,26 @@ func (self BTreeSet[K]) Clone() BTreeSet[K] {
 			panic(fmt.Sprintf("'%s' does not implement Clone[%s]", typeName, typeName))
 		} else {
 			newSet.Insert(clone.Unwrap().Clone())
+		}
+	}
+}
+
+// impl Eq for BTreeSet
+func (self BTreeSet[K]) Eq(other BTreeSet[K]) Bool {
+	if self.Len() != other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			return false
 		}
 	}
 }

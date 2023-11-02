@@ -1,5 +1,6 @@
 package gost
 
+// Used to do a cheap reference-to-reference conversion.
 type AsRef[T any] interface {
 	AsRef() *T
 }
