@@ -405,3 +405,14 @@ func (self *VecDequeIter[T]) Fold(initial T, f func(T, T) T) T {
 
 	return accumulator
 }
+
+// rev
+func (self *VecDequeIter[T]) Rev() Iterator[T] {
+	newDeque := VecDequeWithCapacity[T](self.deque.Capacity())
+
+	for i := self.deque.Len().WrappingSub(1); i >= 0; i-- {
+		newDeque.PushBack(self.deque.Get(i).Unwrap())
+	}
+
+	return newDeque.IntoIter()
+}
