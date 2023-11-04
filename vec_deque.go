@@ -374,6 +374,12 @@ func (self VecDeque[T]) Contains(value T) Bool {
 //	deque := gost.VecDequeWithLen[gost.I32](gost.USize(5))
 //	deque.Fill(gost.I32(1))
 //	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(1), gost.I32(1))
+func (self *VecDeque[T]) Fill(value T) {
+	for i := USize(0); i < self.Len(); i++ {
+		self.SetUnchecked(i, value)
+	}
+}
 
 // Returns `true` if the buffer is at full capacity.
 func (self VecDeque[T]) _IsFull() bool {
