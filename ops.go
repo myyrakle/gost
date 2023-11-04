@@ -872,3 +872,104 @@ func (self U64) WrappingMul(rhs U64) U64 {
 	}
 	return result
 }
+
+// Wrapping (modular) division. Computes self / rhs, wrapping around at the boundary of the type.
+func (self ISize) WrappingDiv(rhs ISize) ISize {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + ISize(math.MaxInt) + 1
+	}
+	return result
+}
+
+func (self I8) WrappingDiv(rhs I8) I8 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + I8(math.MaxInt8) + 1
+	}
+	return result
+}
+
+func (self I16) WrappingDiv(rhs I16) I16 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + I16(math.MaxInt16) + 1
+	}
+	return result
+}
+
+func (self I32) WrappingDiv(rhs I32) I32 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + I32(math.MaxInt32) + 1
+	}
+	return result
+}
+
+func (self I64) WrappingDiv(rhs I64) I64 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + I64(math.MaxInt64) + 1
+	}
+	return result
+}
+
+func (self USize) WrappingDiv(rhs USize) USize {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + USize(math.MaxUint) + 1
+	}
+	return result
+}
+
+func (self U8) WrappingDiv(rhs U8) U8 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + U8(math.MaxUint8) + 1
+	}
+	return result
+}
+
+func (self U16) WrappingDiv(rhs U16) U16 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + U16(math.MaxUint16) + 1
+	}
+	return result
+}
+
+func (self U32) WrappingDiv(rhs U32) U32 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + U32(math.MaxUint32) + 1
+	}
+	return result
+}
+
+func (self U64) WrappingDiv(rhs U64) U64 {
+	result := self / rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, wrap around
+		result = result + U64(math.MaxUint64) + 1
+	}
+	return result
+}
