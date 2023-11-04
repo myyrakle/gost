@@ -435,6 +435,49 @@ func (self VecDeque[T]) BinarySearch(value T) Option[USize] {
 	return None[USize]()
 }
 
+// Binary searches this slice with a comparator function.
+// The comparator function should return an order code that indicates whether its argument is Less, Equal or Greater the desired target. If the slice is not sorted or if the comparator function does not implement an order consistent with the sort order of the underlying slice, the returned result is unspecified and meaningless.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	gost.Assert(deque.BinarySearchBy(func(e gost.I32) gost.Ordering {
+//		if e < 2 {
+//			return gost.OrderingLess
+//		} else if e > 2 {
+//			return gost.OrderingGreater
+//		} else {
+//			return gost.OrderingEqual
+//		}
+//	}).IsSome())
+func (self VecDeque[T]) BinarySearchBy(f func(T) Ordering) Option[USize] {
+	low := 0
+	high := int(self.len) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+		ordering := f(self.buffer[mid])
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[USize](USize(mid))
+			}
+		}
+	}
+
+	return None[USize]()
+}
+
 // Sorts the slice.
 // This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
 // When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
