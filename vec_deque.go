@@ -167,6 +167,17 @@ func (self VecDeque[T]) Get(index USize) Option[T] {
 	return Some[T](self.buffer[uint(self._ToPhysicalIndex(index))])
 }
 
+// Returns a reference to an element or subslice, without doing bounds checking.
+// For a safe alternative see get.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.PushBack(gost.I32(4))
+//  gost.AssertEqual(deque.GetUnchecked(gost.USize(0)), gost.I32(3))
+func (self VecDeque[T]) GetUnchecked(index USize) T {
+	return self.buffer[uint(self._ToPhysicalIndex(index))]
+}
+
 // Provides a reference to the back element, or None if the deque is empty.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
