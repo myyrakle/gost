@@ -1650,3 +1650,119 @@ func (self U64) CheckedRem(rhs U64) Option[U64] {
 	}
 	return Some[U64](result)
 }
+
+// Saturating integer subtraction. Computes self - rhs, saturating at the numeric bounds instead of overflowing.
+func (self ISize) SaturatingSub(rhs ISize) ISize {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return ISize(math.MinInt)
+		}
+		return ISize(math.MaxInt)
+	}
+	return result
+}
+
+func (self I8) SaturatingSub(rhs I8) I8 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I8(math.MinInt8)
+		}
+		return I8(math.MaxInt8)
+	}
+	return result
+}
+
+func (self I16) SaturatingSub(rhs I16) I16 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I16(math.MinInt16)
+		}
+		return I16(math.MaxInt16)
+	}
+	return result
+}
+
+func (self I32) SaturatingSub(rhs I32) I32 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I32(math.MinInt32)
+		}
+		return I32(math.MaxInt32)
+	}
+	return result
+}
+
+func (self I64) SaturatingSub(rhs I64) I64 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I64(math.MinInt64)
+		}
+		return I64(math.MaxInt64)
+	}
+	return result
+}
+
+func (self USize) SaturatingSub(rhs USize) USize {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		return USize(math.MaxUint)
+	}
+	return result
+}
+
+func (self U8) SaturatingSub(rhs U8) U8 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		return U8(math.MaxUint8)
+	}
+	return result
+}
+
+func (self U16) SaturatingSub(rhs U16) U16 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		return U16(math.MaxUint16)
+	}
+	return result
+}
+
+func (self U32) SaturatingSub(rhs U32) U32 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		return U32(math.MaxUint32)
+	}
+	return result
+}
+
+func (self U64) SaturatingSub(rhs U64) U64 {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred, saturate
+		return U64(math.MaxUint64)
+	}
+	return result
+}

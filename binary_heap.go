@@ -113,8 +113,34 @@ func (self *BinaryHeap[T]) _SiftUp(start USize, pos USize) USize {
 
 // Removes the greatest item from the binary heap and returns it, or None if it is empty.
 //
+//	heap := gost.BinaryHeapNew[gost.I32]()
+//	heap.Push(1)
+//	heap.Push(2)
+//	heap.Push(3)
+//  gost.AssertEq(heap.Len(), gost.I32(3))
+//  gost.AssertEq(heap.Pop(), gost.Some[gost.I32](3))
+//  gost.AssertEq(heap.Len(), gost.I32(2))
 func (self *BinaryHeap[T]) Pop() Option[T] {
-	panic("")
+	return self.vec.Pop().Map(func(item T) T {
+		if !self.IsEmpty() {
+			_Swap(&item, &self.vec.data[0])
+			// SAFETY: !self.is_empty() means that self.len() > 0
+			self._SiftDownToBottom(0)
+		}
+
+		return item
+	})
+}
+
+func (self *BinaryHeap[T]) _SiftDownToBottom(pos USize) {
+	end := self.Len()
+	start := pos
+
+	// SAFETY: pos < self.len() so pos + 1 <= self.len()
+	hole := _HoleNew[T](&self.vec, pos)
+	child := 2*hole.Pos() + 1
+
+	
 }
 
 // Moves all the elements of other into self, leaving other empty.
