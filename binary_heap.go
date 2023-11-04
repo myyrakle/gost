@@ -37,7 +37,7 @@ func BinaryHeapWithLen[T Ord[T]](len USize) BinaryHeap[T] {
 //	heap.Reserve(10)
 //	gost.AssertEq(heap.Capacity(), gost.USize(10))
 func (self BinaryHeap[T]) Capacity() USize {
-	return self.Capacity()
+	return self.vec.Capacity()
 }
 
 // Returns the number of elements in the heap, also referred to as its ‘length’.
@@ -48,7 +48,7 @@ func (self BinaryHeap[T]) Capacity() USize {
 //	heap.Push(1)
 //	gost.AssertEq(heap.Len(), gost.USize(1))
 func (self BinaryHeap[T]) Len() USize {
-	return self.Len()
+	return self.vec.Len()
 }
 
 // Returns true if the heap contains no elements.
@@ -59,7 +59,7 @@ func (self BinaryHeap[T]) Len() USize {
 //	heap.Push(1)
 //	gost.Assert(!heap.IsEmpty())
 func (self BinaryHeap[T]) IsEmpty() Bool {
-	return self.IsEmpty()
+	return self.vec.IsEmpty()
 }
 
 // Reserves capacity for at least additional more elements to be inserted in the given Vec<T>. The collection may reserve more space to speculatively avoid frequent reallocations. After calling reserve, capacity will be greater than or equal to self.len() + additional. Does nothing if capacity is already sufficient.
@@ -70,13 +70,45 @@ func (self BinaryHeap[T]) IsEmpty() Bool {
 //	deque.Reserve(10)
 //	gost.AssertEq(deque.Capacity(), gost.USize(10))
 func (self *BinaryHeap[T]) Reserve(capacity USize) {
-	self.Reserve(capacity)
+	self.vec.Reserve(capacity)
 }
 
 // Pushes an item onto the binary heap.
 //
+// heap := gost.BinaryHeapNew[gost.I32]()
+// heap.Push(1)
+// gost.AssertEq(heap.Len(), gost.USize(1))
 func (self *BinaryHeap[T]) Push(item T) {
-	Todo()
+	oldLen := self.Len()
+	self.vec.Push(item)
+
+	// SAFETY: Since we pushed a new item it means that
+	//  old_len = self.len() - 1 < self.len()
+	self._SiftUp(0, oldLen)
+}
+
+func (self *BinaryHeap[T]) _SiftUp(start USize, pos USize) USize {
+	// Take out the value at `pos` and create a hole.
+	// SAFETY: The caller guarantees that pos < self.len()
+	hole := _HoleNew[T](&self.vec, pos)
+
+	for hole.Pos() > start {
+		parent := (hole.Pos() - 1) / 2
+
+		// SAFETY: hole.pos() > start >= 0, which means hole.pos() > 0
+		//  and so hole.pos() - 1 can't underflow.
+		//  This guarantees that parent < hole.pos() so
+		//  it's a valid index and also != hole.pos().
+		order := hole.Element().Cmp(hole.Get(parent))
+		if order == OrderingLess || order == OrderingEqual {
+			break
+		}
+
+		// SAFETY: Same as above
+		hole.MoveTo(parent)
+	}
+
+	return hole.Pos()
 }
 
 // Removes the greatest item from the binary heap and returns it, or None if it is empty.
@@ -113,10 +145,51 @@ func (self *BinaryHeap[T]) Append(other *BinaryHeap[T]) {
 //	heap.Clear()
 //	gost.AssertEq(heap.Len(), gost.USize(0))
 func (self *BinaryHeap[T]) Clear() {
-	self.Clear()
+	self.vec.Clear()
 }
 
 // Extracts a slice containing the entire heap.
-func (self *BinaryHeap[T]) Slice() []T {
-	return self.Slice()
+func (self *BinaryHeap[T]) AsSlice() []T {
+	return self.vec.AsSlice()
+}
+
+/// Hole represents a hole in a slice i.e., an index without valid value
+/// (because it was moved from or duplicated).
+/// In drop, `Hole` will restore the slice by filling the hole
+/// position with the value that was originally removed.
+type _Hole[T any] struct {
+	data *Vec[T]
+	elt  T
+	pos  USize
+}
+
+func _HoleNew[T any](data *Vec[T], pos USize) _Hole[T] {
+	elt := data.GetUnchecked(pos)
+	return _Hole[T]{
+		data: data,
+		elt:  elt,
+		pos:  pos,
+	}
+}
+
+func (self _Hole[T]) Pos() USize {
+	return self.pos
+}
+
+// Returns a reference to the element removed.
+func (self _Hole[T]) Element() T {
+	return self.elt
+}
+
+/// Returns a reference to the element at `index`.
+/// Unsafe because index must be within the data slice and not equal to pos.
+func (self _Hole[T]) Get(pos USize) T {
+	return self.data.data[pos]
+}
+
+// Move hole to new location
+// Unsafe because index must be within the data slice and not equal to pos.
+func (self *_Hole[T]) MoveTo(index USize) {
+	self.data.Swap(self.pos, index)
+	self.pos = index
 }
