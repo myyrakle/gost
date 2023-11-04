@@ -316,6 +316,47 @@ func (self Complex128) Div(rhs Complex128) Complex128 {
 	return self / rhs
 }
 
+// Rem implements
+func (self ISize) Rem(rhs ISize) ISize {
+	return self % rhs
+}
+
+func (self I8) Rem(rhs I8) I8 {
+	return self % rhs
+}
+
+func (self I16) Rem(rhs I16) I16 {
+	return self % rhs
+}
+
+func (self I32) Rem(rhs I32) I32 {
+	return self % rhs
+}
+
+func (self I64) Rem(rhs I64) I64 {
+	return self % rhs
+}
+
+func (self USize) Rem(rhs USize) USize {
+	return self % rhs
+}
+
+func (self U8) Rem(rhs U8) U8 {
+	return self % rhs
+}
+
+func (self U16) Rem(rhs U16) U16 {
+	return self % rhs
+}
+
+func (self U32) Rem(rhs U32) U32 {
+	return self % rhs
+}
+
+func (self U64) Rem(rhs U64) U64 {
+	return self % rhs
+}
+
 // AddAssign implements
 func (self *ISize) AddAssign(rhs ISize) {
 	*self += rhs
