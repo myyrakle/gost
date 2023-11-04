@@ -72,3 +72,34 @@ func (self BinaryHeap[T]) IsEmpty() Bool {
 func (self *BinaryHeap[T]) Reserve(capacity USize) {
 	self.Reserve(capacity)
 }
+
+// Pushes an item onto the binary heap.
+//
+func (self *BinaryHeap[T]) Push(item T) {
+	Todo()
+}
+
+// Removes the greatest item from the binary heap and returns it, or None if it is empty.
+//
+func (self *BinaryHeap[T]) Pop() Option[T] {
+	panic("")
+}
+
+// Moves all the elements of other into self, leaving other empty.
+//
+//	heap := gost.BinaryHeapNew[gost.I32]()
+//	heap.Push(1)
+//	heap.Push(2)
+//	heap.Push(3)
+//	heap2 := gost.BinaryHeapNew[gost.I32]()
+//	heap2.Push(4)
+//	heap2.Push(5)
+//  heap.Append(&heap2)
+//	gost.AssertEq(heap.Len(), gost.USize(5))
+//	gost.AssertEq(heap2.Len(), gost.USize(0))
+func (self *BinaryHeap[T]) Append(other *BinaryHeap[T]) {
+	self.Reserve(self.Len() + other.Len())
+	for _, item := range other.vec.data {
+		self.Push(item)
+	}
+}
