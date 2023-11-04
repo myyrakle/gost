@@ -28,6 +28,14 @@ func VecDequeWithCapacity[T any](capacity USize) VecDeque[T] {
 	return VecDeque[T]{buffer: make([]T, capacity), len: 0, head: 0}
 }
 
+// Constructs a new, empty Vec<T> with at least the specified capacity.
+func VecDequeWithLen[T any](len USize) VecDeque[T] {
+	deque := VecDequeWithCapacity[T](len)
+	deque.len = len
+
+	return deque
+}
+
 // Returns the number of elements in the vecdeque, also referred to as its ‘length’.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
@@ -360,6 +368,12 @@ func (self VecDeque[T]) Contains(value T) Bool {
 
 	return false
 }
+
+// Fills self with elements by cloning value.
+//
+//	deque := gost.VecDequeWithLen[gost.I32](gost.USize(5))
+//	deque.Fill(gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
 
 // Returns `true` if the buffer is at full capacity.
 func (self VecDeque[T]) _IsFull() bool {
