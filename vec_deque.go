@@ -1,6 +1,9 @@
 package gost
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 const (
 	_VECDEQUE_INITIAL_CAPACITY USize = 7 // 2^3 - 1
@@ -162,13 +165,13 @@ func (self *VecDeque[T]) PopBack() Option[T] {
 
 // Moves all the elements of other ISizeo self, leaving other empty.
 //
-//	deque1 := gost.VecDequeNew[gost.I32]()
-//	deque2 := gost.VecDequeNew[gost.I32]()
-//	deque1.PushBack(1)
-//	deque2.PushBack(2)
-//	deque1.Append(&deque2)
-//	gost.AssertEq(deque1.Len(), gost.USize(2))
-//  gost.AssertEq(deque2.Len(), gost.USize(0))
+//		deque1 := gost.VecDequeNew[gost.I32]()
+//		deque2 := gost.VecDequeNew[gost.I32]()
+//		deque1.PushBack(1)
+//		deque2.PushBack(2)
+//		deque1.Append(&deque2)
+//		gost.AssertEq(deque1.Len(), gost.USize(2))
+//	 gost.AssertEq(deque2.Len(), gost.USize(0))
 func (self *VecDeque[T]) Append(other *VecDeque[T]) {
 	self.Reserve(other.Len())
 
@@ -270,10 +273,10 @@ func (self VecDeque[T]) Get(index USize) Option[T] {
 // Returns a reference to an element or subslice, without doing bounds checking.
 // For a safe alternative see get.
 //
-//	deque := gost.VecDequeNew[gost.I32]()
-//	deque.PushBack(gost.I32(3))
-//	deque.PushBack(gost.I32(4))
-//  gost.AssertEqual(deque.GetUnchecked(gost.USize(0)), gost.I32(3))
+//		deque := gost.VecDequeNew[gost.I32]()
+//		deque.PushBack(gost.I32(3))
+//		deque.PushBack(gost.I32(4))
+//	 gost.AssertEqual(deque.GetUnchecked(gost.USize(0)), gost.I32(3))
 func (self VecDeque[T]) GetUnchecked(index USize) T {
 	return self.buffer[uint(self._ToPhysicalIndex(index))]
 }
@@ -393,6 +396,32 @@ func (self *VecDeque[T]) FillWith(f func() T) {
 	for i := USize(0); i < self.Len(); i++ {
 		self.SetUnchecked(i, f())
 	}
+}
+
+// Sorts the slice.
+// This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
+// When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.Sort()
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(1), gost.I32(2))
+//	gost.AssertEq(deque.GetUnchecked(2), gost.I32(3))
+func (self *VecDeque[T]) Sort() {
+	sort.SliceStable(self.buffer[:self.len], func(i, j int) bool {
+		if castToOrd[T](self.buffer[i]).IsNone() {
+			typeName := getTypeName(self.buffer[i])
+			panic(fmt.Sprintf("'%s' does not implement Ord[%s]", typeName, typeName))
+		}
+
+		lhs := castToOrd[T](self.buffer[i]).Unwrap()
+		rhs := self.buffer[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
 }
 
 // Returns `true` if the buffer is at full capacity.
