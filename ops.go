@@ -1074,3 +1074,104 @@ func (self U64) CheckedAdd(rhs U64) Option[U64] {
 	}
 	return Some[U64](result)
 }
+
+// Checked integer subtraction. Computes self - rhs, returning None if overflow occurred.
+func (self ISize) CheckedSub(rhs ISize) Option[ISize] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[ISize]()
+	}
+	return Some[ISize](result)
+}
+
+func (self I8) CheckedSub(rhs I8) Option[I8] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I8]()
+	}
+	return Some[I8](result)
+}
+
+func (self I16) CheckedSub(rhs I16) Option[I16] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I16]()
+	}
+	return Some[I16](result)
+}
+
+func (self I32) CheckedSub(rhs I32) Option[I32] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I32]()
+	}
+	return Some[I32](result)
+}
+
+func (self I64) CheckedSub(rhs I64) Option[I64] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I64]()
+	}
+	return Some[I64](result)
+}
+
+func (self USize) CheckedSub(rhs USize) Option[USize] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[USize]()
+	}
+	return Some[USize](result)
+}
+
+func (self U8) CheckedSub(rhs U8) Option[U8] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U8]()
+	}
+	return Some[U8](result)
+}
+
+func (self U16) CheckedSub(rhs U16) Option[U16] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U16]()
+	}
+	return Some[U16](result)
+}
+
+func (self U32) CheckedSub(rhs U32) Option[U32] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U32]()
+	}
+	return Some[U32](result)
+}
+
+func (self U64) CheckedSub(rhs U64) Option[U64] {
+	result := self - rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U64]()
+	}
+	return Some[U64](result)
+}
