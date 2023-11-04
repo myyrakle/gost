@@ -1417,3 +1417,144 @@ func (self U64) CheckedDiv(rhs U64) Option[U64] {
 	}
 	return Some[U64](result)
 }
+
+// Checked integer remainder. Computes self % rhs, returning None if rhs == 0 or the operation results in overflow.
+func (self ISize) CheckedRem(rhs ISize) Option[ISize] {
+	if rhs == 0 {
+		return None[ISize]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[ISize]()
+	}
+	return Some[ISize](result)
+}
+
+func (self I8) CheckedRem(rhs I8) Option[I8] {
+	if rhs == 0 {
+		return None[I8]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I8]()
+	}
+	return Some[I8](result)
+}
+
+func (self I16) CheckedRem(rhs I16) Option[I16] {
+	if rhs == 0 {
+		return None[I16]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I16]()
+	}
+	return Some[I16](result)
+}
+
+func (self I32) CheckedRem(rhs I32) Option[I32] {
+	if rhs == 0 {
+		return None[I32]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I32]()
+	}
+	return Some[I32](result)
+}
+
+func (self I64) CheckedRem(rhs I64) Option[I64] {
+	if rhs == 0 {
+		return None[I64]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[I64]()
+	}
+	return Some[I64](result)
+}
+
+func (self USize) CheckedRem(rhs USize) Option[USize] {
+	if rhs == 0 {
+		return None[USize]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[USize]()
+	}
+	return Some[USize](result)
+}
+
+func (self U8) CheckedRem(rhs U8) Option[U8] {
+	if rhs == 0 {
+		return None[U8]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U8]()
+	}
+	return Some[U8](result)
+}
+
+func (self U16) CheckedRem(rhs U16) Option[U16] {
+	if rhs == 0 {
+		return None[U16]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U16]()
+	}
+	return Some[U16](result)
+}
+
+func (self U32) CheckedRem(rhs U32) Option[U32] {
+	if rhs == 0 {
+		return None[U32]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U32]()
+	}
+	return Some[U32](result)
+}
+
+func (self U64) CheckedRem(rhs U64) Option[U64] {
+	if rhs == 0 {
+		return None[U64]()
+	}
+
+	result := self % rhs
+
+	if result > self || result > rhs {
+		// Overflow occurred
+		return None[U64]()
+	}
+	return Some[U64](result)
+}
