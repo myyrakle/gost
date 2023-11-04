@@ -7,3 +7,10 @@ package gost
 type BinaryHeap[T Ord[T]] struct {
 	vec Vec[T]
 }
+
+// New creates a new BinaryHeap[T].
+func BinaryHeapNew[T Ord[T]]() BinaryHeap[T] {
+	return BinaryHeap[T]{
+		vec: VecNew[T](),
+	}
+}
