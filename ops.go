@@ -621,6 +621,47 @@ func (self *Complex128) DivAssign(rhs Complex128) {
 	*self /= rhs
 }
 
+// RemAssign implements
+func (self *ISize) RemAssign(rhs ISize) {
+	*self %= rhs
+}
+
+func (self *I8) RemAssign(rhs I8) {
+	*self %= rhs
+}
+
+func (self *I16) RemAssign(rhs I16) {
+	*self %= rhs
+}
+
+func (self *I32) RemAssign(rhs I32) {
+	*self %= rhs
+}
+
+func (self *I64) RemAssign(rhs I64) {
+	*self %= rhs
+}
+
+func (self *USize) RemAssign(rhs USize) {
+	*self %= rhs
+}
+
+func (self *U8) RemAssign(rhs U8) {
+	*self %= rhs
+}
+
+func (self *U16) RemAssign(rhs U16) {
+	*self %= rhs
+}
+
+func (self *U32) RemAssign(rhs U32) {
+	*self %= rhs
+}
+
+func (self *U64) RemAssign(rhs U64) {
+	*self %= rhs
+}
+
 // Wrapping (modular) addition. Computes self + rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingAdd(rhs ISize) ISize {
 	result := self + rhs
