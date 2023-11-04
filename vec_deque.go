@@ -196,6 +196,33 @@ func (self *VecDeque[T]) Retain(f func(T) Bool) {
 	self.len = newLen
 }
 
+// Removes consecutive repeated elements in the vector according to the PartialEq trait implementation.
+// If the vecdeque is sorted, this removes all duplicates.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(2)
+//	deque.Push(3)
+//	deque.Dedup()
+//	gost.AssertEq(deque.Len(), gost.USize(3))
+func (self *VecDeque[T]) Dedup(key func(T) any) {
+	if self.IsEmpty() {
+		return
+	}
+
+	newLen := USize(1)
+
+	for i := USize(1); i < self.Len(); i++ {
+		if !castToEq(self.GetUnchecked(i)).Unwrap().Eq(self.GetUnchecked(newLen - 1)) {
+			self.SetUnchecked(newLen, self.GetUnchecked(i))
+			newLen++
+		}
+	}
+
+	self.len = newLen
+}
+
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
 //

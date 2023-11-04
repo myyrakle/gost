@@ -175,7 +175,9 @@ func (self *Vec[T]) Retain(predicate func(T) Bool) {
 //	vec.Push(2)
 //	vec.Push(2)
 //	vec.Push(3)
-//	vec.Dedup()
+//	vec.DedupByKey(func(e gost.I32) gost.I32 {
+//		return e
+//	}
 //	gost.AssertEq(vec.Len(), gost.USize(3))
 func (self *Vec[T]) DedupByKey(key func(T) any) {
 	newData := make([]T, 0, len(self.data))
