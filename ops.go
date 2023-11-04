@@ -22,6 +22,11 @@ type Div[T any] interface {
 	Div(rhs T) T
 }
 
+// Rem is a trait for types that support remainder after division.
+type Rem[T any] interface {
+	Rem(rhs T) T
+}
+
 // The addition assignment operator +=.
 type AddAssign[T any] interface {
 	AddAssign(rhs T)
