@@ -28,3 +28,14 @@ func BinaryHeapWithLen[T Ord[T]](len USize) BinaryHeap[T] {
 		vec: VecWithLen[T](len),
 	}
 }
+
+// Returns the total number of elements the heap can hold without reallocating.
+//
+//	heap := gost.BinaryHeapNew[gost.I32]()
+//	gost.AssertEq(heap.Capacity(), gost.USize(0))
+//
+//	heap.Reserve(10)
+//	gost.AssertEq(heap.Capacity(), gost.USize(10))
+func (self BinaryHeap[T]) Capacity() USize {
+	return self.Capacity()
+}
