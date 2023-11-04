@@ -61,3 +61,14 @@ func (self BinaryHeap[T]) Len() USize {
 func (self BinaryHeap[T]) IsEmpty() Bool {
 	return self.IsEmpty()
 }
+
+// Reserves capacity for at least additional more elements to be inserted in the given Vec<T>. The collection may reserve more space to speculatively avoid frequent reallocations. After calling reserve, capacity will be greater than or equal to self.len() + additional. Does nothing if capacity is already sufficient.
+//
+//	deque := gost.BinaryHeapNew[gost.I32]()
+//	gost.AssertEq(deque.Capacity(), gost.USize(0))
+//
+//	deque.Reserve(10)
+//	gost.AssertEq(deque.Capacity(), gost.USize(10))
+func (self *BinaryHeap[T]) Reserve(capacity USize) {
+	self.Reserve(capacity)
+}
