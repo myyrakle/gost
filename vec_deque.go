@@ -178,6 +178,21 @@ func (self VecDeque[T]) GetUnchecked(index USize) T {
 	return self.buffer[uint(self._ToPhysicalIndex(index))]
 }
 
+// Set value at index.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.Set(gost.USize(0), gost.I32(4))
+//	gost.AssertEqual(deque.Get(gost.USize(0)), gost.Some[gost.I32](gost.I32(4)))
+func (self *VecDeque[T]) Set(index USize, value T) Option[T] {
+	if index >= self.Len() {
+		return Some[T](value)
+	}
+
+	self.buffer[self._ToPhysicalIndex(index)] = value
+	return None[T]()
+}
+
 // Provides a reference to the back element, or None if the deque is empty.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
