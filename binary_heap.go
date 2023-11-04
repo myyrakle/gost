@@ -115,3 +115,8 @@ func (self *BinaryHeap[T]) Append(other *BinaryHeap[T]) {
 func (self *BinaryHeap[T]) Clear() {
 	self.Clear()
 }
+
+// Extracts a slice containing the entire heap.
+func (self *BinaryHeap[T]) Slice() []T {
+	return self.Slice()
+}
