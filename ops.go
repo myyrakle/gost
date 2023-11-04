@@ -1718,13 +1718,10 @@ func (self I64) SaturatingSub(rhs I64) I64 {
 }
 
 func (self USize) SaturatingSub(rhs USize) USize {
-	result := self - rhs
-
-	if result > self || result > rhs {
-		// Overflow occurred, saturate
-		return USize(math.MaxUint)
+	if self < rhs {
+		return 0
 	}
-	return result
+	return self - rhs
 }
 
 func (self U8) SaturatingSub(rhs U8) U8 {

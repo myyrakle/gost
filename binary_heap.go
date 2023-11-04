@@ -140,7 +140,34 @@ func (self *BinaryHeap[T]) _SiftDownToBottom(pos USize) {
 	hole := _HoleNew[T](&self.vec, pos)
 	child := 2*hole.Pos() + 1
 
-	
+	// Loop invariant: child == 2 * hole.pos() + 1.
+	for child <= end.SaturatingSub(2) {
+		// SAFETY: child < end - 1 < self.len() and
+		//  child + 1 < end <= self.len(), so they're valid indexes.
+		//  child == 2 * hole.pos() + 1 != hole.pos() and
+		//  child + 1 == 2 * hole.pos() + 2 != hole.pos().
+		// FIXME: 2 * hole.pos() + 1 or 2 * hole.pos() + 2 could overflow
+		//  if T is a ZST
+		ordering := hole.Get(child).Cmp(hole.Get(child + 1))
+		if ordering == OrderingLess || ordering == OrderingEqual {
+			child += 1
+		}
+
+		// SAFETY: Same as above
+		hole.MoveTo(child)
+		child = 2*hole.Pos() + 1
+	}
+
+	if child == end-1 {
+		// SAFETY: child == end - 1 < self.len(), so it's a valid index
+		//  and child == 2 * hole.pos() + 1 != hole.pos().
+		hole.MoveTo(child)
+	}
+	pos = hole.Pos()
+
+	// SAFETY: pos is the position in the hole and was already proven
+	//  to be a valid index.
+	self._SiftUp(start, pos)
 }
 
 // Moves all the elements of other into self, leaving other empty.
