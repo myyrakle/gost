@@ -103,3 +103,15 @@ func (self *BinaryHeap[T]) Append(other *BinaryHeap[T]) {
 		self.Push(item)
 	}
 }
+
+// Clears the heap, removing all values.
+//
+//	heap := gost.BinaryHeapNew[gost.I32]()
+//	heap.Push(1)
+//	heap.Push(2)
+//	heap.Push(3)
+//	heap.Clear()
+//	gost.AssertEq(heap.Len(), gost.USize(0))
+func (self *BinaryHeap[T]) Clear() {
+	self.Clear()
+}
