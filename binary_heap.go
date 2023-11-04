@@ -206,6 +206,21 @@ func (self *BinaryHeap[T]) AsSlice() []T {
 	return self.vec.AsSlice()
 }
 
+// Consumes the BinaryHeap and returns the underlying vector in arbitrary order.
+//
+//	heap := gost.BinaryHeapNew[gost.I32]()
+//	heap.Push(1)
+//	heap.Push(2)
+//	heap.Push(3)
+//  vec := gost.VecNew[gost.I32]()
+//  vec.Push(3)
+//  vec.Push(1)
+//  vec.Push(2)
+//	gost.AssertEq(heap.IntoVec(), vec)
+func (self *BinaryHeap[T]) IntoVec() Vec[T] {
+	return self.vec
+}
+
 /// Hole represents a hole in a slice i.e., an index without valid value
 /// (because it was moved from or duplicated).
 /// In drop, `Hole` will restore the slice by filling the hole
