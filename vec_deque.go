@@ -171,6 +171,31 @@ func (self *VecDeque[T]) Append(other *VecDeque[T]) {
 	other.Clear()
 }
 
+// Retains only the elements specified by the predicate.
+// In other words, remove all elements e such that f(e) returns false.
+// This method operates in place and preserves the order of the retained elements.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	deque.Retain(func(e gost.I32) gost.Bool {
+//		return e == 2
+//	})
+func (self *VecDeque[T]) Retain(f func(T) Bool) {
+	newLen := USize(0)
+
+	for i := USize(0); i < self.Len(); i++ {
+		value := self.GetUnchecked(i)
+		if f(value) {
+			self.SetUnchecked(newLen, value)
+			newLen++
+		}
+	}
+
+	self.len = newLen
+}
+
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
 //
