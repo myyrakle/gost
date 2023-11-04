@@ -21,3 +21,10 @@ func BinaryHeapWithCapacity[T Ord[T]](capacity USize) BinaryHeap[T] {
 		vec: VecWithCapacity[T](capacity),
 	}
 }
+
+// Constructs a new, empty BinaryHeap<T> with at least the specified len.
+func BinaryHeapWithLen[T Ord[T]](len USize) BinaryHeap[T] {
+	return BinaryHeap[T]{
+		vec: VecWithLen[T](len),
+	}
+}

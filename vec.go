@@ -23,7 +23,7 @@ func VecWithCapacity[T any](capacity USize) Vec[T] {
 	return Vec[T]{data: make([]T, 0, capacity)}
 }
 
-// Constructs a new, empty Vec<T> with at least the specified capacity.
+// Constructs a new, empty Vec<T> with at least the specified len.
 func VecWithLen[T any](len USize) Vec[T] {
 	return Vec[T]{data: make([]T, len)}
 }
