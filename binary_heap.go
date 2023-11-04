@@ -39,3 +39,14 @@ func BinaryHeapWithLen[T Ord[T]](len USize) BinaryHeap[T] {
 func (self BinaryHeap[T]) Capacity() USize {
 	return self.Capacity()
 }
+
+// Returns the number of elements in the heap, also referred to as its ‘length’.
+//
+//	heap := gost.VecNew[gost.I32]()
+//	gost.AssertEq(heap.Len(), gost.USize(0))
+//
+//	heap.Push(1)
+//	gost.AssertEq(heap.Len(), gost.USize(1))
+func (self BinaryHeap[T]) Len() USize {
+	return self.Len()
+}
