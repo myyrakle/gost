@@ -42,11 +42,22 @@ func (self BinaryHeap[T]) Capacity() USize {
 
 // Returns the number of elements in the heap, also referred to as its ‘length’.
 //
-//	heap := gost.VecNew[gost.I32]()
+//	heap := gost.BinaryHeapNew[gost.I32]()
 //	gost.AssertEq(heap.Len(), gost.USize(0))
 //
 //	heap.Push(1)
 //	gost.AssertEq(heap.Len(), gost.USize(1))
 func (self BinaryHeap[T]) Len() USize {
 	return self.Len()
+}
+
+// Returns true if the heap contains no elements.
+//
+//	heap := gost.BinaryHeapNew[gost.I32]()
+//	gost.Assert(heap.IsEmpty())
+//
+//	heap.Push(1)
+//	gost.Assert(!heap.IsEmpty())
+func (self BinaryHeap[T]) IsEmpty() Bool {
+	return self.IsEmpty()
 }
