@@ -450,6 +450,29 @@ func (self *VecDeque[T]) SortBy(f func(T, T) Ordering) {
 	})
 }
 
+// Sorts the slice, but might not preserve the order of equal elements.
+// This sort is unstable (i.e., may reorder equal elements), in-place (i.e., does not allocate), and O(n * log(n)) worst-case.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.SortUnstable()
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+func (self *VecDeque[T]) SortUnstable() {
+	sort.Slice(self.buffer[:self.len], func(i, j int) bool {
+		if castToOrd[T](self.buffer[i]).IsNone() {
+			typeName := getTypeName(self.buffer[i])
+			panic(fmt.Sprintf("'%s' does not implement Ord[%s]", typeName, typeName))
+		}
+
+		lhs := castToOrd[T](self.buffer[i]).Unwrap()
+		rhs := self.buffer[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
+
 // Returns `true` if the buffer is at full capacity.
 func (self VecDeque[T]) _IsFull() bool {
 	return self.len == USize(len(self.buffer))
