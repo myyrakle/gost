@@ -398,6 +398,43 @@ func (self *VecDeque[T]) FillWith(f func() T) {
 	}
 }
 
+// Binary searches this slice for a given element. If the slice is not sorted, the returned result is unspecified and meaningless.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	gost.Assert(deque.BinarySearch(2).IsSome())
+//	gost.Assert(deque.BinarySearch(4).IsNone())
+func (self VecDeque[T]) BinarySearch(value T) Option[USize] {
+	low := 0
+	high := int(self.len) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+
+		midData := castToOrd[T](self.buffer[mid]).Unwrap()
+		ordering := midData.Cmp(value)
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[USize](USize(mid))
+			}
+		}
+	}
+
+	return None[USize]()
+}
+
 // Sorts the slice.
 // This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
 // When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
