@@ -223,6 +223,27 @@ func (self *VecDeque[T]) Dedup(key func(T) any) {
 	self.len = newLen
 }
 
+// Swaps two elements in the slice.
+// if a equals to b, it’s guaranteed that elements won’t change value.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	deque.Swap(0, 2)
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(3))
+//	gost.AssertEq(deque.GetUnchecked(2), gost.I32(1))
+func (self *VecDeque[T]) Swap(a USize, b USize) {
+	if a == b {
+		return
+	}
+
+	a = self._ToPhysicalIndex(a)
+	b = self._ToPhysicalIndex(b)
+
+	self.buffer[a], self.buffer[b] = self.buffer[b], self.buffer[a]
+}
+
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
 //
