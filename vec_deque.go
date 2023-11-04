@@ -152,6 +152,25 @@ func (self *VecDeque[T]) PopBack() Option[T] {
 	return Some[T](self.buffer[self._ToPhysicalIndex(self.len)])
 }
 
+// Moves all the elements of other ISizeo self, leaving other empty.
+//
+//	deque1 := gost.VecDequeNew[gost.I32]()
+//	deque2 := gost.VecDequeNew[gost.I32]()
+//	deque1.PushBack(1)
+//	deque2.PushBack(2)
+//	deque1.Append(&deque2)
+//	gost.AssertEq(deque1.Len(), gost.USize(2))
+//  gost.AssertEq(deque2.Len(), gost.USize(0))
+func (self *VecDeque[T]) Append(other *VecDeque[T]) {
+	self.Reserve(other.Len())
+
+	for i := USize(0); i < other.Len(); i++ {
+		self.PushBack(other.GetUnchecked(i))
+	}
+
+	other.Clear()
+}
+
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
 //
