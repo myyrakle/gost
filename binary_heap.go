@@ -8,9 +8,16 @@ type BinaryHeap[T Ord[T]] struct {
 	vec Vec[T]
 }
 
-// New creates a new BinaryHeap[T].
+// Constructs a new, empty BinaryHeapNew<T>.
 func BinaryHeapNew[T Ord[T]]() BinaryHeap[T] {
 	return BinaryHeap[T]{
 		vec: VecNew[T](),
+	}
+}
+
+// Constructs a new, empty BinaryHeap<T> with at least the specified capacity.
+func BinaryHeapWithCapacity[T Ord[T]](capacity USize) BinaryHeap[T] {
+	return BinaryHeap[T]{
+		vec: VecWithCapacity[T](capacity),
 	}
 }
