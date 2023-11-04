@@ -255,6 +255,11 @@ func (self *VecDeque[T]) Clear() {
 	self.buffer = make([]T, _VECDEQUE_INITIAL_CAPACITY)
 }
 
+// Extracts a slice containing the entire vecdeque.
+func (self VecDeque[T]) AsSlice() []T {
+	return self.buffer[:self.len]
+}
+
 // Require `impl Eq[T] for T`
 // Returns true if the deque contains an element equal to the given value.
 // This operation is O(n).
