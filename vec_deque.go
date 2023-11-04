@@ -1,6 +1,9 @@
 package gost
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 const (
 	_VECDEQUE_INITIAL_CAPACITY USize = 7 // 2^3 - 1
@@ -26,6 +29,14 @@ func VecDequeWithCapacity[T any](capacity USize) VecDeque[T] {
 	}
 
 	return VecDeque[T]{buffer: make([]T, capacity), len: 0, head: 0}
+}
+
+// Constructs a new, empty Vec<T> with at least the specified capacity.
+func VecDequeWithLen[T any](len USize) VecDeque[T] {
+	deque := VecDequeWithCapacity[T](len)
+	deque.len = len
+
+	return deque
 }
 
 // Returns the number of elements in the vecdeque, also referred to as its ‘length’.
@@ -152,6 +163,98 @@ func (self *VecDeque[T]) PopBack() Option[T] {
 	return Some[T](self.buffer[self._ToPhysicalIndex(self.len)])
 }
 
+// Moves all the elements of other ISizeo self, leaving other empty.
+//
+//		deque1 := gost.VecDequeNew[gost.I32]()
+//		deque2 := gost.VecDequeNew[gost.I32]()
+//		deque1.PushBack(1)
+//		deque2.PushBack(2)
+//		deque1.Append(&deque2)
+//		gost.AssertEq(deque1.Len(), gost.USize(2))
+//	 gost.AssertEq(deque2.Len(), gost.USize(0))
+func (self *VecDeque[T]) Append(other *VecDeque[T]) {
+	self.Reserve(other.Len())
+
+	for i := USize(0); i < other.Len(); i++ {
+		self.PushBack(other.GetUnchecked(i))
+	}
+
+	other.Clear()
+}
+
+// Retains only the elements specified by the predicate.
+// In other words, remove all elements e such that f(e) returns false.
+// This method operates in place and preserves the order of the retained elements.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	deque.Retain(func(e gost.I32) gost.Bool {
+//		return e == 2
+//	})
+func (self *VecDeque[T]) Retain(f func(T) Bool) {
+	newLen := USize(0)
+
+	for i := USize(0); i < self.Len(); i++ {
+		value := self.GetUnchecked(i)
+		if f(value) {
+			self.SetUnchecked(newLen, value)
+			newLen++
+		}
+	}
+
+	self.len = newLen
+}
+
+// Removes consecutive repeated elements in the vector according to the PartialEq trait implementation.
+// If the vecdeque is sorted, this removes all duplicates.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(2)
+//	deque.Push(3)
+//	deque.Dedup()
+//	gost.AssertEq(deque.Len(), gost.USize(3))
+func (self *VecDeque[T]) Dedup(key func(T) any) {
+	if self.IsEmpty() {
+		return
+	}
+
+	newLen := USize(1)
+
+	for i := USize(1); i < self.Len(); i++ {
+		if !castToEq(self.GetUnchecked(i)).Unwrap().Eq(self.GetUnchecked(newLen - 1)) {
+			self.SetUnchecked(newLen, self.GetUnchecked(i))
+			newLen++
+		}
+	}
+
+	self.len = newLen
+}
+
+// Swaps two elements in the slice.
+// if a equals to b, it’s guaranteed that elements won’t change value.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	deque.Swap(0, 2)
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(3))
+//	gost.AssertEq(deque.GetUnchecked(2), gost.I32(1))
+func (self *VecDeque[T]) Swap(a USize, b USize) {
+	if a == b {
+		return
+	}
+
+	a = self._ToPhysicalIndex(a)
+	b = self._ToPhysicalIndex(b)
+
+	self.buffer[a], self.buffer[b] = self.buffer[b], self.buffer[a]
+}
+
 // Provides a reference to the element at the given index.
 // Element at index 0 is the front of the queue.
 //
@@ -165,6 +268,42 @@ func (self VecDeque[T]) Get(index USize) Option[T] {
 	}
 
 	return Some[T](self.buffer[uint(self._ToPhysicalIndex(index))])
+}
+
+// Returns a reference to an element or subslice, without doing bounds checking.
+// For a safe alternative see get.
+//
+//		deque := gost.VecDequeNew[gost.I32]()
+//		deque.PushBack(gost.I32(3))
+//		deque.PushBack(gost.I32(4))
+//	 gost.AssertEqual(deque.GetUnchecked(gost.USize(0)), gost.I32(3))
+func (self VecDeque[T]) GetUnchecked(index USize) T {
+	return self.buffer[uint(self._ToPhysicalIndex(index))]
+}
+
+// Set value at index.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.Set(gost.USize(0), gost.I32(4))
+//	gost.AssertEqual(deque.Get(gost.USize(0)), gost.Some[gost.I32](gost.I32(4)))
+func (self *VecDeque[T]) Set(index USize, value T) Option[T] {
+	if index >= self.Len() {
+		return Some[T](value)
+	}
+
+	self.buffer[self._ToPhysicalIndex(index)] = value
+	return None[T]()
+}
+
+// Set value at index, without doing bounds checking.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.SetUnchecked(gost.USize(0), gost.I32(4))
+//	gost.AssertEqual(deque.Get(gost.USize(0)), gost.Some[gost.I32](gost.I32(4)))
+func (self *VecDeque[T]) SetUnchecked(index USize, value T) {
+	self.buffer[self._ToPhysicalIndex(index)] = value
 }
 
 // Provides a reference to the back element, or None if the deque is empty.
@@ -200,6 +339,11 @@ func (self *VecDeque[T]) Clear() {
 	self.buffer = make([]T, _VECDEQUE_INITIAL_CAPACITY)
 }
 
+// Extracts a slice containing the entire vecdeque.
+func (self VecDeque[T]) AsSlice() []T {
+	return self.buffer[:self.len]
+}
+
 // Require `impl Eq[T] for T`
 // Returns true if the deque contains an element equal to the given value.
 // This operation is O(n).
@@ -226,6 +370,213 @@ func (self VecDeque[T]) Contains(value T) Bool {
 	}
 
 	return false
+}
+
+// Fills self with elements by cloning value.
+//
+//	deque := gost.VecDequeWithLen[gost.I32](gost.USize(5))
+//	deque.Fill(gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(1), gost.I32(1))
+func (self *VecDeque[T]) Fill(value T) {
+	for i := USize(0); i < self.Len(); i++ {
+		self.SetUnchecked(i, value)
+	}
+}
+
+// Fills self with elements returned by calling a closure repeatedly.
+//
+//	deque := gost.VecDequeWithLen[gost.I32](gost.USize(5))
+//	deque.FillWith(func() gost.I32 {
+//		return 1
+//	})
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(1), gost.I32(1))
+func (self *VecDeque[T]) FillWith(f func() T) {
+	for i := USize(0); i < self.Len(); i++ {
+		self.SetUnchecked(i, f())
+	}
+}
+
+// Binary searches this slice for a given element. If the slice is not sorted, the returned result is unspecified and meaningless.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	gost.Assert(deque.BinarySearch(2).IsSome())
+//	gost.Assert(deque.BinarySearch(4).IsNone())
+func (self VecDeque[T]) BinarySearch(value T) Option[USize] {
+	low := 0
+	high := int(self.len) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+
+		midData := castToOrd[T](self.buffer[mid]).Unwrap()
+		ordering := midData.Cmp(value)
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[USize](USize(mid))
+			}
+		}
+	}
+
+	return None[USize]()
+}
+
+// Binary searches this slice with a comparator function.
+// The comparator function should return an order code that indicates whether its argument is Less, Equal or Greater the desired target. If the slice is not sorted or if the comparator function does not implement an order consistent with the sort order of the underlying slice, the returned result is unspecified and meaningless.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(1)
+//	deque.Push(2)
+//	deque.Push(3)
+//	gost.Assert(deque.BinarySearchBy(func(e gost.I32) gost.Ordering {
+//		if e < 2 {
+//			return gost.OrderingLess
+//		} else if e > 2 {
+//			return gost.OrderingGreater
+//		} else {
+//			return gost.OrderingEqual
+//		}
+//	}).IsSome())
+func (self VecDeque[T]) BinarySearchBy(f func(T) Ordering) Option[USize] {
+	low := 0
+	high := int(self.len) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+		ordering := f(self.buffer[mid])
+
+		switch ordering {
+		case OrderingLess:
+			{
+				low = mid + 1
+			}
+		case OrderingGreater:
+			{
+				high = mid - 1
+			}
+		case OrderingEqual:
+			{
+				return Some[USize](USize(mid))
+			}
+		}
+	}
+
+	return None[USize]()
+}
+
+// Sorts the slice.
+// This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
+// When applicable, unstable sorting is preferred because it is generally faster than stable sorting and it doesn’t allocate auxiliary memory. See sort_unstable.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.Sort()
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+//	gost.AssertEq(deque.GetUnchecked(1), gost.I32(2))
+//	gost.AssertEq(deque.GetUnchecked(2), gost.I32(3))
+func (self *VecDeque[T]) Sort() {
+	sort.SliceStable(self.buffer[:self.len], func(i, j int) bool {
+		if castToOrd[T](self.buffer[i]).IsNone() {
+			typeName := getTypeName(self.buffer[i])
+			panic(fmt.Sprintf("'%s' does not implement Ord[%s]", typeName, typeName))
+		}
+
+		lhs := castToOrd[T](self.buffer[i]).Unwrap()
+		rhs := self.buffer[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
+
+// Sorts the slice with a comparator function.
+// This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
+// The comparator function must define a total ordering for the elements in the slice. If the ordering is not total, the order of the elements is unspecified. An order is a total order if it is (for all a, b and c):
+// - total and antisymmetric: exactly one of a < b, a == b or a > b is true, and
+// - transitive, a < b and b < c implies a < c. The same must hold for both == and >.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.SortBy(func(lhs, rhs gost.I32) gost.Ordering {
+//		if lhs < rhs {
+//			return gost.OrderingLess
+//		} else if lhs > rhs {
+//			return gost.OrderingGreater
+//		} else {
+//			return gost.OrderingEqual
+//		}
+//	})
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+func (self *VecDeque[T]) SortBy(f func(T, T) Ordering) {
+	sort.SliceStable(self.buffer[:self.len], func(i, j int) bool {
+		return f(self.buffer[i], self.buffer[j]) == OrderingLess
+	})
+}
+
+// Sorts the slice, but might not preserve the order of equal elements.
+// This sort is unstable (i.e., may reorder equal elements), in-place (i.e., does not allocate), and O(n * log(n)) worst-case.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.SortUnstable()
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+func (self *VecDeque[T]) SortUnstable() {
+	sort.Slice(self.buffer[:self.len], func(i, j int) bool {
+		if castToOrd[T](self.buffer[i]).IsNone() {
+			typeName := getTypeName(self.buffer[i])
+			panic(fmt.Sprintf("'%s' does not implement Ord[%s]", typeName, typeName))
+		}
+
+		lhs := castToOrd[T](self.buffer[i]).Unwrap()
+		rhs := self.buffer[j]
+
+		return lhs.Cmp(rhs) == OrderingLess
+	})
+}
+
+// Sorts the slice with a comparator function, but might not preserve the order of equal elements.
+// This sort is unstable (i.e., may reorder equal elements), in-place (i.e., does not allocate), and O(n * log(n)) worst-case.
+// The comparator function must define a total ordering for the elements in the slice. If the ordering is not total, the order of the elements is unspecified. An order is a total order if it is (for all a, b and c):
+// - total and antisymmetric: exactly one of a < b, a == b or a > b is true, and
+// - transitive, a < b and b < c implies a < c. The same must hold for both == and >.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.SortUnstableBy(func(lhs, rhs gost.I32) gost.Ordering {
+//		if lhs < rhs {
+//			return gost.OrderingLess
+//		} else if lhs > rhs {
+//			return gost.OrderingGreater
+//		} else {
+//			return gost.OrderingEqual
+//		}
+//	})
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+func (self *VecDeque[T]) SortUnstableBy(f func(T, T) Ordering) {
+	sort.Slice(self.buffer[:self.len], func(i, j int) bool {
+		return f(self.buffer[i], self.buffer[j]) == OrderingLess
+	})
 }
 
 // Returns `true` if the buffer is at full capacity.
