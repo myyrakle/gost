@@ -47,6 +47,11 @@ type DivAssign[T any] interface {
 	DivAssign(rhs T)
 }
 
+// The remainder assignment operator %=.
+type RemAssign[T any] interface {
+	RemAssign(rhs T)
+}
+
 // Add implements
 func (self ISize) Add(rhs ISize) ISize {
 	return self + rhs
