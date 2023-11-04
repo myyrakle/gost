@@ -771,3 +771,104 @@ func (self U64) WrappingSub(rhs U64) U64 {
 	}
 	return result
 }
+
+// Wrapping (modular) multiplication. Computes self * rhs, wrapping around at the boundary of the type.
+func (self ISize) WrappingMul(rhs ISize) ISize {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - ISize(math.MaxInt) - 1
+	}
+	return result
+}
+
+func (self I8) WrappingMul(rhs I8) I8 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - I8(math.MaxInt8) - 1
+	}
+	return result
+}
+
+func (self I16) WrappingMul(rhs I16) I16 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - I16(math.MaxInt16) - 1
+	}
+	return result
+}
+
+func (self I32) WrappingMul(rhs I32) I32 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - I32(math.MaxInt32) - 1
+	}
+	return result
+}
+
+func (self I64) WrappingMul(rhs I64) I64 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - I64(math.MaxInt64) - 1
+	}
+	return result
+}
+
+func (self USize) WrappingMul(rhs USize) USize {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - USize(math.MaxUint) - 1
+	}
+	return result
+}
+
+func (self U8) WrappingMul(rhs U8) U8 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - U8(math.MaxUint8) - 1
+	}
+	return result
+}
+
+func (self U16) WrappingMul(rhs U16) U16 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - U16(math.MaxUint16) - 1
+	}
+	return result
+}
+
+func (self U32) WrappingMul(rhs U32) U32 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - U32(math.MaxUint32) - 1
+	}
+	return result
+}
+
+func (self U64) WrappingMul(rhs U64) U64 {
+	result := self * rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, wrap around
+		result = result - U64(math.MaxUint64) - 1
+	}
+	return result
+}
