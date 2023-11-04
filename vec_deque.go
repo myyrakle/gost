@@ -424,6 +424,32 @@ func (self *VecDeque[T]) Sort() {
 	})
 }
 
+// Sorts the slice with a comparator function.
+// This sort is stable (i.e., does not reorder equal elements) and O(n * log(n)) worst-case.
+// The comparator function must define a total ordering for the elements in the slice. If the ordering is not total, the order of the elements is unspecified. An order is a total order if it is (for all a, b and c):
+// - total and antisymmetric: exactly one of a < b, a == b or a > b is true, and
+// - transitive, a < b and b < c implies a < c. The same must hold for both == and >.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.Push(3)
+//	deque.Push(2)
+//	deque.Push(1)
+//	deque.SortBy(func(lhs, rhs gost.I32) gost.Ordering {
+//		if lhs < rhs {
+//			return gost.OrderingLess
+//		} else if lhs > rhs {
+//			return gost.OrderingGreater
+//		} else {
+//			return gost.OrderingEqual
+//		}
+//	})
+//	gost.AssertEq(deque.GetUnchecked(0), gost.I32(1))
+func (self *VecDeque[T]) SortBy(f func(T, T) Ordering) {
+	sort.SliceStable(self.buffer[:self.len], func(i, j int) bool {
+		return f(self.buffer[i], self.buffer[j]) == OrderingLess
+	})
+}
+
 // Returns `true` if the buffer is at full capacity.
 func (self VecDeque[T]) _IsFull() bool {
 	return self.len == USize(len(self.buffer))
