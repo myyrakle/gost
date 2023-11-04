@@ -193,6 +193,16 @@ func (self *VecDeque[T]) Set(index USize, value T) Option[T] {
 	return None[T]()
 }
 
+// Set value at index, without doing bounds checking.
+//
+//	deque := gost.VecDequeNew[gost.I32]()
+//	deque.PushBack(gost.I32(3))
+//	deque.SetUnchecked(gost.USize(0), gost.I32(4))
+//	gost.AssertEqual(deque.Get(gost.USize(0)), gost.Some[gost.I32](gost.I32(4)))
+func (self *VecDeque[T]) SetUnchecked(index USize, value T) {
+	self.buffer[self._ToPhysicalIndex(index)] = value
+}
+
 // Provides a reference to the back element, or None if the deque is empty.
 //
 //	deque := gost.VecDequeNew[gost.I32]()
