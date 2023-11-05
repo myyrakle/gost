@@ -22,3 +22,20 @@ func Test_WrappingAdd_SignedInteger(t *testing.T) {
 	AssertEq(I64(math.MaxInt64).WrappingAdd(2), I64(math.MinInt64+1), "I64.WrappingAdd: overflow")
 
 }
+
+func Test_WrappingAdd_UnsignedInteger(t *testing.T) {
+	AssertEq(USize(200).WrappingAdd(55), USize(255), "USize.WrappingAdd")
+	AssertEq(USize(math.MaxUint).WrappingAdd(200), USize(199), "USize.WrappingAdd: overflow")
+
+	AssertEq(U8(200).WrappingAdd(55), U8(255), "U8.WrappingAdd")
+	AssertEq(U8(math.MaxUint8).WrappingAdd(200), U8(199), "U8.WrappingAdd: overflow")
+
+	AssertEq(U16(200).WrappingAdd(55), U16(255), "U16.WrappingAdd")
+	AssertEq(U16(math.MaxUint16).WrappingAdd(200), U16(199), "U16.WrappingAdd: overflow")
+
+	AssertEq(U32(200).WrappingAdd(55), U32(255), "U32.WrappingAdd")
+	AssertEq(U32(math.MaxUint32).WrappingAdd(200), U32(199), "U32.WrappingAdd: overflow")
+
+	AssertEq(U64(200).WrappingAdd(55), U64(255), "U64.WrappingAdd")
+	AssertEq(U64(math.MaxUint64).WrappingAdd(200), U64(199), "U64.WrappingAdd: overflow")
+}
