@@ -662,54 +662,54 @@ func (self *U64) RemAssign(rhs U64) {
 	*self %= rhs
 }
 
+func (self ISize) _HasOverflow_Add(rhs ISize) bool {
+	if self > 0 && rhs > math.MaxInt-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt-self {
+		return true
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Add(rhs I8) bool {
+	if self > 0 && rhs > math.MaxInt8-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt8-self {
+		return true
+	}
+	return false
+}
+
 // Wrapping (modular) addition. Computes self + rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingAdd(rhs ISize) ISize {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - ISize(math.MaxInt) - 1
-	}
 	return result
 }
 
 func (self I8) WrappingAdd(rhs I8) I8 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I8(math.MaxInt8) - 1
-	}
 	return result
 }
 
 func (self I16) WrappingAdd(rhs I16) I16 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I16(math.MaxInt16) - 1
-	}
 	return result
 }
 
 func (self I32) WrappingAdd(rhs I32) I32 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I32(math.MaxInt32) - 1
-	}
 	return result
 }
 
 func (self I64) WrappingAdd(rhs I64) I64 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I64(math.MaxInt64) - 1
-	}
 	return result
 }
 

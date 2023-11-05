@@ -27,13 +27,19 @@ func Assert(condition Bool, args ...any) {
 //  gost.AssertEq(1, 1, "These are equal")
 func AssertEq[T Eq[T]](lhs T, rhs T, args ...any) {
 	if !lhs.Eq(rhs) {
+		panicMessage := Format("assertion failed: {} != {}", lhs, rhs)
+
 		if len(args) > 0 {
 			if message, ok := args[0].(String); ok {
-				panic(Format(message, args...))
+				panicMessage += "\n>>> " + Format(message, args...)
+			}
+
+			if message, ok := args[0].(string); ok {
+				panicMessage += "\n>>> " + Format(String(message), args...)
 			}
 		}
 
-		panic(Format("assertion failed: {} != {}", lhs, rhs))
+		panic(panicMessage)
 	}
 }
 
@@ -42,13 +48,19 @@ func AssertEq[T Eq[T]](lhs T, rhs T, args ...any) {
 //  gost.AssertNe(1, 2, "These are not equal")
 func AssertNe[T Eq[T]](lhs T, rhs T, args ...any) {
 	if lhs.Eq(rhs) {
+		panicMessage := Format("assertion failed: {} == {}", lhs, rhs)
+
 		if len(args) > 0 {
 			if message, ok := args[0].(String); ok {
-				panic(Format(message, args...))
+				panicMessage += "\n>>> " + Format(message, args...)
+			}
+
+			if message, ok := args[0].(string); ok {
+				panicMessage += "\n>>> " + Format(String(message), args...)
 			}
 		}
 
-		panic(Format("assertion failed: {} == {}", lhs, rhs))
+		panic(panicMessage)
 	}
 }
 
