@@ -85,6 +85,13 @@ func Test_WrappingSub_UnsignedInteger(t *testing.T) {
 func Test_WrappingMul_SignedInteger(t *testing.T) {
 	t.Parallel()
 
-	AssertEq(USize(10).WrappingMul(12), USize(120), "ISize.WrappingMul")
+	AssertEq(ISize(10).WrappingMul(12), ISize(120), "ISize.WrappingMul")
 	AssertEq(I8(11).WrappingMul(12), I8(-124), "I8.WrappingMul overflow")
+}
+
+func Test_WrappingMul_UnsignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(USize(10).WrappingMul(12), USize(120), "USize.WrappingMul")
+	AssertEq(U8(25).WrappingMul(12), U8(44), "U8.WrappingMul overflow")
 }

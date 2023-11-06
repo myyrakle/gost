@@ -924,50 +924,30 @@ func (self I64) WrappingMul(rhs I64) I64 {
 func (self USize) WrappingMul(rhs USize) USize {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - USize(math.MaxUint) - 1
-	}
 	return result
 }
 
 func (self U8) WrappingMul(rhs U8) U8 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U8(math.MaxUint8) - 1
-	}
 	return result
 }
 
 func (self U16) WrappingMul(rhs U16) U16 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U16(math.MaxUint16) - 1
-	}
 	return result
 }
 
 func (self U32) WrappingMul(rhs U32) U32 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U32(math.MaxUint32) - 1
-	}
 	return result
 }
 
 func (self U64) WrappingMul(rhs U64) U64 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U64(math.MaxUint64) - 1
-	}
 	return result
 }
 
