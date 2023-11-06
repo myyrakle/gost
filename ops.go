@@ -1,6 +1,8 @@
 package gost
 
-import "math"
+import (
+	"math"
+)
 
 // Add is a trait for types that support addition.
 type Add[T any] interface {
@@ -662,54 +664,114 @@ func (self *U64) RemAssign(rhs U64) {
 	*self %= rhs
 }
 
+func (self ISize) _HasOverflow_Add(rhs ISize) bool {
+	if self > 0 && rhs > math.MaxInt-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt-self {
+		return true
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Add(rhs I8) bool {
+	if self > 0 && rhs > math.MaxInt8-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt8-self {
+		return true
+	}
+	return false
+}
+
+func (self I16) _HasOverflow_Add(rhs I16) bool {
+	if self > 0 && rhs > math.MaxInt16-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt16-self {
+		return true
+	}
+	return false
+}
+
+func (self I32) _HasOverflow_Add(rhs I32) bool {
+	if self > 0 && rhs > math.MaxInt32-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt32-self {
+		return true
+	}
+	return false
+}
+
+func (self I64) _HasOverflow_Add(rhs I64) bool {
+	if self > 0 && rhs > math.MaxInt64-self {
+		return true
+	}
+	if self < 0 && rhs < math.MinInt64-self {
+		return true
+	}
+	return false
+}
+
+func (self ISize) _HasOverflow_Sub(rhs ISize) bool {
+	if self > 0 && rhs < math.MinInt+self {
+		return true
+	}
+	if self < 0 && rhs > math.MaxInt+self {
+		return true
+	}
+	return false
+}
+
+func (self ISize) _HasUnderflow_Sub(rhs ISize) bool {
+	if rhs < 0 && self > math.MaxInt32+rhs {
+		return true
+	}
+	if rhs > 0 && self < math.MinInt32+rhs {
+		return true
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Sub(rhs I8) bool {
+	if self > 0 && rhs < math.MinInt8+self {
+		return true
+	}
+	if self < 0 && rhs > math.MaxInt8+self {
+		return true
+	}
+	return false
+}
+
 // Wrapping (modular) addition. Computes self + rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingAdd(rhs ISize) ISize {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - ISize(math.MaxInt) - 1
-	}
 	return result
 }
 
 func (self I8) WrappingAdd(rhs I8) I8 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I8(math.MaxInt8) - 1
-	}
 	return result
 }
 
 func (self I16) WrappingAdd(rhs I16) I16 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I16(math.MaxInt16) - 1
-	}
 	return result
 }
 
 func (self I32) WrappingAdd(rhs I32) I32 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I32(math.MaxInt32) - 1
-	}
 	return result
 }
 
 func (self I64) WrappingAdd(rhs I64) I64 {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I64(math.MaxInt64) - 1
-	}
 	return result
 }
 
@@ -765,102 +827,62 @@ func (self U64) WrappingAdd(rhs U64) U64 {
 
 // Wrapping (modular) subtraction. Computes self - rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingSub(rhs ISize) ISize {
-	result := self - rhs
+	diff := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + ISize(math.MaxInt) + 1
-	}
-	return result
+	return diff
 }
 
 func (self I8) WrappingSub(rhs I8) I8 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I8(math.MaxInt8) + 1
-	}
 	return result
 }
 
 func (self I16) WrappingSub(rhs I16) I16 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I16(math.MaxInt16) + 1
-	}
 	return result
 }
 
 func (self I32) WrappingSub(rhs I32) I32 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I32(math.MaxInt32) + 1
-	}
 	return result
 }
 
 func (self I64) WrappingSub(rhs I64) I64 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I64(math.MaxInt64) + 1
-	}
 	return result
 }
 
 func (self USize) WrappingSub(rhs USize) USize {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + USize(math.MaxUint) + 1
-	}
 	return result
 }
 
 func (self U8) WrappingSub(rhs U8) U8 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U8(math.MaxUint8) + 1
-	}
 	return result
 }
 
 func (self U16) WrappingSub(rhs U16) U16 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U16(math.MaxUint16) + 1
-	}
 	return result
 }
 
 func (self U32) WrappingSub(rhs U32) U32 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U32(math.MaxUint32) + 1
-	}
 	return result
 }
 
 func (self U64) WrappingSub(rhs U64) U64 {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U64(math.MaxUint64) + 1
-	}
 	return result
 }
 
@@ -878,90 +900,54 @@ func (self ISize) WrappingMul(rhs ISize) ISize {
 func (self I8) WrappingMul(rhs I8) I8 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I8(math.MaxInt8) - 1
-	}
 	return result
 }
 
 func (self I16) WrappingMul(rhs I16) I16 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I16(math.MaxInt16) - 1
-	}
 	return result
 }
 
 func (self I32) WrappingMul(rhs I32) I32 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I32(math.MaxInt32) - 1
-	}
 	return result
 }
 
 func (self I64) WrappingMul(rhs I64) I64 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - I64(math.MaxInt64) - 1
-	}
 	return result
 }
 
 func (self USize) WrappingMul(rhs USize) USize {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - USize(math.MaxUint) - 1
-	}
 	return result
 }
 
 func (self U8) WrappingMul(rhs U8) U8 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U8(math.MaxUint8) - 1
-	}
 	return result
 }
 
 func (self U16) WrappingMul(rhs U16) U16 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U16(math.MaxUint16) - 1
-	}
 	return result
 }
 
 func (self U32) WrappingMul(rhs U32) U32 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U32(math.MaxUint32) - 1
-	}
 	return result
 }
 
 func (self U64) WrappingMul(rhs U64) U64 {
 	result := self * rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred, wrap around
-		result = result - U64(math.MaxUint64) - 1
-	}
 	return result
 }
 
@@ -969,100 +955,60 @@ func (self U64) WrappingMul(rhs U64) U64 {
 func (self ISize) WrappingDiv(rhs ISize) ISize {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + ISize(math.MaxInt) + 1
-	}
 	return result
 }
 
 func (self I8) WrappingDiv(rhs I8) I8 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I8(math.MaxInt8) + 1
-	}
 	return result
 }
 
 func (self I16) WrappingDiv(rhs I16) I16 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I16(math.MaxInt16) + 1
-	}
 	return result
 }
 
 func (self I32) WrappingDiv(rhs I32) I32 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I32(math.MaxInt32) + 1
-	}
 	return result
 }
 
 func (self I64) WrappingDiv(rhs I64) I64 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + I64(math.MaxInt64) + 1
-	}
 	return result
 }
 
 func (self USize) WrappingDiv(rhs USize) USize {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + USize(math.MaxUint) + 1
-	}
 	return result
 }
 
 func (self U8) WrappingDiv(rhs U8) U8 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U8(math.MaxUint8) + 1
-	}
 	return result
 }
 
 func (self U16) WrappingDiv(rhs U16) U16 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U16(math.MaxUint16) + 1
-	}
 	return result
 }
 
 func (self U32) WrappingDiv(rhs U32) U32 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U32(math.MaxUint32) + 1
-	}
 	return result
 }
 
 func (self U64) WrappingDiv(rhs U64) U64 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U64(math.MaxUint64) + 1
-	}
 	return result
 }
 
