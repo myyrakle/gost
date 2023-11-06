@@ -102,3 +102,9 @@ func Test_WrappingDiv_SignedInteger(t *testing.T) {
 	AssertEq(ISize(100).WrappingDiv(10), ISize(10), "ISize.WrappingDiv")
 	AssertEq(I8(-128).WrappingDiv(-1), I8(-128), "I8.WrappingDiv overflow")
 }
+
+func Test_WrappingDiv_UnsignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(USize(100).WrappingDiv(10), USize(10), "USize.WrappingDiv")
+}

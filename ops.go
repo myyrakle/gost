@@ -985,50 +985,30 @@ func (self I64) WrappingDiv(rhs I64) I64 {
 func (self USize) WrappingDiv(rhs USize) USize {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + USize(math.MaxUint) + 1
-	}
 	return result
 }
 
 func (self U8) WrappingDiv(rhs U8) U8 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U8(math.MaxUint8) + 1
-	}
 	return result
 }
 
 func (self U16) WrappingDiv(rhs U16) U16 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U16(math.MaxUint16) + 1
-	}
 	return result
 }
 
 func (self U32) WrappingDiv(rhs U32) U32 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U32(math.MaxUint32) + 1
-	}
 	return result
 }
 
 func (self U64) WrappingDiv(rhs U64) U64 {
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred, wrap around
-		result = result + U64(math.MaxUint64) + 1
-	}
 	return result
 }
 
