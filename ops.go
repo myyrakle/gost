@@ -1016,50 +1016,50 @@ func (self U64) WrappingDiv(rhs U64) U64 {
 func (self ISize) CheckedAdd(rhs ISize) Option[ISize] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[ISize]()
 	}
+
 	return Some[ISize](result)
 }
 
 func (self I8) CheckedAdd(rhs I8) Option[I8] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I8]()
 	}
+
 	return Some[I8](result)
 }
 
 func (self I16) CheckedAdd(rhs I16) Option[I16] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I16]()
 	}
+
 	return Some[I16](result)
 }
 
 func (self I32) CheckedAdd(rhs I32) Option[I32] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I32]()
 	}
+
 	return Some[I32](result)
 }
 
 func (self I64) CheckedAdd(rhs I64) Option[I64] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I64]()
 	}
+
 	return Some[I64](result)
 }
 
