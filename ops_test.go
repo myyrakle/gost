@@ -131,5 +131,21 @@ func Test_CheckedAdd_SignedInteger(t *testing.T) {
 	AssertEq(I64(100).CheckedAdd(27), Some(I64(127)), "I64.CheckedAdd")
 	AssertEq(I64(math.MaxInt64).CheckedAdd(2), None[I64](), "I64.CheckedAdd overflow")
 	AssertEq(I64(math.MinInt64).CheckedAdd(-2), None[I64](), "I64.CheckedAdd underflow")
+}
 
+func Test_CheckedAdd_UnsignedInteger(t *testing.T) {
+	AssertEq(USize(100).CheckedAdd(27), Some(USize(127)), "ISize.CheckedAdd")
+	AssertEq(USize(math.MaxUint).CheckedAdd(2), None[USize](), "ISize.CheckedAdd overflow")
+
+	AssertEq(U8(100).CheckedAdd(27), Some(U8(127)), "U8.CheckedAdd")
+	AssertEq(U8(math.MaxUint8).CheckedAdd(2), None[U8](), "U8.CheckedAdd overflow")
+
+	AssertEq(U16(100).CheckedAdd(27), Some(U16(127)), "U16.CheckedAdd")
+	AssertEq(U16(math.MaxUint16).CheckedAdd(2), None[U16](), "U16.CheckedAdd overflow")
+
+	AssertEq(U32(100).CheckedAdd(27), Some(U32(127)), "U32.CheckedAdd")
+	AssertEq(U32(math.MaxUint32).CheckedAdd(2), None[U32](), "U32.CheckedAdd overflow")
+
+	AssertEq(U64(100).CheckedAdd(27), Some(U64(127)), "U64.CheckedAdd")
+	AssertEq(U64(math.MaxUint64).CheckedAdd(2), None[U64](), "U64.CheckedAdd overflow")
 }
