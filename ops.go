@@ -2007,6 +2007,7 @@ func (self ISize) Abs() ISize {
 	return self
 }
 
+// Absolute value. Returns the absolute value of self.
 func (self I8) Abs() I8 {
 	if self < 0 {
 		return -self
@@ -2014,6 +2015,7 @@ func (self I8) Abs() I8 {
 	return self
 }
 
+// Absolute value. Returns the absolute value of self.
 func (self I16) Abs() I16 {
 	if self < 0 {
 		return -self
@@ -2021,6 +2023,7 @@ func (self I16) Abs() I16 {
 	return self
 }
 
+// Absolute value. Returns the absolute value of self.
 func (self I32) Abs() I32 {
 	if self < 0 {
 		return -self
@@ -2028,6 +2031,7 @@ func (self I32) Abs() I32 {
 	return self
 }
 
+// Absolute value. Returns the absolute value of self.
 func (self I64) Abs() I64 {
 	if self < 0 {
 		return -self
@@ -2044,6 +2048,8 @@ func (self ISize) AbsDiff(other ISize) USize {
 	return USize(other - self)
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self I8) AbsDiff(other I8) U8 {
 	if self > other {
 		return U8(self - other)
@@ -2051,6 +2057,8 @@ func (self I8) AbsDiff(other I8) U8 {
 	return U8(other - self)
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self I16) AbsDiff(other I16) U16 {
 	if self > other {
 		return U16(self - other)
@@ -2058,6 +2066,8 @@ func (self I16) AbsDiff(other I16) U16 {
 	return U16(other - self)
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self I32) AbsDiff(other I32) U32 {
 	if self > other {
 		return U32(self - other)
@@ -2065,6 +2075,8 @@ func (self I32) AbsDiff(other I32) U32 {
 	return U32(other - self)
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self I64) AbsDiff(other I64) U64 {
 	if self > other {
 		return U64(self - other)
@@ -2072,6 +2084,8 @@ func (self I64) AbsDiff(other I64) U64 {
 	return U64(other - self)
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self USize) AbsDiff(other USize) USize {
 	if self > other {
 		return self - other
@@ -2079,6 +2093,8 @@ func (self USize) AbsDiff(other USize) USize {
 	return other - self
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self U8) AbsDiff(other U8) U8 {
 	if self > other {
 		return self - other
@@ -2086,6 +2102,8 @@ func (self U8) AbsDiff(other U8) U8 {
 	return other - self
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self U16) AbsDiff(other U16) U16 {
 	if self > other {
 		return self - other
@@ -2093,6 +2111,8 @@ func (self U16) AbsDiff(other U16) U16 {
 	return other - self
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self U32) AbsDiff(other U32) U32 {
 	if self > other {
 		return self - other
@@ -2100,6 +2120,8 @@ func (self U32) AbsDiff(other U32) U32 {
 	return other - self
 }
 
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self U64) AbsDiff(other U64) U64 {
 	if self > other {
 		return self - other
@@ -2112,18 +2134,47 @@ func (self ISize) IsPositive() Bool {
 	return self > 0
 }
 
+// Returns true if self is positive and false if the number is zero or negative.
 func (self I8) IsPositive() Bool {
 	return self > 0
 }
 
+// Returns true if self is positive and false if the number is zero or negative.
 func (self I16) IsPositive() Bool {
 	return self > 0
 }
 
+// Returns true if self is positive and false if the number is zero or negative.
 func (self I32) IsPositive() Bool {
 	return self > 0
 }
 
+// Returns true if self is positive and false if the number is zero or negative.
 func (self I64) IsPositive() Bool {
 	return self > 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self ISize) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I8) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I16) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I32) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I64) IsNegative() Bool {
+	return self < 0
 }
