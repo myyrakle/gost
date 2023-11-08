@@ -715,20 +715,10 @@ func (self I64) _HasOverflow_Add(rhs I64) bool {
 }
 
 func (self ISize) _HasOverflow_Sub(rhs ISize) bool {
-	if self > 0 && rhs < math.MinInt+self {
+	if rhs < 0 && self > math.MaxInt+rhs {
 		return true
 	}
-	if self < 0 && rhs > math.MaxInt+self {
-		return true
-	}
-	return false
-}
-
-func (self ISize) _HasUnderflow_Sub(rhs ISize) bool {
-	if rhs < 0 && self > math.MaxInt32+rhs {
-		return true
-	}
-	if rhs > 0 && self < math.MinInt32+rhs {
+	if rhs > 0 && self < math.MinInt+rhs {
 		return true
 	}
 	return false
@@ -739,6 +729,341 @@ func (self I8) _HasOverflow_Sub(rhs I8) bool {
 		return true
 	}
 	if self < 0 && rhs > math.MaxInt8+self {
+		return true
+	}
+	return false
+}
+
+func (self I16) _HasOverflow_Sub(rhs I16) bool {
+	if self > 0 && rhs < math.MinInt16+self {
+		return true
+	}
+	if self < 0 && rhs > math.MaxInt16+self {
+		return true
+	}
+	return false
+}
+
+func (self I32) _HasOverflow_Sub(rhs I32) bool {
+	if self > 0 && rhs < math.MinInt32+self {
+		return true
+	}
+	if self < 0 && rhs > math.MaxInt32+self {
+		return true
+	}
+	return false
+}
+
+func (self I64) _HasOverflow_Sub(rhs I64) bool {
+	if self > 0 && rhs < math.MinInt64+self {
+		return true
+	}
+	if self < 0 && rhs > math.MaxInt64+self {
+		return true
+	}
+	return false
+}
+
+func (self USize) _HasUnderflow_Sub(rhs USize) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U8) _HasUnderflow_Sub(rhs U8) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U16) _HasUnderflow_Sub(rhs U16) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U32) _HasUnderflow_Sub(rhs U32) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U64) _HasUnderflow_Sub(rhs U64) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self ISize) _HasUnderflow_Sub(rhs ISize) bool {
+	if rhs > 0 && self < math.MinInt32+rhs {
+		return true
+	}
+	if rhs < 0 && self > math.MaxInt32+rhs {
+		return true
+	}
+	return false
+}
+
+func (self I8) _HasUnderflow_Sub(rhs I8) bool {
+	if rhs > 0 && self < math.MinInt8+rhs {
+		return true
+	}
+	if rhs < 0 && self > math.MaxInt8+rhs {
+		return true
+	}
+	return false
+}
+
+func (self I16) _HasUnderflow_Sub(rhs I16) bool {
+	if rhs > 0 && self < math.MinInt16+rhs {
+		return true
+	}
+	if rhs < 0 && self > math.MaxInt16+rhs {
+		return true
+	}
+	return false
+}
+
+func (self I32) _HasUnderflow_Sub(rhs I32) bool {
+	if rhs > 0 && self < math.MinInt32+rhs {
+		return true
+	}
+	if rhs < 0 && self > math.MaxInt32+rhs {
+		return true
+	}
+	return false
+}
+
+func (self I64) _HasUnderflow_Sub(rhs I64) bool {
+	if rhs > 0 && self < math.MinInt64+rhs {
+		return true
+	}
+	if rhs < 0 && self > math.MaxInt64+rhs {
+		return true
+	}
+	return false
+}
+
+func (self ISize) _HasOverflow_Mul(rhs ISize) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Mul(rhs I8) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt8/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt8/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt8/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt8/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I16) _HasOverflow_Mul(rhs I16) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt16/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt16/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt16/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt16/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I32) _HasOverflow_Mul(rhs I32) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt32/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt32/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt32/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt32/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I64) _HasOverflow_Mul(rhs I64) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt64/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt64/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt64/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt64/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self USize) _HasOverflow_Mul(rhs USize) bool {
+	if self != 0 && rhs > math.MaxUint32/self {
+		return true
+	}
+	return false
+}
+
+func (self U8) _HasOverflow_Mul(rhs U8) bool {
+	if self != 0 && rhs > math.MaxUint8/self {
+		return true
+	}
+	return false
+}
+
+func (self U16) _HasOverflow_Mul(rhs U16) bool {
+	if self != 0 && rhs > math.MaxUint16/self {
+		return true
+	}
+	return false
+}
+
+func (self U32) _HasOverflow_Mul(rhs U32) bool {
+	if self != 0 && rhs > math.MaxUint32/self {
+		return true
+	}
+	return false
+}
+
+func (self U64) _HasOverflow_Mul(rhs U64) bool {
+	if self != 0 && rhs > math.MaxUint64/self {
+		return true
+	}
+	return false
+}
+
+func (self ISize) _HasOverflow_Div(rhs ISize) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Div(rhs I8) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt8 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I16) _HasOverflow_Div(rhs I16) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt16 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I32) _HasOverflow_Div(rhs I32) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt32 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I64) _HasOverflow_Div(rhs I64) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt64 && rhs == -1 {
 		return true
 	}
 	return false
@@ -1016,50 +1341,50 @@ func (self U64) WrappingDiv(rhs U64) U64 {
 func (self ISize) CheckedAdd(rhs ISize) Option[ISize] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[ISize]()
 	}
+
 	return Some[ISize](result)
 }
 
 func (self I8) CheckedAdd(rhs I8) Option[I8] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I8]()
 	}
+
 	return Some[I8](result)
 }
 
 func (self I16) CheckedAdd(rhs I16) Option[I16] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I16]()
 	}
+
 	return Some[I16](result)
 }
 
 func (self I32) CheckedAdd(rhs I32) Option[I32] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I32]()
 	}
+
 	return Some[I32](result)
 }
 
 func (self I64) CheckedAdd(rhs I64) Option[I64] {
 	result := self + rhs
 
-	if result < self || result < rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) {
 		return None[I64]()
 	}
+
 	return Some[I64](result)
 }
 
@@ -1117,18 +1442,17 @@ func (self U64) CheckedAdd(rhs U64) Option[U64] {
 func (self ISize) CheckedSub(rhs ISize) Option[ISize] {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		return None[ISize]()
 	}
+
 	return Some[ISize](result)
 }
 
 func (self I8) CheckedSub(rhs I8) Option[I8] {
 	result := self - rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
+	if self._HasOverflow_Add(rhs) || self._HasUnderflow_Sub(rhs) {
 		return None[I8]()
 	}
 	return Some[I8](result)
@@ -1137,7 +1461,7 @@ func (self I8) CheckedSub(rhs I8) Option[I8] {
 func (self I16) CheckedSub(rhs I16) Option[I16] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Add(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[I16]()
 	}
@@ -1147,7 +1471,7 @@ func (self I16) CheckedSub(rhs I16) Option[I16] {
 func (self I32) CheckedSub(rhs I32) Option[I32] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Add(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[I32]()
 	}
@@ -1157,7 +1481,7 @@ func (self I32) CheckedSub(rhs I32) Option[I32] {
 func (self I64) CheckedSub(rhs I64) Option[I64] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Add(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[I64]()
 	}
@@ -1167,7 +1491,7 @@ func (self I64) CheckedSub(rhs I64) Option[I64] {
 func (self USize) CheckedSub(rhs USize) Option[USize] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[USize]()
 	}
@@ -1177,7 +1501,7 @@ func (self USize) CheckedSub(rhs USize) Option[USize] {
 func (self U8) CheckedSub(rhs U8) Option[U8] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U8]()
 	}
@@ -1187,7 +1511,7 @@ func (self U8) CheckedSub(rhs U8) Option[U8] {
 func (self U16) CheckedSub(rhs U16) Option[U16] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U16]()
 	}
@@ -1197,7 +1521,7 @@ func (self U16) CheckedSub(rhs U16) Option[U16] {
 func (self U32) CheckedSub(rhs U32) Option[U32] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U32]()
 	}
@@ -1207,7 +1531,7 @@ func (self U32) CheckedSub(rhs U32) Option[U32] {
 func (self U64) CheckedSub(rhs U64) Option[U64] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U64]()
 	}
@@ -1218,7 +1542,7 @@ func (self U64) CheckedSub(rhs U64) Option[U64] {
 func (self ISize) CheckedMul(rhs ISize) Option[ISize] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[ISize]()
 	}
@@ -1228,7 +1552,7 @@ func (self ISize) CheckedMul(rhs ISize) Option[ISize] {
 func (self I8) CheckedMul(rhs I8) Option[I8] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I8]()
 	}
@@ -1238,7 +1562,7 @@ func (self I8) CheckedMul(rhs I8) Option[I8] {
 func (self I16) CheckedMul(rhs I16) Option[I16] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I16]()
 	}
@@ -1248,7 +1572,7 @@ func (self I16) CheckedMul(rhs I16) Option[I16] {
 func (self I32) CheckedMul(rhs I32) Option[I32] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I32]()
 	}
@@ -1258,7 +1582,7 @@ func (self I32) CheckedMul(rhs I32) Option[I32] {
 func (self I64) CheckedMul(rhs I64) Option[I64] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I64]()
 	}
@@ -1268,7 +1592,7 @@ func (self I64) CheckedMul(rhs I64) Option[I64] {
 func (self USize) CheckedMul(rhs USize) Option[USize] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[USize]()
 	}
@@ -1278,7 +1602,7 @@ func (self USize) CheckedMul(rhs USize) Option[USize] {
 func (self U8) CheckedMul(rhs U8) Option[U8] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U8]()
 	}
@@ -1288,7 +1612,7 @@ func (self U8) CheckedMul(rhs U8) Option[U8] {
 func (self U16) CheckedMul(rhs U16) Option[U16] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U16]()
 	}
@@ -1298,7 +1622,7 @@ func (self U16) CheckedMul(rhs U16) Option[U16] {
 func (self U32) CheckedMul(rhs U32) Option[U32] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U32]()
 	}
@@ -1308,7 +1632,7 @@ func (self U32) CheckedMul(rhs U32) Option[U32] {
 func (self U64) CheckedMul(rhs U64) Option[U64] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U64]()
 	}
@@ -1317,72 +1641,57 @@ func (self U64) CheckedMul(rhs U64) Option[U64] {
 
 // Checked integer division. Computes self / rhs, returning None if rhs == 0 or the operation results in overflow.
 func (self ISize) CheckedDiv(rhs ISize) Option[ISize] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[ISize]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[ISize]()
-	}
 	return Some[ISize](result)
 }
 
 func (self I8) CheckedDiv(rhs I8) Option[I8] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I8]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I8]()
-	}
 	return Some[I8](result)
 }
 
 func (self I16) CheckedDiv(rhs I16) Option[I16] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I16]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I16]()
-	}
 	return Some[I16](result)
 }
 
 func (self I32) CheckedDiv(rhs I32) Option[I32] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I32]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I32]()
-	}
 	return Some[I32](result)
 }
 
 func (self I64) CheckedDiv(rhs I64) Option[I64] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I64]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I64]()
-	}
 	return Some[I64](result)
 }
 
@@ -1393,10 +1702,6 @@ func (self USize) CheckedDiv(rhs USize) Option[USize] {
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[USize]()
-	}
 	return Some[USize](result)
 }
 
@@ -1407,10 +1712,6 @@ func (self U8) CheckedDiv(rhs U8) Option[U8] {
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[U8]()
-	}
 	return Some[U8](result)
 }
 
@@ -1421,10 +1722,6 @@ func (self U16) CheckedDiv(rhs U16) Option[U16] {
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[U16]()
-	}
 	return Some[U16](result)
 }
 
@@ -1435,10 +1732,6 @@ func (self U32) CheckedDiv(rhs U32) Option[U32] {
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[U32]()
-	}
 	return Some[U32](result)
 }
 
@@ -1449,10 +1742,6 @@ func (self U64) CheckedDiv(rhs U64) Option[U64] {
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[U64]()
-	}
 	return Some[U64](result)
 }
 
