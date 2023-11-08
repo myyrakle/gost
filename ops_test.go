@@ -259,3 +259,22 @@ func Test_CheckedDiv_SignedInteger(t *testing.T) {
 	AssertEq(I64(math.MinInt64).CheckedDiv(0), None[I64](), "I64.CheckedDiv divide by zero")
 	AssertEq(I64(math.MinInt64).CheckedDiv(-1), None[I64](), "I64.CheckedDiv overflow")
 }
+
+func Test_CheckedDiv_UnsignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(USize(100).CheckedDiv(10), Some(USize(10)), "USize.CheckedDiv")
+	AssertEq(USize(100).CheckedDiv(0), None[USize](), "USize.CheckedDiv divide by zero")
+
+	AssertEq(U8(100).CheckedDiv(10), Some(U8(10)), "U8.CheckedDiv")
+	AssertEq(U8(100).CheckedDiv(0), None[U8](), "U8.CheckedDiv divide by zero")
+
+	AssertEq(U16(100).CheckedDiv(10), Some(U16(10)), "U16.CheckedDiv")
+	AssertEq(U16(100).CheckedDiv(0), None[U16](), "U16.CheckedDiv divide by zero")
+
+	AssertEq(U32(100).CheckedDiv(10), Some(U32(10)), "U32.CheckedDiv")
+	AssertEq(U32(100).CheckedDiv(0), None[U32](), "U32.CheckedDiv divide by zero")
+
+	AssertEq(U64(100).CheckedDiv(10), Some(U64(10)), "U64.CheckedDiv")
+	AssertEq(U64(100).CheckedDiv(0), None[U64](), "U64.CheckedDiv divide by zero")
+}
