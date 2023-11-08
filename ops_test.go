@@ -235,3 +235,27 @@ func Test_CheckedMul_UnsignedInteger(t *testing.T) {
 	AssertEq(U64(11).CheckedMul(12), Some(U64(132)), "U64.CheckedMul")
 	AssertEq(U64(math.MaxUint64).CheckedMul(2), None[U64](), "U64.CheckedMul overflow")
 }
+
+func Test_CheckedDiv_SignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(ISize(100).CheckedDiv(10), Some(ISize(10)), "ISize.CheckedDiv")
+	AssertEq(ISize(math.MinInt).CheckedDiv(0), None[ISize](), "ISize.CheckedDiv divide by zero")
+	AssertEq(ISize(math.MinInt).CheckedDiv(-1), None[ISize](), "ISize.CheckedDiv overflow")
+
+	AssertEq(I8(100).CheckedDiv(10), Some(I8(10)), "I8.CheckedDiv")
+	AssertEq(I8(math.MinInt8).CheckedDiv(0), None[I8](), "I8.CheckedDiv divide by zero")
+	AssertEq(I8(math.MinInt8).CheckedDiv(-1), None[I8](), "I8.CheckedDiv overflow")
+
+	AssertEq(I16(100).CheckedDiv(10), Some(I16(10)), "I16.CheckedDiv")
+	AssertEq(I16(math.MinInt16).CheckedDiv(0), None[I16](), "I16.CheckedDiv divide by zero")
+	AssertEq(I16(math.MinInt16).CheckedDiv(-1), None[I16](), "I16.CheckedDiv overflow")
+
+	AssertEq(I32(100).CheckedDiv(10), Some(I32(10)), "I32.CheckedDiv")
+	AssertEq(I32(math.MinInt32).CheckedDiv(0), None[I32](), "I32.CheckedDiv divide by zero")
+	AssertEq(I32(math.MinInt32).CheckedDiv(-1), None[I32](), "I32.CheckedDiv overflow")
+
+	AssertEq(I64(100).CheckedDiv(10), Some(I64(10)), "I64.CheckedDiv")
+	AssertEq(I64(math.MinInt64).CheckedDiv(0), None[I64](), "I64.CheckedDiv divide by zero")
+	AssertEq(I64(math.MinInt64).CheckedDiv(-1), None[I64](), "I64.CheckedDiv overflow")
+}

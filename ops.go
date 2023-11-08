@@ -1009,6 +1009,66 @@ func (self U64) _HasOverflow_Mul(rhs U64) bool {
 	return false
 }
 
+func (self ISize) _HasOverflow_Div(rhs ISize) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Div(rhs I8) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt8 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I16) _HasOverflow_Div(rhs I16) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt16 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I32) _HasOverflow_Div(rhs I32) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt32 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
+func (self I64) _HasOverflow_Div(rhs I64) bool {
+	// Division by zero
+	if rhs == 0 {
+		return true
+	}
+	// Division of the minimum negative int by -1
+	if self == math.MinInt64 && rhs == -1 {
+		return true
+	}
+	return false
+}
+
 // Wrapping (modular) addition. Computes self + rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingAdd(rhs ISize) ISize {
 	result := self + rhs
@@ -1581,72 +1641,57 @@ func (self U64) CheckedMul(rhs U64) Option[U64] {
 
 // Checked integer division. Computes self / rhs, returning None if rhs == 0 or the operation results in overflow.
 func (self ISize) CheckedDiv(rhs ISize) Option[ISize] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[ISize]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[ISize]()
-	}
 	return Some[ISize](result)
 }
 
 func (self I8) CheckedDiv(rhs I8) Option[I8] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I8]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I8]()
-	}
 	return Some[I8](result)
 }
 
 func (self I16) CheckedDiv(rhs I16) Option[I16] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I16]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I16]()
-	}
 	return Some[I16](result)
 }
 
 func (self I32) CheckedDiv(rhs I32) Option[I32] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I32]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I32]()
-	}
 	return Some[I32](result)
 }
 
 func (self I64) CheckedDiv(rhs I64) Option[I64] {
-	if rhs == 0 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred
 		return None[I64]()
 	}
 
 	result := self / rhs
 
-	if result > self || result > rhs {
-		// Overflow occurred
-		return None[I64]()
-	}
 	return Some[I64](result)
 }
 
