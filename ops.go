@@ -2034,3 +2034,75 @@ func (self I64) Abs() I64 {
 	}
 	return self
 }
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self ISize) AbsDiff(other ISize) USize {
+	if self > other {
+		return USize(self - other)
+	}
+	return USize(other - self)
+}
+
+func (self I8) AbsDiff(other I8) U8 {
+	if self > other {
+		return U8(self - other)
+	}
+	return U8(other - self)
+}
+
+func (self I16) AbsDiff(other I16) U16 {
+	if self > other {
+		return U16(self - other)
+	}
+	return U16(other - self)
+}
+
+func (self I32) AbsDiff(other I32) U32 {
+	if self > other {
+		return U32(self - other)
+	}
+	return U32(other - self)
+}
+
+func (self I64) AbsDiff(other I64) U64 {
+	if self > other {
+		return U64(self - other)
+	}
+	return U64(other - self)
+}
+
+func (self USize) AbsDiff(other USize) USize {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+func (self U8) AbsDiff(other U8) U8 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+func (self U16) AbsDiff(other U16) U16 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+func (self U32) AbsDiff(other U32) U32 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+func (self U64) AbsDiff(other U64) U64 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
