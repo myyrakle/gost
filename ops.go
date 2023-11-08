@@ -2106,3 +2106,24 @@ func (self U64) AbsDiff(other U64) U64 {
 	}
 	return other - self
 }
+
+// Returns true if self is positive and false if the number is zero or negative.
+func (self ISize) IsPositive() Bool {
+	return self > 0
+}
+
+func (self I8) IsPositive() Bool {
+	return self > 0
+}
+
+func (self I16) IsPositive() Bool {
+	return self > 0
+}
+
+func (self I32) IsPositive() Bool {
+	return self > 0
+}
+
+func (self I64) IsPositive() Bool {
+	return self > 0
+}
