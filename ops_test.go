@@ -173,3 +173,22 @@ func Test_CheckedSub_SignedInteger(t *testing.T) {
 	AssertEq(I64(math.MinInt64).CheckedSub(2), None[I64](), "I64.CheckedSub underflow")
 	AssertEq(I64(math.MaxInt64).CheckedSub(-2), None[I64](), "I64.CheckedSub overflow")
 }
+
+func Test_CheckedSub_UnsignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(USize(100).CheckedSub(27), Some(USize(73)), "USize.CheckedSub")
+	AssertEq(USize(0).CheckedSub(2), None[USize](), "USize.CheckedSub underflow")
+
+	AssertEq(U8(100).CheckedSub(27), Some(U8(73)), "U8.CheckedSub")
+	AssertEq(U8(0).CheckedSub(2), None[U8](), "U8.CheckedSub underflow")
+
+	AssertEq(U16(100).CheckedSub(27), Some(U16(73)), "U16.CheckedSub")
+	AssertEq(U16(0).CheckedSub(2), None[U16](), "U16.CheckedSub underflow")
+
+	AssertEq(U32(100).CheckedSub(27), Some(U32(73)), "U32.CheckedSub")
+	AssertEq(U32(0).CheckedSub(2), None[U32](), "U32.CheckedSub underflow")
+
+	AssertEq(U64(100).CheckedSub(27), Some(U64(73)), "U64.CheckedSub")
+	AssertEq(U64(0).CheckedSub(2), None[U64](), "U64.CheckedSub underflow")
+}

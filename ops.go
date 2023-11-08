@@ -764,6 +764,41 @@ func (self I64) _HasOverflow_Sub(rhs I64) bool {
 	return false
 }
 
+func (self USize) _HasUnderflow_Sub(rhs USize) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U8) _HasUnderflow_Sub(rhs U8) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U16) _HasUnderflow_Sub(rhs U16) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U32) _HasUnderflow_Sub(rhs U32) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
+func (self U64) _HasUnderflow_Sub(rhs U64) bool {
+	if self < rhs {
+		return true
+	}
+	return false
+}
+
 func (self ISize) _HasUnderflow_Sub(rhs ISize) bool {
 	if rhs > 0 && self < math.MinInt32+rhs {
 		return true
@@ -1236,7 +1271,7 @@ func (self I64) CheckedSub(rhs I64) Option[I64] {
 func (self USize) CheckedSub(rhs USize) Option[USize] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[USize]()
 	}
@@ -1246,7 +1281,7 @@ func (self USize) CheckedSub(rhs USize) Option[USize] {
 func (self U8) CheckedSub(rhs U8) Option[U8] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U8]()
 	}
@@ -1256,7 +1291,7 @@ func (self U8) CheckedSub(rhs U8) Option[U8] {
 func (self U16) CheckedSub(rhs U16) Option[U16] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U16]()
 	}
@@ -1266,7 +1301,7 @@ func (self U16) CheckedSub(rhs U16) Option[U16] {
 func (self U32) CheckedSub(rhs U32) Option[U32] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U32]()
 	}
@@ -1276,7 +1311,7 @@ func (self U32) CheckedSub(rhs U32) Option[U32] {
 func (self U64) CheckedSub(rhs U64) Option[U64] {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred
 		return None[U64]()
 	}
