@@ -974,6 +974,41 @@ func (self I64) _HasOverflow_Mul(rhs I64) bool {
 	return false
 }
 
+func (self USize) _HasOverflow_Mul(rhs USize) bool {
+	if self != 0 && rhs > math.MaxUint32/self {
+		return true
+	}
+	return false
+}
+
+func (self U8) _HasOverflow_Mul(rhs U8) bool {
+	if self != 0 && rhs > math.MaxUint8/self {
+		return true
+	}
+	return false
+}
+
+func (self U16) _HasOverflow_Mul(rhs U16) bool {
+	if self != 0 && rhs > math.MaxUint16/self {
+		return true
+	}
+	return false
+}
+
+func (self U32) _HasOverflow_Mul(rhs U32) bool {
+	if self != 0 && rhs > math.MaxUint32/self {
+		return true
+	}
+	return false
+}
+
+func (self U64) _HasOverflow_Mul(rhs U64) bool {
+	if self != 0 && rhs > math.MaxUint64/self {
+		return true
+	}
+	return false
+}
+
 // Wrapping (modular) addition. Computes self + rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingAdd(rhs ISize) ISize {
 	result := self + rhs
@@ -1497,7 +1532,7 @@ func (self I64) CheckedMul(rhs I64) Option[I64] {
 func (self USize) CheckedMul(rhs USize) Option[USize] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[USize]()
 	}
@@ -1507,7 +1542,7 @@ func (self USize) CheckedMul(rhs USize) Option[USize] {
 func (self U8) CheckedMul(rhs U8) Option[U8] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U8]()
 	}
@@ -1517,7 +1552,7 @@ func (self U8) CheckedMul(rhs U8) Option[U8] {
 func (self U16) CheckedMul(rhs U16) Option[U16] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U16]()
 	}
@@ -1527,7 +1562,7 @@ func (self U16) CheckedMul(rhs U16) Option[U16] {
 func (self U32) CheckedMul(rhs U32) Option[U32] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U32]()
 	}
@@ -1537,7 +1572,7 @@ func (self U32) CheckedMul(rhs U32) Option[U32] {
 func (self U64) CheckedMul(rhs U64) Option[U64] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[U64]()
 	}
