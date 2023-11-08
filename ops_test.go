@@ -192,3 +192,27 @@ func Test_CheckedSub_UnsignedInteger(t *testing.T) {
 	AssertEq(U64(100).CheckedSub(27), Some(U64(73)), "U64.CheckedSub")
 	AssertEq(U64(0).CheckedSub(2), None[U64](), "U64.CheckedSub underflow")
 }
+
+func Test_CheckedMul_SignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(ISize(10).CheckedMul(12), Some(ISize(120)), "ISize.CheckedMul")
+	AssertEq(ISize(math.MaxInt).CheckedMul(2), None[ISize](), "ISize.CheckedMul overflow")
+	AssertEq(ISize(math.MinInt).CheckedMul(2), None[ISize](), "ISize.CheckedMul underflow")
+
+	AssertEq(I8(11).CheckedMul(5), Some(I8(55)), "I8.CheckedMul")
+	AssertEq(I8(math.MaxInt8).CheckedMul(2), None[I8](), "I8.CheckedMul overflow")
+	AssertEq(I8(math.MinInt8).CheckedMul(2), None[I8](), "I8.CheckedMul underflow")
+
+	AssertEq(I16(11).CheckedMul(12), Some(I16(132)), "I16.CheckedMul")
+	AssertEq(I16(math.MaxInt16).CheckedMul(2), None[I16](), "I16.CheckedMul overflow")
+	AssertEq(I16(math.MinInt16).CheckedMul(2), None[I16](), "I16.CheckedMul underflow")
+
+	AssertEq(I32(11).CheckedMul(12), Some(I32(132)), "I32.CheckedMul")
+	AssertEq(I32(math.MaxInt32).CheckedMul(2), None[I32](), "I32.CheckedMul overflow")
+	AssertEq(I32(math.MinInt32).CheckedMul(2), None[I32](), "I32.CheckedMul underflow")
+
+	AssertEq(I64(11).CheckedMul(12), Some(I64(132)), "I64.CheckedMul")
+	AssertEq(I64(math.MaxInt64).CheckedMul(2), None[I64](), "I64.CheckedMul overflow")
+	AssertEq(I64(math.MinInt64).CheckedMul(2), None[I64](), "I64.CheckedMul underflow")
+}

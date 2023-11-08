@@ -849,6 +849,131 @@ func (self I64) _HasUnderflow_Sub(rhs I64) bool {
 	return false
 }
 
+func (self ISize) _HasOverflow_Mul(rhs ISize) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I8) _HasOverflow_Mul(rhs I8) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt8/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt8/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt8/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt8/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I16) _HasOverflow_Mul(rhs I16) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt16/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt16/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt16/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt16/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I32) _HasOverflow_Mul(rhs I32) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt32/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt32/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt32/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt32/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self I64) _HasOverflow_Mul(rhs I64) bool {
+	if self > 0 {
+		if rhs > 0 {
+			if self > math.MaxInt64/rhs {
+				return true
+			}
+		} else {
+			if rhs < math.MaxInt64/self {
+				return true
+			}
+		}
+	} else {
+		if rhs > 0 {
+			if self < math.MaxInt64/rhs {
+				return true
+			}
+		} else {
+			if self != 0 && rhs < math.MaxInt64/self {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 // Wrapping (modular) addition. Computes self + rhs, wrapping around at the boundary of the type.
 func (self ISize) WrappingAdd(rhs ISize) ISize {
 	result := self + rhs
@@ -1322,7 +1447,7 @@ func (self U64) CheckedSub(rhs U64) Option[U64] {
 func (self ISize) CheckedMul(rhs ISize) Option[ISize] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[ISize]()
 	}
@@ -1332,7 +1457,7 @@ func (self ISize) CheckedMul(rhs ISize) Option[ISize] {
 func (self I8) CheckedMul(rhs I8) Option[I8] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I8]()
 	}
@@ -1342,7 +1467,7 @@ func (self I8) CheckedMul(rhs I8) Option[I8] {
 func (self I16) CheckedMul(rhs I16) Option[I16] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I16]()
 	}
@@ -1352,7 +1477,7 @@ func (self I16) CheckedMul(rhs I16) Option[I16] {
 func (self I32) CheckedMul(rhs I32) Option[I32] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I32]()
 	}
@@ -1362,7 +1487,7 @@ func (self I32) CheckedMul(rhs I32) Option[I32] {
 func (self I64) CheckedMul(rhs I64) Option[I64] {
 	result := self * rhs
 
-	if result < self || result < rhs {
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred
 		return None[I64]()
 	}
