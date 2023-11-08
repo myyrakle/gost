@@ -1998,3 +1998,323 @@ func (self U64) SaturatingSub(rhs U64) U64 {
 	}
 	return result
 }
+
+// Absolute value. Returns the absolute value of self.
+func (self ISize) Abs() ISize {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+// Absolute value. Returns the absolute value of self.
+func (self I8) Abs() I8 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+// Absolute value. Returns the absolute value of self.
+func (self I16) Abs() I16 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+// Absolute value. Returns the absolute value of self.
+func (self I32) Abs() I32 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+// Absolute value. Returns the absolute value of self.
+func (self I64) Abs() I64 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self ISize) AbsDiff(other ISize) USize {
+	if self > other {
+		return USize(self - other)
+	}
+	return USize(other - self)
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self I8) AbsDiff(other I8) U8 {
+	if self > other {
+		return U8(self - other)
+	}
+	return U8(other - self)
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self I16) AbsDiff(other I16) U16 {
+	if self > other {
+		return U16(self - other)
+	}
+	return U16(other - self)
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self I32) AbsDiff(other I32) U32 {
+	if self > other {
+		return U32(self - other)
+	}
+	return U32(other - self)
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self I64) AbsDiff(other I64) U64 {
+	if self > other {
+		return U64(self - other)
+	}
+	return U64(other - self)
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self USize) AbsDiff(other USize) USize {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self U8) AbsDiff(other U8) U8 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self U16) AbsDiff(other U16) U16 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self U32) AbsDiff(other U32) U32 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+// Computes the absolute difference between self and other.
+// This function always returns the correct answer without overflow or panics by returning an unsigned integer.
+func (self U64) AbsDiff(other U64) U64 {
+	if self > other {
+		return self - other
+	}
+	return other - self
+}
+
+// Returns true if self is positive and false if the number is zero or negative.
+func (self ISize) IsPositive() Bool {
+	return self > 0
+}
+
+// Returns true if self is positive and false if the number is zero or negative.
+func (self I8) IsPositive() Bool {
+	return self > 0
+}
+
+// Returns true if self is positive and false if the number is zero or negative.
+func (self I16) IsPositive() Bool {
+	return self > 0
+}
+
+// Returns true if self is positive and false if the number is zero or negative.
+func (self I32) IsPositive() Bool {
+	return self > 0
+}
+
+// Returns true if self is positive and false if the number is zero or negative.
+func (self I64) IsPositive() Bool {
+	return self > 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self ISize) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I8) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I16) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I32) IsNegative() Bool {
+	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I64) IsNegative() Bool {
+	return self < 0
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self ISize) Pow(exp U32) ISize {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I8) Pow(exp U32) I8 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I16) Pow(exp U32) I16 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I32) Pow(exp U32) I32 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I64) Pow(exp U32) I64 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self USize) Pow(exp U32) USize {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U8) Pow(exp U32) U8 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U16) Pow(exp U32) U16 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U32) Pow(exp U32) U32 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U64) Pow(exp U32) U64 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}

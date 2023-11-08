@@ -278,3 +278,19 @@ func Test_CheckedDiv_UnsignedInteger(t *testing.T) {
 	AssertEq(U64(100).CheckedDiv(10), Some(U64(10)), "U64.CheckedDiv")
 	AssertEq(U64(100).CheckedDiv(0), None[U64](), "U64.CheckedDiv divide by zero")
 }
+
+func Test_Pow_Integer(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(ISize(2).Pow(3), ISize(8), "ISize.Pow")
+	AssertEq(I8(2).Pow(3), I8(8), "I8.Pow")
+	AssertEq(I16(2).Pow(3), I16(8), "I16.Pow")
+	AssertEq(I32(2).Pow(3), I32(8), "I32.Pow")
+	AssertEq(I64(2).Pow(3), I64(8), "I64.Pow")
+
+	AssertEq(USize(2).Pow(3), USize(8), "USize.Pow")
+	AssertEq(U8(2).Pow(3), U8(8), "U8.Pow")
+	AssertEq(U16(2).Pow(3), U16(8), "U16.Pow")
+	AssertEq(U32(2).Pow(3), U32(8), "U32.Pow")
+	AssertEq(U64(2).Pow(3), U64(8), "U64.Pow")
+}
