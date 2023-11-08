@@ -2178,3 +2178,143 @@ func (self I32) IsNegative() Bool {
 func (self I64) IsNegative() Bool {
 	return self < 0
 }
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self ISize) Pow(exp U32) ISize {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I8) Pow(exp U32) I8 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I16) Pow(exp U32) I16 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I32) Pow(exp U32) I32 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self I64) Pow(exp U32) I64 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self USize) Pow(exp U32) USize {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U8) Pow(exp U32) U8 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U16) Pow(exp U32) U16 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U32) Pow(exp U32) U32 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
+
+// Raises self to the power of exp, using exponentiation by squaring.
+func (self U64) Pow(exp U32) U64 {
+	if exp == 0 {
+		return 1
+	}
+	if exp == 1 {
+		return self
+	}
+	if exp%2 == 0 {
+		return (self * self).Pow(exp / 2)
+	}
+	return self * (self * self).Pow(exp/2)
+}
