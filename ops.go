@@ -1998,3 +1998,39 @@ func (self U64) SaturatingSub(rhs U64) U64 {
 	}
 	return result
 }
+
+// Absolute value. Returns the absolute value of self.
+func (self ISize) Abs() ISize {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+func (self I8) Abs() I8 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+func (self I16) Abs() I16 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+func (self I32) Abs() I32 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
+
+func (self I64) Abs() I64 {
+	if self < 0 {
+		return -self
+	}
+	return self
+}
