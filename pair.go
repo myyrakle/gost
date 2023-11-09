@@ -32,7 +32,7 @@ func (p Pair[K, V]) ToString() string {
 }
 
 // impl Display for Pair
-func (p Pair[K, V]) String() string {
+func (p Pair[K, V]) Display() string {
 	return p.ToString()
 }
 

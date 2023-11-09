@@ -14,78 +14,129 @@ Experience the true taste of Rust in Go
 go get github.com/myyrakle/gost@v0.9.0
 ```
 
-## Example
+## Basic Principles
+
+gost implements its main operations through primitive wrappers and traits.
+
+So, you should use the ISize type instead of the int type, and the String type instead of the string type.
 
 ```
-package main
-
 import (
 	"math"
 
-	gost "github.com/myyrakle/gost"
+	. "github.com/myyrakle/gost"
 )
 
-func CheckedAdd(a, b gost.ISize) gost.Option[gost.ISize] {
-	max := gost.ISize(math.MaxInt)
-	if (b > 0 && a > max-b) || (b < 0 && a < max-b) {
-		return gost.None[gost.ISize]()
-	}
+func main() {
+	a := ISize(1)
+	b := ISize(2)
+	c := a + b
 
-	return gost.Some(a + b)
+	Println("{} + {} = {}", a, b, c) // "1 + 2 = 3"
+
+	d := String("foo")
+	Println(d) // "foo"
+}
+```
+
+## Traits
+
+gost defines common operations through a trait-type interface.
+Most of the traits are similar to Rust's traits.
+
+For example, the Clone trait defines deep copying.
+This allows you to consistently define and use specific behaviors in a type-safe manner.
+
+```
+func DoSomethingWithClone[T any](source Clone[T]) {
+	cloned := source.Clone()
+	Println("{}", cloned)
 }
 
 func main() {
-	a := gost.ISize(1)
-	b := gost.ISize(2)
-	result := CheckedAdd(a, b)
-
-	if result.IsSome() {
-		gost.Println("result: {}", result.Unwrap())
-	} else {
-		gost.Println("result: overflow")
-	}
-
-	a = gost.ISize(math.MaxInt)
-	b = gost.ISize(1)
-	result = CheckedAdd(a, b)
-
-	if result.IsSome() {
-		gost.Println("result: {}", result.Unwrap())
-	} else {
-		gost.Println("result: overflow")
-	}
-
-	vector := gost.Vec[gost.ISize]{}
-	vector.Push(gost.ISize(3))
-	vector.Push(gost.ISize(1))
-	vector.Push(gost.ISize(2))
-	vector.Push(gost.ISize(4))
-	vector.Sort()
-	gost.Println("sorted Vec: {}", vector)
-
-	newVec := vector.IntoIter().Map(func(x gost.ISize) gost.ISize { return x * 2 }).CollectToVec()
-	gost.Println("mapped Vec: {}", newVec)
-
-	newVec.Push(gost.ISize(7))
-	foo := newVec.IntoIter().Fold(gost.ISize(0), func(a, b gost.ISize) gost.ISize { return a + b })
-	gost.Println("fold value: {}", foo)
-
-	hashMap := gost.HashMapNew[gost.String, gost.ISize]()
-	hashMap.Insert(gost.String("foo"), gost.ISize(1))
-	hashMap.Insert(gost.String("bar"), gost.ISize(2))
-	hashMap.Insert(gost.String("baz"), gost.ISize(3))
-
-	gost.Println("hashMap: {}", hashMap)
-
-	linkedList := gost.LinkedListNew[gost.ISize]()
-	linkedList.PushBack(gost.ISize(1))
-	linkedList.PushFront(gost.ISize(2))
-	linkedList.PushBack(gost.ISize(3))
-	linkedList2 := gost.LinkedListNew[gost.ISize]()
-	linkedList2.PushBack(gost.ISize(4))
-	linkedList2.PushFront(gost.ISize(5))
-	linkedList.Append(&linkedList2)
-
-	gost.Println("linkedList: {}", linkedList)
+	vec := VecNew[I32]()
+	vec.Push(I32(1))
+	vec.Push(I32(2))
+	DoSomethingWithClone[Vec[I32]](vec)
 }
+```
+
+(Of course, there are limitations to type inference due to Go's poor generic support.)
+
+The basic traits currently provided include the following, and are defined for most types.
+
+- Clone
+- Display
+- Debug
+- ToString
+- Iterator
+- AsRef
+- Ord
+- Eq
+- Add
+- Sub
+- Mul
+- Div
+- Rem
+- AddAssign
+- SubAssign
+- MulAssign
+- DivAssign
+- RemAssign
+
+## Option and Result
+
+gost handles errors through the rusty monad types Option and Result.
+
+For example, CheckedAdd, a function that detects overflow and fails, returns an Option type.
+If Option is None, it fails, and if Option is Some, it succeeds.
+
+```
+a := I8(150)
+b := I8(555)
+
+result := a.CheckedAdd(b)
+
+if result.IsNone() {
+	Println("overflow")
+} else {
+	Println("{}", result.Unwrap())
+}
+```
+
+In normal Go, errors are controlled very loosely through regular pointers and tuples, but Option and Result allow for tighter restrictions.
+
+## Collections
+
+gost supports all of Rust's collection types: Vec, VecDeque, LinkedList, HashSet, HashMap, BTreeSet, BTreeMap, and BinaryHeap.
+It is implemented as a generic, and traits and Iterators can be used.
+
+vector sample
+
+```
+vec := VecNew[I32]()
+vec.Push(I32(1))
+vec.Push(I32(2))
+vec.Push(I32(3))
+vec.Push(I32(4))
+Println("{}", vec)
+
+otherVec := vec.IntoIter().Map(func (e I32) I32 { return e * 2 }).CollectToVec()
+Println("{}", vec)
+```
+
+hashset sample
+
+```
+set := HashSetNew[I32]()
+set.Insert(gost.I32(3))
+set.Insert(gost.I32(4))
+set.Insert(gost.I32(5))
+set.Insert(gost.I32(6))
+set.Insert(gost.I32(7))
+
+Println("{}", set.Contains(I32(33)))
+Println("{}", set.Contains(I32(3)))
+
+Println("{}", set)
 ```
