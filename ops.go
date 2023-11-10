@@ -1886,6 +1886,63 @@ func (self U64) CheckedRem(rhs U64) Option[U64] {
 	return Some[U64](result)
 }
 
+// Saturating integer addition. Computes self + rhs, saturating at the numeric bounds instead of overflowing.
+func (self ISize) SaturatingAdd(rhs ISize) ISize {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return ISize(math.MinInt)
+		}
+		return ISize(math.MaxInt)
+	}
+	return self + rhs
+}
+
+func (self I8) SaturatingAdd(rhs I8) I8 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I8(math.MinInt8)
+		}
+		return I8(math.MaxInt8)
+	}
+	return self + rhs
+}
+
+func (self I16) SaturatingAdd(rhs I16) I16 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I16(math.MinInt16)
+		}
+		return I16(math.MaxInt16)
+	}
+
+	return self + rhs
+}
+
+func (self I32) SaturatingAdd(rhs I32) I32 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I32(math.MinInt32)
+		}
+		return I32(math.MaxInt32)
+	}
+	return self + rhs
+}
+
+func (self I64) SaturatingAdd(rhs I64) I64 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I64(math.MinInt64)
+		}
+		return I64(math.MaxInt64)
+	}
+	return self + rhs
+}
+
 // Saturating integer subtraction. Computes self - rhs, saturating at the numeric bounds instead of overflowing.
 func (self ISize) SaturatingSub(rhs ISize) ISize {
 	result := self - rhs
