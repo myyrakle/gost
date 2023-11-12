@@ -2002,7 +2002,7 @@ func (self U64) SaturatingAdd(rhs U64) U64 {
 func (self ISize) SaturatingSub(rhs ISize) ISize {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return ISize(math.MinInt)

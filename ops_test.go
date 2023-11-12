@@ -337,3 +337,27 @@ func Test_SaturatingAdd_UnsignedInteger(t *testing.T) {
 	AssertEq(U64(100).SaturatingAdd(27), U64(127), "U64.SaturatingAdd")
 	AssertEq(U64(math.MaxUint64).SaturatingAdd(200), U64(math.MaxUint64), "U64.SaturatingAdd overflow")
 }
+
+func Test_SaturatingSub_SignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(ISize(100).SaturatingSub(27), ISize(73), "ISize.SaturatingSub")
+	AssertEq(ISize(math.MinInt).SaturatingSub(2), ISize(math.MinInt), "ISize.SaturatingSub underflow")
+	AssertEq(ISize(math.MaxInt).SaturatingSub(-2), ISize(math.MaxInt), "ISize.SaturatingSub overflow")
+
+	AssertEq(I8(100).SaturatingSub(27), I8(73), "I8.SaturatingSub")
+	AssertEq(I8(math.MinInt8).SaturatingSub(2), I8(math.MinInt8), "I8.SaturatingSub underflow")
+	AssertEq(I8(math.MaxInt8).SaturatingSub(-2), I8(math.MaxInt8), "I8.SaturatingSub overflow")
+
+	AssertEq(I16(100).SaturatingSub(27), I16(73), "I16.SaturatingSub")
+	AssertEq(I16(math.MinInt16).SaturatingSub(2), I16(math.MinInt16), "I16.SaturatingSub underflow")
+	AssertEq(I16(math.MaxInt16).SaturatingSub(-2), I16(math.MaxInt16), "I16.SaturatingSub overflow")
+
+	AssertEq(I32(100).SaturatingSub(27), I32(73), "I32.SaturatingSub")
+	AssertEq(I32(math.MinInt32).SaturatingSub(2), I32(math.MinInt32), "I32.SaturatingSub underflow")
+	AssertEq(I32(math.MaxInt32).SaturatingSub(-2), I32(math.MaxInt32), "I32.SaturatingSub overflow")
+
+	AssertEq(I64(100).SaturatingSub(27), I64(73), "I64.SaturatingSub")
+	AssertEq(I64(math.MinInt64).SaturatingSub(2), I64(math.MinInt64), "I64.SaturatingSub underflow")
+	AssertEq(I64(math.MaxInt64).SaturatingSub(-2), I64(math.MaxInt64), "I64.SaturatingSub overflow")
+}
