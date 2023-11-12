@@ -2226,6 +2226,12 @@ func (self U64) SaturatingMul(rhs U64) U64 {
 func (self ISize) SaturatingDiv(rhs ISize) ISize {
 	if self._HasOverflow_Div(rhs) {
 		// Overflow occurred, saturate
+
+		if self == math.MinInt && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return ISize(math.MaxInt)
+		}
+
 		if self < 0 {
 			return ISize(math.MinInt)
 		}
@@ -2237,6 +2243,12 @@ func (self ISize) SaturatingDiv(rhs ISize) ISize {
 func (self I8) SaturatingDiv(rhs I8) I8 {
 	if self._HasOverflow_Div(rhs) {
 		// Overflow occurred, saturate
+
+		if self == math.MinInt8 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I8(math.MaxInt8)
+		}
+
 		if self < 0 {
 			return I8(math.MinInt8)
 		}
@@ -2247,6 +2259,12 @@ func (self I8) SaturatingDiv(rhs I8) I8 {
 
 func (self I16) SaturatingDiv(rhs I16) I16 {
 	if self._HasOverflow_Div(rhs) {
+
+		if self == math.MinInt16 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I16(math.MaxInt16)
+		}
+
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I16(math.MinInt16)
@@ -2258,6 +2276,12 @@ func (self I16) SaturatingDiv(rhs I16) I16 {
 
 func (self I32) SaturatingDiv(rhs I32) I32 {
 	if self._HasOverflow_Div(rhs) {
+
+		if self == math.MinInt32 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I32(math.MaxInt32)
+		}
+
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I32(math.MinInt32)
@@ -2269,6 +2293,12 @@ func (self I32) SaturatingDiv(rhs I32) I32 {
 
 func (self I64) SaturatingDiv(rhs I64) I64 {
 	if self._HasOverflow_Div(rhs) {
+
+		if self == math.MinInt64 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I64(math.MaxInt64)
+		}
+
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I64(math.MinInt64)

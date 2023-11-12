@@ -423,3 +423,27 @@ func Test_SaturatingMul_UnsignedInteger(t *testing.T) {
 	AssertEq(U64(11).SaturatingMul(12), U64(132), "U64.SaturatingMul")
 	AssertEq(U64(math.MaxUint64).SaturatingMul(2), U64(math.MaxUint64), "U64.SaturatingMul overflow")
 }
+
+func Test_SaturatingDiv_SignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(ISize(100).SaturatingDiv(10), ISize(10), "ISize.SaturatingDiv")
+	AssertEq(ISize(math.MaxInt).SaturatingDiv(-1), ISize(math.MinInt+1), "ISize.SaturatingDiv overflow")
+	AssertEq(ISize(math.MinInt).SaturatingDiv(-1), ISize(math.MaxInt), "ISize.SaturatingDiv underflow")
+
+	AssertEq(I8(100).SaturatingDiv(10), I8(10), "I8.SaturatingDiv")
+	AssertEq(I8(math.MaxInt8).SaturatingDiv(-1), I8(math.MinInt8+1), "I8.SaturatingDiv overflow")
+	AssertEq(I8(math.MinInt8).SaturatingDiv(-1), I8(math.MaxInt8), "I8.SaturatingDiv underflow")
+
+	AssertEq(I16(100).SaturatingDiv(10), I16(10), "I16.SaturatingDiv")
+	AssertEq(I16(math.MaxInt16).SaturatingDiv(-1), I16(math.MinInt16+1), "I16.SaturatingDiv overflow")
+	AssertEq(I16(math.MinInt16).SaturatingDiv(-1), I16(math.MaxInt16), "I16.SaturatingDiv underflow")
+
+	AssertEq(I32(100).SaturatingDiv(10), I32(10), "I32.SaturatingDiv")
+	AssertEq(I32(math.MaxInt32).SaturatingDiv(-1), I32(math.MinInt32+1), "I32.SaturatingDiv overflow")
+	AssertEq(I32(math.MinInt32).SaturatingDiv(-1), I32(math.MaxInt32), "I32.SaturatingDiv underflow")
+
+	AssertEq(I64(100).SaturatingDiv(10), I64(10), "I64.SaturatingDiv")
+	AssertEq(I64(math.MaxInt64).SaturatingDiv(-1), I64(math.MinInt64+1), "I64.SaturatingDiv overflow")
+	AssertEq(I64(math.MinInt64).SaturatingDiv(-1), I64(math.MaxInt64), "I64.SaturatingDiv underflow")
+}
