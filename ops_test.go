@@ -404,3 +404,22 @@ func Test_SaturatingMul_SignedInteger(t *testing.T) {
 	AssertEq(I64(math.MaxInt64).SaturatingMul(2), I64(math.MaxInt64), "I64.SaturatingMul overflow")
 	AssertEq(I64(math.MinInt64).SaturatingMul(2), I64(math.MinInt64), "I64.SaturatingMul underflow")
 }
+
+func Test_SaturatingMul_UnsignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(USize(10).SaturatingMul(12), USize(120), "USize.SaturatingMul")
+	AssertEq(USize(math.MaxUint).SaturatingMul(2), USize(math.MaxUint), "USize.SaturatingMul overflow")
+
+	AssertEq(U8(11).SaturatingMul(5), U8(55), "U8.SaturatingMul")
+	AssertEq(U8(math.MaxUint8).SaturatingMul(2), U8(math.MaxUint8), "U8.SaturatingMul overflow")
+
+	AssertEq(U16(11).SaturatingMul(12), U16(132), "U16.SaturatingMul")
+	AssertEq(U16(math.MaxUint16).SaturatingMul(2), U16(math.MaxUint16), "U16.SaturatingMul overflow")
+
+	AssertEq(U32(11).SaturatingMul(12), U32(132), "U32.SaturatingMul")
+	AssertEq(U32(math.MaxUint32).SaturatingMul(2), U32(math.MaxUint32), "U32.SaturatingMul overflow")
+
+	AssertEq(U64(11).SaturatingMul(12), U64(132), "U64.SaturatingMul")
+	AssertEq(U64(math.MaxUint64).SaturatingMul(2), U64(math.MaxUint64), "U64.SaturatingMul overflow")
+}
