@@ -2015,7 +2015,7 @@ func (self ISize) SaturatingSub(rhs ISize) ISize {
 func (self I8) SaturatingSub(rhs I8) I8 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I8(math.MinInt8)
@@ -2028,7 +2028,7 @@ func (self I8) SaturatingSub(rhs I8) I8 {
 func (self I16) SaturatingSub(rhs I16) I16 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I16(math.MinInt16)
@@ -2041,7 +2041,7 @@ func (self I16) SaturatingSub(rhs I16) I16 {
 func (self I32) SaturatingSub(rhs I32) I32 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I32(math.MinInt32)
@@ -2054,7 +2054,7 @@ func (self I32) SaturatingSub(rhs I32) I32 {
 func (self I64) SaturatingSub(rhs I64) I64 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I64(math.MinInt64)
