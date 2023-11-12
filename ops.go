@@ -2308,6 +2308,56 @@ func (self I64) SaturatingDiv(rhs I64) I64 {
 	return self / rhs
 }
 
+func (self USize) SaturatingDiv(rhs USize) USize {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U8) SaturatingDiv(rhs U8) U8 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U16) SaturatingDiv(rhs U16) U16 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U32) SaturatingDiv(rhs U32) U32 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U64) SaturatingDiv(rhs U64) U64 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
 // Absolute value. Returns the absolute value of self.
 func (self ISize) Abs() ISize {
 	if self < 0 {
