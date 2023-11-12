@@ -2167,6 +2167,61 @@ func (self I64) SaturatingMul(rhs I64) I64 {
 	return self * rhs
 }
 
+func (self USize) SaturatingMul(rhs USize) USize {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return USize(math.MaxUint)
+	}
+
+	return result
+}
+
+func (self U8) SaturatingMul(rhs U8) U8 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U8(math.MaxUint8)
+	}
+
+	return result
+}
+
+func (self U16) SaturatingMul(rhs U16) U16 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U16(math.MaxUint16)
+	}
+
+	return result
+}
+
+func (self U32) SaturatingMul(rhs U32) U32 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U32(math.MaxUint32)
+	}
+
+	return result
+}
+
+func (self U64) SaturatingMul(rhs U64) U64 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U64(math.MaxUint64)
+	}
+
+	return result
+}
+
 // Absolute value. Returns the absolute value of self.
 func (self ISize) Abs() ISize {
 	if self < 0 {
