@@ -2222,6 +2222,62 @@ func (self U64) SaturatingMul(rhs U64) U64 {
 	return result
 }
 
+// Saturating integer division. Computes self / rhs, saturating at the numeric bounds instead of overflowing.
+func (self ISize) SaturatingDiv(rhs ISize) ISize {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return ISize(math.MinInt)
+		}
+		return ISize(math.MaxInt)
+	}
+	return self / rhs
+}
+
+func (self I8) SaturatingDiv(rhs I8) I8 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I8(math.MinInt8)
+		}
+		return I8(math.MaxInt8)
+	}
+	return self / rhs
+}
+
+func (self I16) SaturatingDiv(rhs I16) I16 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I16(math.MinInt16)
+		}
+		return I16(math.MaxInt16)
+	}
+	return self / rhs
+}
+
+func (self I32) SaturatingDiv(rhs I32) I32 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I32(math.MinInt32)
+		}
+		return I32(math.MaxInt32)
+	}
+	return self / rhs
+}
+
+func (self I64) SaturatingDiv(rhs I64) I64 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I64(math.MinInt64)
+		}
+		return I64(math.MaxInt64)
+	}
+	return self / rhs
+}
+
 // Absolute value. Returns the absolute value of self.
 func (self ISize) Abs() ISize {
 	if self < 0 {
