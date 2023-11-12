@@ -294,3 +294,27 @@ func Test_Pow_Integer(t *testing.T) {
 	AssertEq(U32(2).Pow(3), U32(8), "U32.Pow")
 	AssertEq(U64(2).Pow(3), U64(8), "U64.Pow")
 }
+
+func Test_SaturatingAdd_SignedInteger(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(ISize(100).SaturatingAdd(27), ISize(127), "ISize.SaturatingAdd")
+	AssertEq(ISize(math.MaxInt).SaturatingAdd(2), ISize(math.MaxInt), "ISize.SaturatingAdd overflow")
+	AssertEq(ISize(math.MinInt).SaturatingAdd(-2), ISize(math.MinInt), "ISize.SaturatingAdd underflow")
+
+	AssertEq(I8(100).SaturatingAdd(27), I8(127), "I8.SaturatingAdd")
+	AssertEq(I8(math.MaxInt8).SaturatingAdd(2), I8(math.MaxInt8), "I8.SaturatingAdd overflow")
+	AssertEq(I8(math.MinInt8).SaturatingAdd(-2), I8(math.MinInt8), "I8.SaturatingAdd underflow")
+
+	AssertEq(I16(100).SaturatingAdd(27), I16(127), "I16.SaturatingAdd")
+	AssertEq(I16(math.MaxInt16).SaturatingAdd(2), I16(math.MaxInt16), "I16.SaturatingAdd overflow")
+	AssertEq(I16(math.MinInt16).SaturatingAdd(-2), I16(math.MinInt16), "I16.SaturatingAdd underflow")
+
+	AssertEq(I32(100).SaturatingAdd(27), I32(127), "I32.SaturatingAdd")
+	AssertEq(I32(math.MaxInt32).SaturatingAdd(2), I32(math.MaxInt32), "I32.SaturatingAdd overflow")
+	AssertEq(I32(math.MinInt32).SaturatingAdd(-2), I32(math.MinInt32), "I32.SaturatingAdd underflow")
+
+	AssertEq(I64(100).SaturatingAdd(27), I64(127), "I64.SaturatingAdd")
+	AssertEq(I64(math.MaxInt64).SaturatingAdd(2), I64(math.MaxInt64), "I64.SaturatingAdd overflow")
+	AssertEq(I64(math.MinInt64).SaturatingAdd(-2), I64(math.MinInt64), "I64.SaturatingAdd underflow")
+}
