@@ -2074,9 +2074,9 @@ func (self USize) SaturatingSub(rhs USize) USize {
 func (self U8) SaturatingSub(rhs U8) U8 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U8(math.MaxUint8)
+		return 0
 	}
 	return result
 }
@@ -2084,9 +2084,9 @@ func (self U8) SaturatingSub(rhs U8) U8 {
 func (self U16) SaturatingSub(rhs U16) U16 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U16(math.MaxUint16)
+		return 0
 	}
 	return result
 }
@@ -2094,9 +2094,9 @@ func (self U16) SaturatingSub(rhs U16) U16 {
 func (self U32) SaturatingSub(rhs U32) U32 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U32(math.MaxUint32)
+		return 0
 	}
 	return result
 }
@@ -2104,9 +2104,9 @@ func (self U32) SaturatingSub(rhs U32) U32 {
 func (self U64) SaturatingSub(rhs U64) U64 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U64(math.MaxUint64)
+		return 0
 	}
 	return result
 }
