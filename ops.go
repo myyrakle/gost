@@ -1943,6 +1943,61 @@ func (self I64) SaturatingAdd(rhs I64) I64 {
 	return self + rhs
 }
 
+func (self USize) SaturatingAdd(rhs USize) USize {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return USize(math.MaxUint)
+	}
+
+	return result
+}
+
+func (self U8) SaturatingAdd(rhs U8) U8 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U8(math.MaxUint8)
+	}
+
+	return result
+}
+
+func (self U16) SaturatingAdd(rhs U16) U16 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U16(math.MaxUint16)
+	}
+
+	return result
+}
+
+func (self U32) SaturatingAdd(rhs U32) U32 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U32(math.MaxUint32)
+	}
+
+	return result
+}
+
+func (self U64) SaturatingAdd(rhs U64) U64 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U64(math.MaxUint64)
+	}
+
+	return result
+}
+
 // Saturating integer subtraction. Computes self - rhs, saturating at the numeric bounds instead of overflowing.
 func (self ISize) SaturatingSub(rhs ISize) ISize {
 	result := self - rhs
