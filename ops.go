@@ -1886,11 +1886,123 @@ func (self U64) CheckedRem(rhs U64) Option[U64] {
 	return Some[U64](result)
 }
 
+// Saturating integer addition. Computes self + rhs, saturating at the numeric bounds instead of overflowing.
+func (self ISize) SaturatingAdd(rhs ISize) ISize {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return ISize(math.MinInt)
+		}
+		return ISize(math.MaxInt)
+	}
+	return self + rhs
+}
+
+func (self I8) SaturatingAdd(rhs I8) I8 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I8(math.MinInt8)
+		}
+		return I8(math.MaxInt8)
+	}
+	return self + rhs
+}
+
+func (self I16) SaturatingAdd(rhs I16) I16 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I16(math.MinInt16)
+		}
+		return I16(math.MaxInt16)
+	}
+
+	return self + rhs
+}
+
+func (self I32) SaturatingAdd(rhs I32) I32 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I32(math.MinInt32)
+		}
+		return I32(math.MaxInt32)
+	}
+	return self + rhs
+}
+
+func (self I64) SaturatingAdd(rhs I64) I64 {
+	if self._HasOverflow_Add(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I64(math.MinInt64)
+		}
+		return I64(math.MaxInt64)
+	}
+	return self + rhs
+}
+
+func (self USize) SaturatingAdd(rhs USize) USize {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return USize(math.MaxUint)
+	}
+
+	return result
+}
+
+func (self U8) SaturatingAdd(rhs U8) U8 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U8(math.MaxUint8)
+	}
+
+	return result
+}
+
+func (self U16) SaturatingAdd(rhs U16) U16 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U16(math.MaxUint16)
+	}
+
+	return result
+}
+
+func (self U32) SaturatingAdd(rhs U32) U32 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U32(math.MaxUint32)
+	}
+
+	return result
+}
+
+func (self U64) SaturatingAdd(rhs U64) U64 {
+	result := self + rhs
+
+	if result < self || result < rhs {
+		// Overflow occurred, saturate
+		return U64(math.MaxUint64)
+	}
+
+	return result
+}
+
 // Saturating integer subtraction. Computes self - rhs, saturating at the numeric bounds instead of overflowing.
 func (self ISize) SaturatingSub(rhs ISize) ISize {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return ISize(math.MinInt)
@@ -1903,7 +2015,7 @@ func (self ISize) SaturatingSub(rhs ISize) ISize {
 func (self I8) SaturatingSub(rhs I8) I8 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I8(math.MinInt8)
@@ -1916,7 +2028,7 @@ func (self I8) SaturatingSub(rhs I8) I8 {
 func (self I16) SaturatingSub(rhs I16) I16 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I16(math.MinInt16)
@@ -1929,7 +2041,7 @@ func (self I16) SaturatingSub(rhs I16) I16 {
 func (self I32) SaturatingSub(rhs I32) I32 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I32(math.MinInt32)
@@ -1942,7 +2054,7 @@ func (self I32) SaturatingSub(rhs I32) I32 {
 func (self I64) SaturatingSub(rhs I64) I64 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self._HasOverflow_Sub(rhs) || self._HasUnderflow_Sub(rhs) {
 		// Overflow occurred, saturate
 		if self < 0 {
 			return I64(math.MinInt64)
@@ -1962,9 +2074,9 @@ func (self USize) SaturatingSub(rhs USize) USize {
 func (self U8) SaturatingSub(rhs U8) U8 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U8(math.MaxUint8)
+		return 0
 	}
 	return result
 }
@@ -1972,9 +2084,9 @@ func (self U8) SaturatingSub(rhs U8) U8 {
 func (self U16) SaturatingSub(rhs U16) U16 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U16(math.MaxUint16)
+		return 0
 	}
 	return result
 }
@@ -1982,9 +2094,9 @@ func (self U16) SaturatingSub(rhs U16) U16 {
 func (self U32) SaturatingSub(rhs U32) U32 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
 		// Overflow occurred, saturate
-		return U32(math.MaxUint32)
+		return 0
 	}
 	return result
 }
@@ -1992,10 +2104,257 @@ func (self U32) SaturatingSub(rhs U32) U32 {
 func (self U64) SaturatingSub(rhs U64) U64 {
 	result := self - rhs
 
-	if result > self || result > rhs {
+	if self < rhs {
+		// Overflow occurred, saturate
+		return 0
+	}
+	return result
+}
+
+// Saturating integer multiplication. Computes self * rhs, saturating at the numeric bounds instead of overflowing.
+func (self ISize) SaturatingMul(rhs ISize) ISize {
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return ISize(math.MinInt)
+		}
+		return ISize(math.MaxInt)
+	}
+	return self * rhs
+}
+
+func (self I8) SaturatingMul(rhs I8) I8 {
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I8(math.MinInt8)
+		}
+		return I8(math.MaxInt8)
+	}
+	return self * rhs
+}
+
+func (self I16) SaturatingMul(rhs I16) I16 {
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I16(math.MinInt16)
+		}
+		return I16(math.MaxInt16)
+	}
+	return self * rhs
+}
+
+func (self I32) SaturatingMul(rhs I32) I32 {
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I32(math.MinInt32)
+		}
+		return I32(math.MaxInt32)
+	}
+	return self * rhs
+}
+
+func (self I64) SaturatingMul(rhs I64) I64 {
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I64(math.MinInt64)
+		}
+		return I64(math.MaxInt64)
+	}
+	return self * rhs
+}
+
+func (self USize) SaturatingMul(rhs USize) USize {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return USize(math.MaxUint)
+	}
+
+	return result
+}
+
+func (self U8) SaturatingMul(rhs U8) U8 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U8(math.MaxUint8)
+	}
+
+	return result
+}
+
+func (self U16) SaturatingMul(rhs U16) U16 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U16(math.MaxUint16)
+	}
+
+	return result
+}
+
+func (self U32) SaturatingMul(rhs U32) U32 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
+		// Overflow occurred, saturate
+		return U32(math.MaxUint32)
+	}
+
+	return result
+}
+
+func (self U64) SaturatingMul(rhs U64) U64 {
+	result := self * rhs
+
+	if self._HasOverflow_Mul(rhs) {
 		// Overflow occurred, saturate
 		return U64(math.MaxUint64)
 	}
+
+	return result
+}
+
+// Saturating integer division. Computes self / rhs, saturating at the numeric bounds instead of overflowing.
+func (self ISize) SaturatingDiv(rhs ISize) ISize {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+
+		if self == math.MinInt && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return ISize(math.MaxInt)
+		}
+
+		if self < 0 {
+			return ISize(math.MinInt)
+		}
+		return ISize(math.MaxInt)
+	}
+	return self / rhs
+}
+
+func (self I8) SaturatingDiv(rhs I8) I8 {
+	if self._HasOverflow_Div(rhs) {
+		// Overflow occurred, saturate
+
+		if self == math.MinInt8 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I8(math.MaxInt8)
+		}
+
+		if self < 0 {
+			return I8(math.MinInt8)
+		}
+		return I8(math.MaxInt8)
+	}
+	return self / rhs
+}
+
+func (self I16) SaturatingDiv(rhs I16) I16 {
+	if self._HasOverflow_Div(rhs) {
+
+		if self == math.MinInt16 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I16(math.MaxInt16)
+		}
+
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I16(math.MinInt16)
+		}
+		return I16(math.MaxInt16)
+	}
+	return self / rhs
+}
+
+func (self I32) SaturatingDiv(rhs I32) I32 {
+	if self._HasOverflow_Div(rhs) {
+
+		if self == math.MinInt32 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I32(math.MaxInt32)
+		}
+
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I32(math.MinInt32)
+		}
+		return I32(math.MaxInt32)
+	}
+	return self / rhs
+}
+
+func (self I64) SaturatingDiv(rhs I64) I64 {
+	if self._HasOverflow_Div(rhs) {
+
+		if self == math.MinInt64 && rhs == -1 {
+			// Division of the minimum negative int by -1
+			return I64(math.MaxInt64)
+		}
+
+		// Overflow occurred, saturate
+		if self < 0 {
+			return I64(math.MinInt64)
+		}
+		return I64(math.MaxInt64)
+	}
+	return self / rhs
+}
+
+func (self USize) SaturatingDiv(rhs USize) USize {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U8) SaturatingDiv(rhs U8) U8 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U16) SaturatingDiv(rhs U16) U16 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U32) SaturatingDiv(rhs U32) U32 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
+	return result
+}
+
+func (self U64) SaturatingDiv(rhs U64) U64 {
+	if rhs == 0 {
+		return 0
+	}
+
+	result := self / rhs
+
 	return result
 }
 
