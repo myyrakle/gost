@@ -178,6 +178,32 @@ func (self BTreeSet[K]) Intersection(other BTreeSet[K]) BTreeSet[K] {
 	}
 }
 
+// Returns true if self has no elements in common with other. This is equivalent to checking for an empty intersection.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	gost.Assert(set1.IsDisjoint(set2))
+func (self BTreeSet[K]) IsDisjoint(other BTreeSet[K]) Bool {
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
 // Returns an iterator over the set.
 type BTreeSetIter[K Ord[K]] struct {
 	vec      Vec[K]
