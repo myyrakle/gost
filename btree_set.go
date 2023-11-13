@@ -98,11 +98,11 @@ func (self BTreeSet[K]) Len() USize {
 
 // Returns true if the set is a subset of another, i.e., other contains at least all the elements in self.
 //
-//	set1 := gost.BTreeSetNew[Int]()
+//	set1 := gost.BTreeSetNew[I32]()
 //	set1.Insert(gost.I32(1))
 //	set1.Insert(gost.I32(2))
 //
-//	set2 := gost.BTreeSetNew[Int]()
+//	set2 := gost.BTreeSetNew[I32]()
 //	set2.Insert(gost.I32(1))
 //	set2.Insert(gost.I32(2))
 //	set2.Insert(gost.I32(3))
@@ -130,11 +130,11 @@ func (self BTreeSet[K]) IsSubset(other BTreeSet[K]) Bool {
 
 // Returns true if the set is a superset of another, i.e., self contains at least all the elements in other.
 //
-//	set1 := gost.BTreeSetNew[Int]()
+//	set1 := gost.BTreeSetNew[I32]()
 //	set1.Insert(gost.I32(1))
 //	set1.Insert(gost.I32(2))
 //
-//	set2 := gost.BTreeSetNew[Int]()
+//	set2 := gost.BTreeSetNew[I32]()
 //	set2.Insert(gost.I32(1))
 //	set2.Insert(gost.I32(2))
 //	set2.Insert(gost.I32(3))
@@ -143,6 +143,39 @@ func (self BTreeSet[K]) IsSubset(other BTreeSet[K]) Bool {
 //	gost.Assert(set2.IsSuperset(set1))
 func (self BTreeSet[K]) IsSuperset(other BTreeSet[K]) Bool {
 	return other.IsSubset(self)
+}
+
+// Visits the elements representing the intersection, i.e., the elements that are both in self and other, in ascending order.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(5))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	intersection := set1.Intersection(set2)
+//	gost.Assert(intersection.Len() == gost.USize(2))
+//	gost.Assert(intersection.Contains(gost.I32(1)))
+//	gost.Assert(intersection.Contains(gost.I32(2)))
+func (self BTreeSet[K]) Intersection(other BTreeSet[K]) BTreeSet[K] {
+	newSet := BTreeSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return newSet
+		}
+
+		if other.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
 }
 
 // Returns an iterator over the set.
