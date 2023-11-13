@@ -81,7 +81,7 @@ func (self *BTreeSet[K]) Remove(key K) Bool {
 //
 //	set.Insert(gost.I32(1))
 //	gost.Assert(!set.IsEmpty())
-func (self *BTreeSet[K]) IsEmpty() Bool {
+func (self BTreeSet[K]) IsEmpty() Bool {
 	return self._treemap.IsEmpty()
 }
 
@@ -92,8 +92,209 @@ func (self *BTreeSet[K]) IsEmpty() Bool {
 //
 //	set.Insert(gost.I32(1))
 //	gost.AssertEq(set.Len(), gost.USize(1))
-func (self *BTreeSet[K]) Len() USize {
+func (self BTreeSet[K]) Len() USize {
 	return self._treemap.Len()
+}
+
+// Returns true if the set is a subset of another, i.e., other contains at least all the elements in self.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(set1.IsSubset(set2))
+//	gost.Assert(!set2.IsSubset(set1))
+func (self BTreeSet[K]) IsSubset(other BTreeSet[K]) Bool {
+	if self.Len() > other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
+// Returns true if the set is a superset of another, i.e., self contains at least all the elements in other.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(!set1.IsSuperset(set2))
+//	gost.Assert(set2.IsSuperset(set1))
+func (self BTreeSet[K]) IsSuperset(other BTreeSet[K]) Bool {
+	return other.IsSubset(self)
+}
+
+// Visits the elements representing the intersection, i.e., the elements that are both in self and other, in ascending order.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(5))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	intersection := set1.Intersection(set2)
+//	gost.Assert(intersection.Len() == gost.USize(2))
+//	gost.Assert(intersection.Contains(gost.I32(1)))
+//	gost.Assert(intersection.Contains(gost.I32(2)))
+func (self BTreeSet[K]) Intersection(other BTreeSet[K]) BTreeSet[K] {
+	newSet := BTreeSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return newSet
+		}
+
+		if other.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+}
+
+// Returns true if self has no elements in common with other. This is equivalent to checking for an empty intersection.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	gost.Assert(set1.IsDisjoint(set2))
+func (self BTreeSet[K]) IsDisjoint(other BTreeSet[K]) Bool {
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
+// Visits the elements representing the union, i.e., all the elements in self or other, without duplicates, in ascending order.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(3))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	union := set1.Union(set2)
+//	gost.Assert(union.Len() == gost.USize(4))
+//	gost.Assert(union.Contains(gost.I32(1)))
+//	gost.Assert(union.Contains(gost.I32(2)))
+//	gost.Assert(union.Contains(gost.I32(3)))
+//	gost.Assert(union.Contains(gost.I32(4)))
+func (self BTreeSet[K]) Union(other BTreeSet[K]) BTreeSet[K] {
+	newSet := BTreeSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newSet.Insert(value.Unwrap())
+	}
+
+	iter = other.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newSet.Insert(value.Unwrap())
+	}
+
+	return newSet
+}
+
+// Visits the elements representing the symmetric difference, i.e., the elements that are in self or in other but not in both, in ascending order.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(5))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	symmetricDifference := set1.SymmetricDifference(set2)
+//	gost.Assert(symmetricDifference.Len() == gost.USize(2))
+//	gost.Assert(symmetricDifference.Contains(gost.I32(3)))
+//	gost.Assert(symmetricDifference.Contains(gost.I32(5)))
+func (self BTreeSet[K]) SymmetricDifference(other BTreeSet[K]) BTreeSet[K] {
+	newSet := BTreeSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+
+	iter = other.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if !self.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+
+	return newSet
 }
 
 // Returns an iterator over the set.
