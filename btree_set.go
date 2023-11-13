@@ -128,6 +128,23 @@ func (self BTreeSet[K]) IsSubset(other BTreeSet[K]) Bool {
 	}
 }
 
+// Returns true if the set is a superset of another, i.e., self contains at least all the elements in other.
+//
+//	set1 := gost.BTreeSetNew[Int]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.BTreeSetNew[Int]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(!set1.IsSuperset(set2))
+//	gost.Assert(set2.IsSuperset(set1))
+func (self BTreeSet[K]) IsSuperset(other BTreeSet[K]) Bool {
+	return other.IsSubset(self)
+}
+
 // Returns an iterator over the set.
 type BTreeSetIter[K Ord[K]] struct {
 	vec      Vec[K]
