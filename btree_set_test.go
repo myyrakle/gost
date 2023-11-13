@@ -66,3 +66,22 @@ func Test_BTreeSet_IsDisjoint(t *testing.T) {
 	Assert(!set1.IsDisjoint(set2))
 	Assert(!set2.IsDisjoint(set1))
 }
+
+func Test_BTreeSet_Union(t *testing.T) {
+	set1 := BTreeSetNew[I32]()
+	set1.Insert(I32(1))
+	set1.Insert(I32(2))
+	set1.Insert(I32(3))
+
+	set2 := BTreeSetNew[I32]()
+	set2.Insert(I32(3))
+	set2.Insert(I32(4))
+
+	union := set1.Union(set2)
+
+	Assert(union.Len() == 4)
+	Assert(union.Contains(I32(1)))
+	Assert(union.Contains(I32(2)))
+	Assert(union.Contains(I32(3)))
+	Assert(union.Contains(I32(4)))
+}
