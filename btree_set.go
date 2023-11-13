@@ -81,7 +81,7 @@ func (self *BTreeSet[K]) Remove(key K) Bool {
 //
 //	set.Insert(gost.I32(1))
 //	gost.Assert(!set.IsEmpty())
-func (self *BTreeSet[K]) IsEmpty() Bool {
+func (self BTreeSet[K]) IsEmpty() Bool {
 	return self._treemap.IsEmpty()
 }
 
@@ -92,8 +92,40 @@ func (self *BTreeSet[K]) IsEmpty() Bool {
 //
 //	set.Insert(gost.I32(1))
 //	gost.AssertEq(set.Len(), gost.USize(1))
-func (self *BTreeSet[K]) Len() USize {
+func (self BTreeSet[K]) Len() USize {
 	return self._treemap.Len()
+}
+
+// Returns true if the set is a subset of another, i.e., other contains at least all the elements in self.
+//
+//	set1 := gost.BTreeSetNew[Int]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.BTreeSetNew[Int]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(set1.IsSubset(set2))
+//	gost.Assert(!set2.IsSubset(set1))
+func (self BTreeSet[K]) IsSubset(other BTreeSet[K]) Bool {
+	if self.Len() > other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
 }
 
 // Returns an iterator over the set.
