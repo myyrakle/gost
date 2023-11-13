@@ -85,3 +85,21 @@ func Test_BTreeSet_Union(t *testing.T) {
 	Assert(union.Contains(I32(3)))
 	Assert(union.Contains(I32(4)))
 }
+
+func Test_BTreeSet_SymmetricDifference(t *testing.T) {
+	set1 := BTreeSetNew[I32]()
+	set1.Insert(I32(1))
+	set1.Insert(I32(2))
+	set1.Insert(I32(5))
+
+	set2 := BTreeSetNew[I32]()
+	set2.Insert(I32(1))
+	set2.Insert(I32(2))
+	set2.Insert(I32(3))
+
+	diff := set1.SymmetricDifference(set2)
+
+	Assert(diff.Len() == 2)
+	Assert(diff.Contains(I32(3)))
+	Assert(diff.Contains(I32(5)))
+}
