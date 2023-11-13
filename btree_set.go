@@ -204,6 +204,51 @@ func (self BTreeSet[K]) IsDisjoint(other BTreeSet[K]) Bool {
 	}
 }
 
+// Visits the elements representing the union, i.e., all the elements in self or other, without duplicates, in ascending order.
+//
+//	set1 := gost.BTreeSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(3))
+//
+//	set2 := gost.BTreeSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	union := set1.Union(set2)
+//	gost.Assert(union.Len() == gost.USize(4))
+//	gost.Assert(union.Contains(gost.I32(1)))
+//	gost.Assert(union.Contains(gost.I32(2)))
+//	gost.Assert(union.Contains(gost.I32(3)))
+//	gost.Assert(union.Contains(gost.I32(4)))
+func (self BTreeSet[K]) Union(other BTreeSet[K]) BTreeSet[K] {
+	newSet := BTreeSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newSet.Insert(value.Unwrap())
+	}
+
+	iter = other.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newSet.Insert(value.Unwrap())
+	}
+
+	return newSet
+}
+
 // Returns an iterator over the set.
 type BTreeSetIter[K Ord[K]] struct {
 	vec      Vec[K]
