@@ -127,6 +127,207 @@ func (self HashSet[K]) Contains(value K) Bool {
 	return self.hashMap.ContainsKey(value)
 }
 
+// Returns true if the set is a subset of another, i.e., other contains at least all the elements in self.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(set1.IsSubset(set2))
+//	gost.Assert(!set2.IsSubset(set1))
+func (self HashSet[K]) IsSubset(other HashSet[K]) Bool {
+	if self.Len() > other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
+// Returns true if the set is a superset of another, i.e., self contains at least all the elements in other.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(!set1.IsSuperset(set2))
+//	gost.Assert(set2.IsSuperset(set1))
+func (self HashSet[K]) IsSuperset(other HashSet[K]) Bool {
+	return other.IsSubset(self)
+}
+
+// Visits the elements representing the intersection, i.e., the elements that are both in self and other, in ascending order.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(5))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	intersection := set1.Intersection(set2)
+//	gost.Assert(intersection.Len() == gost.USize(2))
+//	gost.Assert(intersection.Contains(gost.I32(1)))
+//	gost.Assert(intersection.Contains(gost.I32(2)))
+func (self HashSet[K]) Intersection(other HashSet[K]) HashSet[K] {
+	newSet := HashSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return newSet
+		}
+
+		if other.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+}
+
+// Returns true if self has no elements in common with other. This is equivalent to checking for an empty intersection.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	gost.Assert(set1.IsDisjoint(set2))
+func (self HashSet[K]) IsDisjoint(other HashSet[K]) Bool {
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
+// Visits the elements representing the union, i.e., all the elements in self or other, without duplicates, in ascending order.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(3))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	union := set1.Union(set2)
+//	gost.Assert(union.Len() == gost.USize(4))
+//	gost.Assert(union.Contains(gost.I32(1)))
+//	gost.Assert(union.Contains(gost.I32(2)))
+//	gost.Assert(union.Contains(gost.I32(3)))
+//	gost.Assert(union.Contains(gost.I32(4)))
+func (self HashSet[K]) Union(other HashSet[K]) HashSet[K] {
+	newSet := HashSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newSet.Insert(value.Unwrap())
+	}
+
+	iter = other.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		newSet.Insert(value.Unwrap())
+	}
+
+	return newSet
+}
+
+// Visits the elements representing the symmetric difference, i.e., the elements that are in self or in other but not in both, in ascending order.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(5))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	symmetricDifference := set1.SymmetricDifference(set2)
+//	gost.Assert(symmetricDifference.Len() == gost.USize(2))
+//	gost.Assert(symmetricDifference.Contains(gost.I32(3)))
+//	gost.Assert(symmetricDifference.Contains(gost.I32(5)))
+func (self HashSet[K]) SymmetricDifference(other HashSet[K]) HashSet[K] {
+	newSet := HashSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+
+	iter = other.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if !self.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+
+	return newSet
+}
+
 // Returns true if the set contains an element equal to the value.
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
