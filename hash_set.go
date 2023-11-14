@@ -127,6 +127,38 @@ func (self HashSet[K]) Contains(value K) Bool {
 	return self.hashMap.ContainsKey(value)
 }
 
+// Returns true if the set is a subset of another, i.e., other contains at least all the elements in self.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(set1.IsSubset(set2))
+//	gost.Assert(!set2.IsSubset(set1))
+func (self HashSet[K]) IsSubset(other HashSet[K]) Bool {
+	if self.Len() > other.Len() {
+		return false
+	}
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
 // Returns true if the set contains an element equal to the value.
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
