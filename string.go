@@ -38,3 +38,8 @@ func (self String) IntoBytes() Vec[U8] {
 func (self String) Len() USize {
 	return USize(len(self))
 }
+
+// Returns true if this String has a length of zero, and false otherwise.
+func (self String) IsEmpty() bool {
+	return len(self) == 0
+}
