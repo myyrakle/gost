@@ -199,3 +199,27 @@ func (self F32) Powf(n F32) F32 {
 func (self F64) Powf(n F64) F64 {
 	return F64(math.Pow(float64(self), float64(n)))
 }
+
+// Returns the square root of a number.
+// Returns NaN if self is a negative number other than -0.0.
+//
+//  f := gost.F32(9.0)
+//  g := gost.F32(16.0)
+//
+//  gost.AssertEq(f.Sqrt(), F32(3.0))
+//  gost.AssertEq(g.Sqrt(), F32(4.0))
+func (self F32) Sqrt() F32 {
+	return F32(math.Sqrt(float64(self)))
+}
+
+// Returns the square root of a number.
+// Returns NaN if self is a negative number other than -0.0.
+//
+//  f := gost.F64(9.0)
+//  g := gost.F64(16.0)
+//
+//  gost.AssertEq(f.Sqrt(), F64(3.0))
+//  gost.AssertEq(g.Sqrt(), F64(4.0))
+func (self F64) Sqrt() F64 {
+	return F64(math.Sqrt(float64(self)))
+}
