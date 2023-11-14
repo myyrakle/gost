@@ -160,3 +160,8 @@ func (self String) Replace(old String, new String) String {
 func (self String) ToLowercase() String {
 	return String(strings.ToLower(string(self)))
 }
+
+// Returns the uppercase equivalent of this string slice, as a new String.
+func (self String) ToUppercase() String {
+	return String(strings.ToUpper(string(self)))
+}
