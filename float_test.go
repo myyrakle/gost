@@ -2,6 +2,18 @@ package gost
 
 import "testing"
 
+func Test_F32_Floor(t *testing.T) {
+	t.Parallel()
+
+	f := F32(3.7)
+	g := F32(3.0)
+	h := F32(-3.7)
+
+	AssertEq(f.Floor(), F32(3.0))
+	AssertEq(g.Floor(), F32(3.0))
+	AssertEq(h.Floor(), F32(-4.0))
+}
+
 func Test_F64_Floor(t *testing.T) {
 	t.Parallel()
 
@@ -14,14 +26,22 @@ func Test_F64_Floor(t *testing.T) {
 	AssertEq(h.Floor(), F64(-4.0))
 }
 
-func Test_F32_Floor(t *testing.T) {
+func Test_F32_Ceil(t *testing.T) {
 	t.Parallel()
 
-	f := F32(3.7)
-	g := F32(3.0)
-	h := F32(-3.7)
+	f := F32(3.01)
+	g := F32(4.0)
 
-	AssertEq(f.Floor(), F32(3.0))
-	AssertEq(g.Floor(), F32(3.0))
-	AssertEq(h.Floor(), F32(-4.0))
+	AssertEq(f.Ceil(), F32(4.0))
+	AssertEq(g.Ceil(), F32(4.0))
+}
+
+func Test_F64_Ceil(t *testing.T) {
+	t.Parallel()
+
+	f := F64(3.01)
+	g := F64(4.0)
+
+	AssertEq(f.Ceil(), F64(4.0))
+	AssertEq(g.Ceil(), F64(4.0))
 }
