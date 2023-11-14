@@ -267,3 +267,25 @@ func (self F32) Exp2() F32 {
 func (self F64) Exp2() F64 {
 	return F64(math.Exp2(float64(self)))
 }
+
+// Returns the natural logarithm of the number.
+//
+//  f := gost.F32(2.7182817)
+//  g := gost.F32(7.389056)
+//
+//  gost.AssertEq(f.Ln(), F32(1.0))
+//  gost.AssertEq(g.Ln(), F32(2.0))
+func (self F32) Ln() F32 {
+	return F32(math.Log(float64(self)))
+}
+
+// Returns the natural logarithm of the number.
+//
+//  f := gost.F64(2.718281828459045)
+//  g := gost.F64(7.38905609893065)
+//
+//  gost.AssertEq(f.Ln(), F64(1.0))
+//  gost.AssertEq(g.Ln(), F64(2.0))
+func (self F64) Ln() F64 {
+	return F64(math.Log(float64(self)))
+}
