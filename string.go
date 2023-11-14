@@ -49,3 +49,18 @@ func (self *String) Push(c Char) String {
 	*self += String(c)
 	return *self
 }
+
+// Removes the last character from the string buffer and returns it.
+// Returns None if this String is empty.
+func (self *String) Pop() Option[Char] {
+	if self.IsEmpty() {
+		return None[Char]()
+	}
+
+	runes := []rune(*self)
+
+	last := runes[len(runes)-1]
+	*self = String(runes[:len(runes)-1])
+
+	return Some[Char](Char(last))
+}
