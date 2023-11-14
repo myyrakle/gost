@@ -1,5 +1,8 @@
 package gost
 
+type Unit struct{}
+type Void struct{}
+
 type ISize int
 type I8 int8
 type I16 int16
