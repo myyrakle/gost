@@ -85,3 +85,16 @@ func (self String) Chars() Vec[Char] {
 func (self String) Contains(str String) bool {
 	return strings.Contains(string(self), string(str))
 }
+
+// Returns the byte index of the first character of this string slice that matches the pattern.
+// Returns None if the pattern doesn’t match.
+// The pattern can be a &str, char, a slice of chars, or a function or closure that determines if a character matches.
+func (self String) Find(str String) Option[USize] {
+	index := strings.Index(string(self), string(str))
+
+	if index == -1 {
+		return None[USize]()
+	}
+
+	return Some[USize](USize(index))
+}
