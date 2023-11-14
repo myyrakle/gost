@@ -20,3 +20,15 @@ func StringFromUTF16(bytes Vec[U16]) Result[String] {
 
 	return Ok[String](String(decoded))
 }
+
+// Converts a String into a byte vector.
+// This consumes the String, so we do not need to copy its contents.
+func (self String) IntoBytes() Vec[U8] {
+	bytes := VecNew[U8]()
+
+	for _, b := range []byte(self) {
+		bytes.Push(U8(b))
+	}
+
+	return bytes
+}
