@@ -335,3 +335,25 @@ func (self F32) Log2() F32 {
 func (self F64) Log2() F64 {
 	return F64(math.Log2(float64(self)))
 }
+
+// Returns the base 10 logarithm of the number.
+//
+//  f := gost.F32(10.0)
+//  g := gost.F32(100.0)
+//
+//  gost.AssertEq(f.Log10(), F32(1.0))
+//  gost.AssertEq(g.Log10(), F32(2.0))
+func (self F32) Log10() F32 {
+	return F32(math.Log10(float64(self)))
+}
+
+// Returns the base 10 logarithm of the number.
+//
+//  f := gost.F64(10.0)
+//  g := gost.F64(100.0)
+//
+//  gost.AssertEq(f.Log10(), F64(1.0))
+//  gost.AssertEq(g.Log10(), F64(2.0))
+func (self F64) Log10() F64 {
+	return F64(math.Log10(float64(self)))
+}
