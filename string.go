@@ -138,3 +138,14 @@ func (self String) ParseU64() Result[U64] {
 		return Ok[U64](U64(parsed))
 	}
 }
+
+// Parses this string slice into another type. (F64)
+func (self String) ParseF64() Result[F64] {
+	parsed, err := strconv.ParseFloat(string(self), 64)
+
+	if err != nil {
+		return Err[F64](err)
+	} else {
+		return Ok[F64](F64(parsed))
+	}
+}
