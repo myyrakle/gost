@@ -1,6 +1,7 @@
 package gost
 
 import (
+	"strconv"
 	"strings"
 	"unicode/utf16"
 )
@@ -114,4 +115,15 @@ func (self String) Split(str String) Vec[String] {
 // ‘Whitespace’ is defined according to the terms of the Unicode Derived Core Property White_Space, which includes newlines.
 func (self String) Trim() String {
 	return String(strings.TrimSpace(string(self)))
+}
+
+// Parses this string slice into another type. (I64)
+func (self String) ParseI64() Result[I64] {
+	parsed, err := strconv.Atoi(string(self))
+
+	if err != nil {
+		return Err[I64](err)
+	} else {
+		return Ok[I64](I64(parsed))
+	}
 }
