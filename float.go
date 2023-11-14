@@ -127,3 +127,25 @@ func (self F32) Trunc() F32 {
 func (self F64) Trunc() F64 {
 	return F64(math.Trunc(float64(self)))
 }
+
+// Returns the fractional part of self.
+//
+//  f := gost.F32(3.7)
+//  g := gost.F32(-3.7)
+//
+//  gost.AssertEq(f.Frac(), F32(0.7))
+//  gost.AssertEq(g.Frac(), F32(-0.7))
+func (self F32) Frac() F32 {
+	return F32(math.Mod(float64(self), 1.0))
+}
+
+// Returns the fractional part of self.
+//
+//  f := gost.F64(3.7)
+//  g := gost.F64(-3.7)
+//
+//  gost.AssertEq(f.Frac(), F64(0.7))
+//  gost.AssertEq(g.Frac(), F64(-0.7))
+func (self F64) Frac() F64 {
+	return F64(math.Mod(float64(self), 1.0))
+}
