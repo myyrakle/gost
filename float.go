@@ -136,7 +136,9 @@ func (self F64) Trunc() F64 {
 //  gost.AssertEq(f.Frac(), F32(0.7))
 //  gost.AssertEq(g.Frac(), F32(-0.7))
 func (self F32) Frac() F32 {
-	return F32(math.Mod(float64(self), 1.0))
+	_, frac := math.Modf(float64(self))
+
+	return F32(frac)
 }
 
 // Returns the fractional part of self.
@@ -147,5 +149,31 @@ func (self F32) Frac() F32 {
 //  gost.AssertEq(f.Frac(), F64(0.7))
 //  gost.AssertEq(g.Frac(), F64(-0.7))
 func (self F64) Frac() F64 {
-	return F64(math.Mod(float64(self), 1.0))
+	_, frac := math.Modf(float64(self))
+
+	return F64(frac)
+}
+
+// Raises a number to an integer power.
+// Using this function is generally faster than using powf. It might have a different sequence of rounding operations than powf, so the results are not guaranteed to agree.
+//
+//  f := gost.F32(3.0)
+//  g := gost.F32(3.0)
+//
+//  gost.AssertEq(f.Powi(2), F32(9.0))
+//  gost.AssertEq(g.Powi(3), F32(27.0))
+func (self F32) Powi(n int) F32 {
+	return F32(math.Pow(float64(self), float64(n)))
+}
+
+// Raises a number to an integer power.
+// Using this function is generally faster than using powf. It might have a different sequence of rounding operations than powf, so the results are not guaranteed to agree.
+//
+//  f := gost.F64(3.0)
+//  g := gost.F64(3.0)
+//
+//  gost.AssertEq(f.Powi(2), F64(9.0))
+//  gost.AssertEq(g.Powi(3), F64(27.0))
+func (self F64) Powi(n int) F64 {
+	return F64(math.Pow(float64(self), float64(n)))
 }
