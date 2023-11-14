@@ -223,3 +223,25 @@ func (self F32) Sqrt() F32 {
 func (self F64) Sqrt() F64 {
 	return F64(math.Sqrt(float64(self)))
 }
+
+// Returns e^(self), (the exponential function).
+//
+//  f := gost.F32(1.0)
+//  g := gost.F32(2.0)
+//
+//  gost.AssertEq(f.Exp(), F32(2.7182817))
+//  gost.AssertEq(g.Exp(), F32(7.389056))
+func (self F32) Exp() F32 {
+	return F32(math.Exp(float64(self)))
+}
+
+// Returns e^(self), (the exponential function).
+//
+//  f := gost.F64(1.0)
+//  g := gost.F64(2.0)
+//
+//  gost.AssertEq(f.Exp(), F64(2.718281828459045))
+//  gost.AssertEq(g.Exp(), F64(7.38905609893065))
+func (self F64) Exp() F64 {
+	return F64(math.Exp(float64(self)))
+}
