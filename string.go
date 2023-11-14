@@ -1,6 +1,9 @@
 package gost
 
-import "unicode/utf16"
+import (
+	"strings"
+	"unicode/utf16"
+)
 
 // Converts a vector of bytes to a String.
 func StringFromUTF8(bytes Vec[U8]) String {
@@ -74,4 +77,11 @@ func (self String) Chars() Vec[Char] {
 	}
 
 	return chars
+}
+
+// Returns true if the given pattern matches a sub-slice of this string slice.
+// Returns false if it does not.
+// The pattern can be a &str, char, a slice of chars, or a function or closure that determines if a character matches.
+func (self String) Contains(str String) bool {
+	return strings.Contains(string(self), string(str))
 }
