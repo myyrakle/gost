@@ -43,3 +43,9 @@ func (self String) Len() USize {
 func (self String) IsEmpty() bool {
 	return len(self) == 0
 }
+
+// Appends the given char to the end of this String.
+func (self *String) Push(c Char) String {
+	*self += String(c)
+	return *self
+}
