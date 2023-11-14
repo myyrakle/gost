@@ -97,3 +97,23 @@ func Test_F64_Abs(t *testing.T) {
 	AssertEq(f.Abs(), F64(3.0))
 	AssertEq(g.Abs(), F64(3.0))
 }
+
+func Test_F32_Trunc(t *testing.T) {
+	t.Parallel()
+
+	f := F32(3.7)
+	g := F32(-3.0)
+
+	AssertEq(f.Trunc(), F32(3.0))
+	AssertEq(g.Trunc(), F32(-3.0))
+}
+
+func Test_F64_Trunc(t *testing.T) {
+	t.Parallel()
+
+	f := F64(3.7)
+	g := F64(-3.0)
+
+	AssertEq(f.Trunc(), F64(3.0))
+	AssertEq(g.Trunc(), F64(-3.0))
+}
