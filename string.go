@@ -98,3 +98,14 @@ func (self String) Find(str String) Option[USize] {
 
 	return Some[USize](USize(index))
 }
+
+// An iterator over substrings of this string slice, separated by characters matched by a string
+func (self String) Split(str String) Vec[String] {
+	split := VecNew[String]()
+
+	for _, s := range strings.Split(string(self), string(str)) {
+		split.Push(String(s))
+	}
+
+	return split
+}
