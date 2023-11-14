@@ -280,6 +280,54 @@ func (self HashSet[K]) Union(other HashSet[K]) HashSet[K] {
 	return newSet
 }
 
+// Visits the elements representing the symmetric difference, i.e., the elements that are in self or in other but not in both, in ascending order.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//	set1.Insert(gost.I32(5))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	symmetricDifference := set1.SymmetricDifference(set2)
+//	gost.Assert(symmetricDifference.Len() == gost.USize(2))
+//	gost.Assert(symmetricDifference.Contains(gost.I32(3)))
+//	gost.Assert(symmetricDifference.Contains(gost.I32(5)))
+func (self HashSet[K]) SymmetricDifference(other HashSet[K]) HashSet[K] {
+	newSet := HashSetNew[K]()
+
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if !other.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+
+	iter = other.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			break
+		}
+
+		if !self.Contains(value.Unwrap()) {
+			newSet.Insert(value.Unwrap())
+		}
+	}
+
+	return newSet
+}
+
 // Returns true if the set contains an element equal to the value.
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
