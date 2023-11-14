@@ -49,3 +49,37 @@ func (self F32) Ceil() F32 {
 func (self F64) Ceil() F64 {
 	return F64(math.Ceil(float64(self)))
 }
+
+// Returns the nearest integer to self. If a value is half-way between two integers, round away from 0.0.
+//
+//  f := gost.F32(3.3)
+//  g := gost.F32(-3.3)
+//  h := gost.F32(-3.7)
+//  i := gost.F32(3.5)
+//  j := gost.F32(4.5)
+//
+//  gost.AssertEq(f.Round(), F32(3.0))
+//  gost.AssertEq(g.Round(), F32(-3.0))
+//  gost.AssertEq(h.Round(), F32(-4.0))
+//  gost.AssertEq(i.Round(), F32(4.0))
+//  gost.AssertEq(j.Round(), F32(5.0))
+func (self F32) Round() F32 {
+	return F32(math.Round(float64(self)))
+}
+
+// Returns the nearest integer to self. If a value is half-way between two integers, round away from 0.0.
+//
+//  f := gost.F64(3.3)
+//  g := gost.F64(-3.3)
+//  h := gost.F64(-3.7)
+//  i := gost.F64(3.5)
+//  j := gost.F64(4.5)
+//
+//  gost.AssertEq(f.Round(), F64(3.0))
+//  gost.AssertEq(g.Round(), F64(-3.0))
+//  gost.AssertEq(h.Round(), F64(-4.0))
+//  gost.AssertEq(i.Round(), F64(4.0))
+//  gost.AssertEq(j.Round(), F64(5.0))
+func (self F64) Round() F64 {
+	return F64(math.Round(float64(self)))
+}
