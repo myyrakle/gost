@@ -159,6 +159,23 @@ func (self HashSet[K]) IsSubset(other HashSet[K]) Bool {
 	}
 }
 
+// Returns true if the set is a superset of another, i.e., self contains at least all the elements in other.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(1))
+//	set2.Insert(gost.I32(2))
+//	set2.Insert(gost.I32(3))
+//
+//	gost.Assert(!set1.IsSuperset(set2))
+//	gost.Assert(set2.IsSuperset(set1))
+func (self HashSet[K]) IsSuperset(other HashSet[K]) Bool {
+	return other.IsSubset(self)
+}
+
 // Returns true if the set contains an element equal to the value.
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
