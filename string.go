@@ -127,3 +127,14 @@ func (self String) ParseI64() Result[I64] {
 		return Ok[I64](I64(parsed))
 	}
 }
+
+// Parses this string slice into another type. (U64)
+func (self String) ParseU64() Result[U64] {
+	parsed, err := strconv.Atoi(string(self))
+
+	if err != nil {
+		return Err[U64](err)
+	} else {
+		return Ok[U64](U64(parsed))
+	}
+}
