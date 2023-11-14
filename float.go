@@ -313,3 +313,25 @@ func (self F32) Log(base F32) F32 {
 func (self F64) Log(base F64) F64 {
 	return F64(math.Log(float64(self)) / math.Log(float64(base)))
 }
+
+// Returns the base 2 logarithm of the number.
+//
+//  f := gost.F32(2.0)
+//  g := gost.F32(4.0)
+//
+//  gost.AssertEq(f.Log2(), F32(1.0))
+//  gost.AssertEq(g.Log2(), F32(2.0))
+func (self F32) Log2() F32 {
+	return F32(math.Log2(float64(self)))
+}
+
+// Returns the base 2 logarithm of the number.
+//
+//  f := gost.F64(2.0)
+//  g := gost.F64(4.0)
+//
+//  gost.AssertEq(f.Log2(), F64(1.0))
+//  gost.AssertEq(g.Log2(), F64(2.0))
+func (self F64) Log2() F64 {
+	return F64(math.Log2(float64(self)))
+}
