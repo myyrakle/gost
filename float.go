@@ -245,3 +245,25 @@ func (self F32) Exp() F32 {
 func (self F64) Exp() F64 {
 	return F64(math.Exp(float64(self)))
 }
+
+// Returns 2^(self).
+//
+//  f := gost.F32(1.0)
+//  g := gost.F32(2.0)
+//
+//  gost.AssertEq(f.Exp2(), F32(2.0))
+//  gost.AssertEq(g.Exp2(), F32(4.0))
+func (self F32) Exp2() F32 {
+	return F32(math.Exp2(float64(self)))
+}
+
+// Returns 2^(self).
+//
+//  f := gost.F64(1.0)
+//  g := gost.F64(2.0)
+//
+//  gost.AssertEq(f.Exp2(), F64(2.0))
+//  gost.AssertEq(g.Exp2(), F64(4.0))
+func (self F64) Exp2() F64 {
+	return F64(math.Exp2(float64(self)))
+}
