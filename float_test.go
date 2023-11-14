@@ -77,3 +77,23 @@ func Test_F64_Round(t *testing.T) {
 	AssertEq(i.Round(), F64(4.0))
 	AssertEq(j.Round(), F64(5.0))
 }
+
+func Test_F32_Abs(t *testing.T) {
+	t.Parallel()
+
+	f := F32(-3.0)
+	g := F32(3.0)
+
+	AssertEq(f.Abs(), F32(3.0))
+	AssertEq(g.Abs(), F32(3.0))
+}
+
+func Test_F64_Abs(t *testing.T) {
+	t.Parallel()
+
+	f := F64(-3.0)
+	g := F64(3.0)
+
+	AssertEq(f.Abs(), F64(3.0))
+	AssertEq(g.Abs(), F64(3.0))
+}
