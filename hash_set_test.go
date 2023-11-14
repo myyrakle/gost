@@ -55,3 +55,22 @@ func Test_HashSet_Intersection(t *testing.T) {
 	Assert(!intersection.Contains(I32(3)))
 	Assert(!intersection.Contains(I32(5)))
 }
+
+func Test_HashSet_IsDisjoint(t *testing.T) {
+	t.Parallel()
+
+	set1 := HashSetNew[I32]()
+	set1.Insert(I32(1))
+	set1.Insert(I32(2))
+
+	set2 := HashSetNew[I32]()
+	set2.Insert(I32(3))
+	set2.Insert(I32(4))
+
+	Assert(set1.IsDisjoint(set2))
+	Assert(set2.IsDisjoint(set1))
+
+	set2.Insert(I32(2))
+	Assert(!set1.IsDisjoint(set2))
+	Assert(!set2.IsDisjoint(set1))
+}
