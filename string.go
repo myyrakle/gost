@@ -165,3 +165,8 @@ func (self String) ToLowercase() String {
 func (self String) ToUppercase() String {
 	return String(strings.ToUpper(string(self)))
 }
+
+// Creates a new String by repeating a string n times.
+func (self String) Repeat(n USize) String {
+	return String(strings.Repeat(string(self), int(n)))
+}
