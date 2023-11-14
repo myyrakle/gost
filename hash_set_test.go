@@ -95,3 +95,23 @@ func Test_HashSet_Union(t *testing.T) {
 	Assert(union.Contains(I32(3)))
 	Assert(union.Contains(I32(4)))
 }
+
+func Test_HashSet_SymmetricDifference(t *testing.T) {
+	t.Parallel()
+
+	set1 := HashSetNew[I32]()
+	set1.Insert(I32(1))
+	set1.Insert(I32(2))
+	set1.Insert(I32(5))
+
+	set2 := HashSetNew[I32]()
+	set2.Insert(I32(1))
+	set2.Insert(I32(2))
+	set2.Insert(I32(3))
+
+	diff := set1.SymmetricDifference(set2)
+
+	Assert(diff.Len() == 2)
+	Assert(diff.Contains(I32(3)))
+	Assert(diff.Contains(I32(5)))
+}
