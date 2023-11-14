@@ -155,3 +155,8 @@ func (self String) ParseF64() Result[F64] {
 func (self String) Replace(old String, new String) String {
 	return String(strings.Replace(string(self), string(old), string(new), -1))
 }
+
+// Returns the lowercase equivalent of this string slice, as a new String.
+func (self String) ToLowercase() String {
+	return String(strings.ToLower(string(self)))
+}
