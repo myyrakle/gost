@@ -209,6 +209,32 @@ func (self HashSet[K]) Intersection(other HashSet[K]) HashSet[K] {
 	}
 }
 
+// Returns true if self has no elements in common with other. This is equivalent to checking for an empty intersection.
+//
+//	set1 := gost.HashSetNew[I32]()
+//	set1.Insert(gost.I32(1))
+//	set1.Insert(gost.I32(2))
+//
+//	set2 := gost.HashSetNew[I32]()
+//	set2.Insert(gost.I32(3))
+//	set2.Insert(gost.I32(4))
+//
+//	gost.Assert(set1.IsDisjoint(set2))
+func (self HashSet[K]) IsDisjoint(other HashSet[K]) Bool {
+	iter := self.IntoIter()
+	for {
+		value := iter.Next()
+
+		if value.IsNone() {
+			return true
+		}
+
+		if other.Contains(value.Unwrap()) {
+			return false
+		}
+	}
+}
+
 // Returns true if the set contains an element equal to the value.
 type HashSetIter[K comparable] struct {
 	vec      Vec[K]
