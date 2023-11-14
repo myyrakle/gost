@@ -32,3 +32,9 @@ func (self String) IntoBytes() Vec[U8] {
 
 	return bytes
 }
+
+// Returns the length of this String, in bytes, not chars or graphemes.
+// In other words, it might not be what a human considers the length of the string.
+func (self String) Len() USize {
+	return USize(len(self))
+}
