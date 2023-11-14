@@ -109,3 +109,9 @@ func (self String) Split(str String) Vec[String] {
 
 	return split
 }
+
+// Returns a string slice with leading and trailing whitespace removed.
+// ‘Whitespace’ is defined according to the terms of the Unicode Derived Core Property White_Space, which includes newlines.
+func (self String) Trim() String {
+	return String(strings.TrimSpace(string(self)))
+}
