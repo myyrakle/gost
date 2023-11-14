@@ -105,3 +105,25 @@ func (self F32) Abs() F32 {
 func (self F64) Abs() F64 {
 	return F64(math.Abs(float64(self)))
 }
+
+// Returns the integer part of self. This means that non-integer numbers are always truncated towards zero.
+//
+//  f := gost.F32(3.7)
+//  g := gost.F32(-3.7)
+//
+//  gost.AssertEq(f.Trunc(), F32(3.0))
+//  gost.AssertEq(g.Trunc(), F32(-3.0))
+func (self F32) Trunc() F32 {
+	return F32(math.Trunc(float64(self)))
+}
+
+// Returns the integer part of self. This means that non-integer numbers are always truncated towards zero.
+//
+//  f := gost.F64(3.7)
+//  g := gost.F64(-3.7)
+//
+//  gost.AssertEq(f.Trunc(), F64(3.0))
+//  gost.AssertEq(g.Trunc(), F64(-3.0))
+func (self F64) Trunc() F64 {
+	return F64(math.Trunc(float64(self)))
+}
