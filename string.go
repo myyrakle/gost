@@ -149,3 +149,9 @@ func (self String) ParseF64() Result[F64] {
 		return Ok[F64](F64(parsed))
 	}
 }
+
+// Replaces all matches of a pattern with another string.
+// replace creates a new String, and copies the data from this string slice into it. While doing so, it attempts to find matches of a pattern. If it finds any, it replaces them with the replacement string slice.
+func (self String) Replace(old String, new String) String {
+	return String(strings.Replace(string(self), string(old), string(new), -1))
+}
