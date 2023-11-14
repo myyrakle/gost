@@ -45,3 +45,35 @@ func Test_F64_Ceil(t *testing.T) {
 	AssertEq(f.Ceil(), F64(4.0))
 	AssertEq(g.Ceil(), F64(4.0))
 }
+
+func Test_F32_Round(t *testing.T) {
+	t.Parallel()
+
+	f := F32(3.3)
+	g := F32(-3.3)
+	h := F32(-3.7)
+	i := F32(3.5)
+	j := F32(4.5)
+
+	AssertEq(f.Round(), F32(3.0))
+	AssertEq(g.Round(), F32(-3.0))
+	AssertEq(h.Round(), F32(-4.0))
+	AssertEq(i.Round(), F32(4.0))
+	AssertEq(j.Round(), F32(5.0))
+}
+
+func Test_F64_Round(t *testing.T) {
+	t.Parallel()
+
+	f := F64(3.3)
+	g := F64(-3.3)
+	h := F64(-3.7)
+	i := F64(3.5)
+	j := F64(4.5)
+
+	AssertEq(f.Round(), F64(3.0))
+	AssertEq(g.Round(), F64(-3.0))
+	AssertEq(h.Round(), F64(-4.0))
+	AssertEq(i.Round(), F64(4.0))
+	AssertEq(j.Round(), F64(5.0))
+}
