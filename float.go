@@ -83,3 +83,25 @@ func (self F32) Round() F32 {
 func (self F64) Round() F64 {
 	return F64(math.Round(float64(self)))
 }
+
+// Computes the absolute value of self.
+//
+//  f := gost.F32(-3.0)
+//  g := gost.F32(3.0)
+//
+//  gost.AssertEq(f.Abs(), F32(3.0))
+//  gost.AssertEq(g.Abs(), F32(3.0))
+func (self F32) Abs() F32 {
+	return F32(math.Abs(float64(self)))
+}
+
+// Computes the absolute value of self.
+//
+//  f := gost.F64(-3.0)
+//  g := gost.F64(3.0)
+//
+//  gost.AssertEq(f.Abs(), F64(3.0))
+//  gost.AssertEq(g.Abs(), F64(3.0))
+func (self F64) Abs() F64 {
+	return F64(math.Abs(float64(self)))
+}
