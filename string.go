@@ -64,3 +64,14 @@ func (self *String) Pop() Option[Char] {
 
 	return Some[Char](Char(last))
 }
+
+// Returns an iterator over the chars of a string slice.
+func (self String) Chars() Vec[Char] {
+	chars := VecNew[Char]()
+
+	for _, c := range self {
+		chars.Push(Char(c))
+	}
+
+	return chars
+}
