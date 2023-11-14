@@ -177,3 +177,25 @@ func (self F32) Powi(n int) F32 {
 func (self F64) Powi(n int) F64 {
 	return F64(math.Pow(float64(self), float64(n)))
 }
+
+// Raises a number to a floating point power.
+//
+//  f := gost.F32(3.0)
+//  g := gost.F32(3.0)
+//
+//  gost.AssertEq(f.Powf(2.0), F32(9.0))
+//  gost.AssertEq(g.Powf(3.0), F32(27.0))
+func (self F32) Powf(n F32) F32 {
+	return F32(math.Pow(float64(self), float64(n)))
+}
+
+// Raises a number to a floating point power.
+//
+//  f := gost.F64(3.0)
+//  g := gost.F64(3.0)
+//
+//  gost.AssertEq(f.Powf(2.0), F64(9.0))
+//  gost.AssertEq(g.Powf(3.0), F64(27.0))
+func (self F64) Powf(n F64) F64 {
+	return F64(math.Pow(float64(self), float64(n)))
+}

@@ -1,6 +1,8 @@
 package gost
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_F32_Floor(t *testing.T) {
 	t.Parallel()
