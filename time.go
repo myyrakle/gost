@@ -1,5 +1,7 @@
 package gost
 
+// A Duration type to represent a span of time, typically used for system timeouts.
+// Each Duration is composed of a whole number of seconds and a fractional part represented in nanoseconds. If the underlying system does not support nanosecond-level precision, APIs binding a system timeout will typically round up the number of nanoseconds.
 type Duration struct {
 	seconds     U64
 	nanoseconds U32
@@ -20,4 +22,9 @@ func DurationNew(secs U64, nanos U32) Duration {
 		seconds:     secs.CheckedAdd(seconds).Expect("overflow in DurationNew"),
 		nanoseconds: nanos % U32(1e9),
 	}
+}
+
+// Creates a new Duration from the specified number of whole seconds.
+func DurationFromSecs(secs U64) Duration {
+	return DurationNew(secs, 0)
 }
