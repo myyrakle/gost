@@ -33,3 +33,8 @@ func DurationFromSecs(secs U64) Duration {
 func DurationFromMillis(millis U64) Duration {
 	return DurationNew(millis/U64(_MILLIS_PER_SEC), U32(millis%U64(_MILLIS_PER_SEC))*_NANOS_PER_MILLI)
 }
+
+// Creates a new Duration from the specified number of microseconds.
+func DurationFromMicros(micros U64) Duration {
+	return DurationNew(micros/U64(_MICROS_PER_SEC), U32(micros%U64(_MICROS_PER_SEC))*_NANOS_PER_MICRO)
+}
