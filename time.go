@@ -43,3 +43,8 @@ func DurationFromMicros(micros U64) Duration {
 func DurationFromNanos(nanos U64) Duration {
 	return DurationNew(nanos/U64(_NANOS_PER_SEC), U32(nanos%U64(_NANOS_PER_SEC)))
 }
+
+// Returns true if this Duration spans no time.
+func (self Duration) IsZero() bool {
+	return self.seconds == 0 && self.nanoseconds == 0
+}
