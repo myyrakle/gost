@@ -38,3 +38,8 @@ func DurationFromMillis(millis U64) Duration {
 func DurationFromMicros(micros U64) Duration {
 	return DurationNew(micros/U64(_MICROS_PER_SEC), U32(micros%U64(_MICROS_PER_SEC))*_NANOS_PER_MICRO)
 }
+
+// Creates a new Duration from the specified number of nanoseconds.
+func DurationFromNanos(nanos U64) Duration {
+	return DurationNew(nanos/U64(_NANOS_PER_SEC), U32(nanos%U64(_NANOS_PER_SEC)))
+}
