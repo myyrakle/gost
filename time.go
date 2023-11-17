@@ -63,7 +63,20 @@ func (self Duration) SubsecMillis() U32 {
 }
 
 // Returns the fractional part of this Duration, in whole microseconds.
-// This method does not return the length of the duration when represented by microseconds. The returned number always represents a fractional portion of a second (i.e., it is less than one million).
+// This method does not return the length of the duration when represented by microseconds.
+// The returned number always represents a fractional portion of a second (i.e., it is less than one million).
 func (self Duration) SubsecMicros() U32 {
 	return self.nanoseconds / _NANOS_PER_MICRO
+}
+
+// Returns the fractional part of this Duration, in nanoseconds.
+// This method does not return the length of the duration when represented by nanoseconds.
+// The returned number always represents a fractional portion of a second (i.e., it is less than one billion).
+func (self Duration) SubsecNanos() U32 {
+	return self.nanoseconds
+}
+
+// Returns the total number of whole milliseconds contained by this Duration.
+func (self Duration) AsMillis() U64 {
+	return self.seconds*_MILLIS_PER_SEC + U64(self.nanoseconds/_NANOS_PER_MILLI)
 }
