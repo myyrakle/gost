@@ -48,3 +48,9 @@ func DurationFromNanos(nanos U64) Duration {
 func (self Duration) IsZero() bool {
 	return self.seconds == 0 && self.nanoseconds == 0
 }
+
+// Returns the number of whole seconds contained by this Duration.
+// The returned value does not include the fractional (nanosecond) part of the duration, which can be obtained using subsec_nanos.
+func (self Duration) AsSecs() U64 {
+	return self.seconds
+}
