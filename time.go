@@ -61,3 +61,9 @@ func (self Duration) AsSecs() U64 {
 func (self Duration) SubsecMillis() U32 {
 	return self.nanoseconds / _NANOS_PER_MILLI
 }
+
+// Returns the fractional part of this Duration, in whole microseconds.
+// This method does not return the length of the duration when represented by microseconds. The returned number always represents a fractional portion of a second (i.e., it is less than one million).
+func (self Duration) SubsecMicros() U32 {
+	return self.nanoseconds / _NANOS_PER_MICRO
+}
