@@ -54,3 +54,10 @@ func (self Duration) IsZero() bool {
 func (self Duration) AsSecs() U64 {
 	return self.seconds
 }
+
+// Returns the fractional part of this Duration, in whole milliseconds.
+// This method does not return the length of the duration when represented by milliseconds.
+// The returned number always represents a fractional portion of a second (i.e., it is less than one thousand).
+func (self Duration) SubsecMillis() U32 {
+	return self.nanoseconds / _NANOS_PER_MILLI
+}
