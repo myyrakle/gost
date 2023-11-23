@@ -75,6 +75,30 @@ func (self I64) Add(rhs I64) I64 {
 	return self + rhs
 }
 
+func (self I128) Add(rhs I128) I128 {
+	carry := I64(0)
+
+	if self.low < 0 && rhs.low < 0 {
+		low := self.low + rhs.low
+		if low < self.low || low < rhs.low {
+			carry = 1
+		}
+	} else if self.low > 0 && rhs.low > 0 {
+		low := self.low + rhs.low
+		if low > self.low || low > rhs.low {
+			carry = 1
+		}
+	}
+
+	high := self.high + rhs.high + carry
+	low := self.low + rhs.low
+
+	return I128{
+		high: high,
+		low:  low,
+	}
+}
+
 func (self USize) Add(rhs USize) USize {
 	return self + rhs
 }
