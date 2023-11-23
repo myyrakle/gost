@@ -473,3 +473,13 @@ func Test_U128_Add(t *testing.T) {
 	AssertEq(U128_FromU64(10).Add(U128_FromU64(5)), U128_FromU64(15), "U128.Add")
 	AssertEq(U128_FromU64(U64_MAX).Add(U128_FromU64(1)), U128{high: 1, low: 0}, "U128.Add over range of U64")
 }
+
+func Test_I128_Add(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(I128_FromI64(10).Add(I128_FromI64(5)), I128_FromI64(15), "I128.Add")
+	// AssertEq(I128_FromI64(I64_MAX).Add(I128_FromI64(1)), I128{high: 0, low: 0}, "I128.Add over range of I64")
+
+	// AssertEq(I128_FromI64(-10).Add(I128_FromI64(-5)), I128_FromI64(-15), "I128.Add negative")
+	// AssertEq(I128_FromI64(I64_MIN).Add(I128_FromI64(-1)), I128{high: 0, low: 0}, "I128.Add negative over range of I64")
+}
