@@ -75,6 +75,30 @@ func (self I64) Add(rhs I64) I64 {
 	return self + rhs
 }
 
+func (self I128) Add(rhs I128) I128 {
+	carry := I64(0)
+
+	if self.low < 0 && rhs.low < 0 {
+		low := self.low + rhs.low
+		if low > self.low || low > rhs.low {
+			carry = 1
+		}
+	} else if self.low > 0 && rhs.low > 0 {
+		low := self.low + rhs.low
+		if low < self.low || low < rhs.low {
+			carry = 1
+		}
+	}
+
+	high := self.high + rhs.high + carry
+	low := self.low + rhs.low
+
+	return I128{
+		high: high,
+		low:  low,
+	}
+}
+
 func (self USize) Add(rhs USize) USize {
 	return self + rhs
 }
@@ -93,6 +117,22 @@ func (self U32) Add(rhs U32) U32 {
 
 func (self U64) Add(rhs U64) U64 {
 	return self + rhs
+}
+
+func (self U128) Add(rhs U128) U128 {
+	carry := U64(0)
+
+	low := self.low + rhs.low
+	if low < self.low || low < rhs.low {
+		carry = 1
+	}
+
+	high := self.high + rhs.high + carry
+
+	return U128{
+		high: high,
+		low:  low,
+	}
 }
 
 func (self F32) Add(rhs F32) F32 {
@@ -2676,4 +2716,23 @@ func (self U64) Pow(exp U32) U64 {
 		return (self * self).Pow(exp / 2)
 	}
 	return self * (self * self).Pow(exp/2)
+}
+
+func (self I128) Neg() I128 {
+	high := self.high
+	low := self.low
+
+	hasCarry := low == U64_MAX
+
+	high = ^high
+	low = ^low
+
+	if hasCarry {
+		high = high + 1
+		low = 0
+	} else {
+		low = low + 1
+	}
+
+	return I128{high, low}
 }

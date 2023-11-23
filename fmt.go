@@ -30,6 +30,10 @@ func (self I64) Display() String {
 	return self.ToString()
 }
 
+func (self I128) Display() String {
+	return self.ToString()
+}
+
 func (self USize) Display() String {
 	return self.ToString()
 }
@@ -47,6 +51,10 @@ func (self U32) Display() String {
 }
 
 func (self U64) Display() String {
+	return self.ToString()
+}
+
+func (self U128) Display() String {
 	return self.ToString()
 }
 
@@ -118,6 +126,10 @@ func (self I64) Debug() String {
 	return String(fmt.Sprintf("I64(%s)", self.ToString()))
 }
 
+func (self I128) Debug() String {
+	return String(fmt.Sprintf("I128(%s)", self.ToString()))
+}
+
 func (self USize) Debug() String {
 	return String(fmt.Sprintf("USize(%s)", self.ToString()))
 }
@@ -136,6 +148,10 @@ func (self U32) Debug() String {
 
 func (self U64) Debug() String {
 	return String(fmt.Sprintf("U64(%s)", self.ToString()))
+}
+
+func (self U128) Debug() String {
+	return String(fmt.Sprintf("U128(%s)", self.ToString()))
 }
 
 func (self F32) Debug() String {

@@ -1,6 +1,7 @@
 package gost
 
 import (
+	"math/big"
 	"reflect"
 	"strconv"
 )
@@ -40,6 +41,39 @@ func (self I64) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
 
+func (self I128) ToString() String {
+	isNegative := self.high < 0
+
+	if isNegative {
+		self = self.Neg()
+	}
+
+	high := self.high
+	low := self.low
+
+	if high == 0 {
+		if isNegative {
+			return "-" + low.ToString()
+		} else {
+			return low.ToString()
+		}
+	} else {
+		binaryString := ""
+
+		for i := 0; i < 64; i++ {
+			binaryString = string((low & 1).ToString()[0]) + binaryString
+			low = low >> 1
+		}
+
+		for i := 0; i < 64; i++ {
+			binaryString = string((high & 1).ToString()[0]) + binaryString
+			high = high >> 1
+		}
+
+		return _ConvertBinaryStringToDecimalString(String(binaryString), Bool(isNegative))
+	}
+}
+
 func (self USize) ToString() String {
 	return String(strconv.Itoa(int(self)))
 }
@@ -58,6 +92,29 @@ func (self U32) ToString() String {
 
 func (self U64) ToString() String {
 	return String(strconv.Itoa(int(self)))
+}
+
+func (self U128) ToString() String {
+	high := self.high
+	low := self.low
+
+	if high == 0 {
+		return low.ToString()
+	} else {
+		binaryString := ""
+
+		for i := 0; i < 64; i++ {
+			binaryString = string((low & 1).ToString()[0]) + binaryString
+			low = low >> 1
+		}
+
+		for i := 0; i < 64; i++ {
+			binaryString = string((high & 1).ToString()[0]) + binaryString
+			high = high >> 1
+		}
+
+		return _ConvertBinaryStringToDecimalString(String(binaryString), false)
+	}
 }
 
 func (self F32) ToString() String {
@@ -90,4 +147,25 @@ func (self Complex64) ToString() String {
 
 func (self Complex128) ToString() String {
 	return String(strconv.FormatComplex(complex128(self), 'f', -1, 128))
+}
+
+func _ConvertBinaryStringToDecimalString(binaryString String, isNegative Bool) String {
+	decimal := big.NewInt(0)
+
+	i := len(binaryString) - 1
+	digit := big.NewInt(1)
+	for i >= 0 {
+		if binaryString[i] == '1' {
+			decimal.Add(decimal, digit)
+		}
+
+		digit = digit.Mul(digit, big.NewInt(2))
+		i--
+	}
+
+	if isNegative {
+		decimal.Neg(decimal)
+	}
+
+	return String(decimal.String())
 }
