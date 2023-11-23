@@ -466,3 +466,9 @@ func Test_SaturatingDiv_UnsignedInteger(t *testing.T) {
 	AssertEq(U64(100).SaturatingDiv(10), U64(10), "U64.SaturatingDiv")
 	AssertEq(U64(0).SaturatingDiv(10), U64(0), "U64.SaturatingDiv underflow")
 }
+
+func Test_U128_Add(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(U128_FromU64(0).Add(U128_FromU64(0)), U128{0, 0}, "U128.Add")
+}

@@ -40,3 +40,26 @@ type Complex128 complex128
 type Error error
 
 type Any interface{}
+
+func U128_FromU64(low U64) U128 {
+	return U128{
+		high: 0,
+		low:  low,
+	}
+}
+
+func I128_FromI64(low I64) I128 {
+	isNegative := low < 0
+
+	if isNegative {
+		return I128{
+			high: I64_MIN,
+			low:  U64(low.Abs()),
+		}
+	} else {
+		return I128{
+			high: 0,
+			low:  U64(low),
+		}
+	}
+}
