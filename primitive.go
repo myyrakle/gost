@@ -9,8 +9,8 @@ type I16 int16
 type I32 int32
 type I64 int64
 type I128 struct {
-	hi I64
-	lo U64
+	high I64
+	low  U64
 }
 
 type USize uint
@@ -19,8 +19,8 @@ type U16 uint16
 type U32 uint32
 type U64 uint64
 type U128 struct {
-	hi U64
-	lo U64
+	high U64
+	low  U64
 }
 
 type F32 float32

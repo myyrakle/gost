@@ -95,6 +95,22 @@ func (self U64) Add(rhs U64) U64 {
 	return self + rhs
 }
 
+func (self U128) Add(rhs U128) U128 {
+	carry := U64(0)
+
+	low := self.low + rhs.low
+	if low < self.low || low < rhs.low {
+		carry = 1
+	}
+
+	high := self.high + rhs.high + carry
+
+	return U128{
+		high: high,
+		low:  low,
+	}
+}
+
 func (self F32) Add(rhs F32) F32 {
 	return self + rhs
 }
