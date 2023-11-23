@@ -1,7 +1,6 @@
 package gost
 
 import (
-	"fmt"
 	"math/big"
 	"reflect"
 	"strconv"
@@ -45,13 +44,20 @@ func (self I64) ToString() String {
 func (self I128) ToString() String {
 	isNegative := self.high < 0
 
+	if isNegative {
+		self = self.Neg()
+	}
+
 	high := self.high
 	low := self.low
 
 	if high == 0 {
-		return low.ToString()
+		if isNegative {
+			return "-" + low.ToString()
+		} else {
+			return low.ToString()
+		}
 	} else {
-
 		binaryString := ""
 
 		for i := 0; i < 64; i++ {
@@ -63,8 +69,6 @@ func (self I128) ToString() String {
 			binaryString = string((high & 1).ToString()[0]) + binaryString
 			high = high >> 1
 		}
-
-		fmt.Println(binaryString)
 
 		return _ConvertBinaryStringToDecimalString(String(binaryString), Bool(isNegative))
 	}
@@ -100,13 +104,13 @@ func (self U128) ToString() String {
 		binaryString := ""
 
 		for i := 0; i < 64; i++ {
-			binaryString = string((high & 1).ToString()[0]) + binaryString
-			high = high >> 1
+			binaryString = string((low & 1).ToString()[0]) + binaryString
+			low = low >> 1
 		}
 
 		for i := 0; i < 64; i++ {
-			binaryString = string((low & 1).ToString()[0]) + binaryString
-			low = low >> 1
+			binaryString = string((high & 1).ToString()[0]) + binaryString
+			high = high >> 1
 		}
 
 		return _ConvertBinaryStringToDecimalString(String(binaryString), false)
@@ -160,7 +164,7 @@ func _ConvertBinaryStringToDecimalString(binaryString String, isNegative Bool) S
 	}
 
 	if isNegative {
-		decimal = decimal.Neg(decimal)
+		decimal.Neg(decimal)
 	}
 
 	return String(decimal.String())

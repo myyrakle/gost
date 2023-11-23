@@ -53,9 +53,9 @@ func I128_FromI64(low I64) I128 {
 
 	if isNegative {
 		return I128{
-			high: I64_MIN,
+			high: 0,
 			low:  U64(low.Abs()),
-		}
+		}.Neg()
 	} else {
 		return I128{
 			high: 0,
