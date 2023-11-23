@@ -2717,3 +2717,22 @@ func (self U64) Pow(exp U32) U64 {
 	}
 	return self * (self * self).Pow(exp/2)
 }
+
+func (self I128) Neg() I128 {
+	high := self.high
+	low := self.low
+
+	hasCarry := low == U64_MAX
+
+	high = ^high
+	low = ^low
+
+	if hasCarry {
+		high = high + 1
+		low = 0
+	} else {
+		low = low + 1
+	}
+
+	return I128{high, low}
+}

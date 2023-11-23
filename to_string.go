@@ -1,6 +1,7 @@
 package gost
 
 import (
+	"fmt"
 	"math/big"
 	"reflect"
 	"strconv"
@@ -39,6 +40,34 @@ func (self I32) ToString() String {
 
 func (self I64) ToString() String {
 	return String(strconv.Itoa(int(self)))
+}
+
+func (self I128) ToString() String {
+	isNegative := self.high < 0
+
+	high := self.high
+	low := self.low
+
+	if high == 0 {
+		return low.ToString()
+	} else {
+
+		binaryString := ""
+
+		for i := 0; i < 64; i++ {
+			binaryString = string((low & 1).ToString()[0]) + binaryString
+			low = low >> 1
+		}
+
+		for i := 0; i < 64; i++ {
+			binaryString = string((high & 1).ToString()[0]) + binaryString
+			high = high >> 1
+		}
+
+		fmt.Println(binaryString)
+
+		return _ConvertBinaryStringToDecimalString(String(binaryString), Bool(isNegative))
+	}
 }
 
 func (self USize) ToString() String {
