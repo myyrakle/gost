@@ -80,12 +80,12 @@ func (self I128) Add(rhs I128) I128 {
 
 	if self.low < 0 && rhs.low < 0 {
 		low := self.low + rhs.low
-		if low < self.low || low < rhs.low {
+		if low > self.low || low > rhs.low {
 			carry = 1
 		}
 	} else if self.low > 0 && rhs.low > 0 {
 		low := self.low + rhs.low
-		if low > self.low || low > rhs.low {
+		if low < self.low || low < rhs.low {
 			carry = 1
 		}
 	}

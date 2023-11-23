@@ -63,3 +63,10 @@ func I128_FromI64(low I64) I128 {
 		}
 	}
 }
+
+func I128_FromU64(low U64) I128 {
+	return I128{
+		high: 0,
+		low:  low,
+	}
+}

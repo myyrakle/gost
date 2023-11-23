@@ -478,8 +478,9 @@ func Test_I128_Add(t *testing.T) {
 	t.Parallel()
 
 	AssertEq(I128_FromI64(10).Add(I128_FromI64(5)), I128_FromI64(15), "I128.Add")
-	// AssertEq(I128_FromI64(I64_MAX).Add(I128_FromI64(1)), I128{high: 0, low: 0}, "I128.Add over range of I64")
+	AssertEq(I128_FromI64(I64_MAX).Add(I128_FromI64(1)), I128{high: 0, low: U64(I64_MAX) + 1}, "I128.Add over range of I64")
+	AssertEq(I128_FromI64(I64_MAX).Add(I128_FromI64(I64_MAX)).Add(I128_FromI64(2)), I128{high: 1, low: 0}, "I128.Add over range of U64")
 
-	// AssertEq(I128_FromI64(-10).Add(I128_FromI64(-5)), I128_FromI64(-15), "I128.Add negative")
-	// AssertEq(I128_FromI64(I64_MIN).Add(I128_FromI64(-1)), I128{high: 0, low: 0}, "I128.Add negative over range of I64")
+	AssertEq(I128_FromI64(-10).Add(I128_FromI64(-5)), I128_FromI64(-15), "I128.Add negative")
+	AssertEq(I128_FromI64(I64_MIN).Add(I128_FromI64(-1)), I128_FromU64(U64(I64_MIN.Abs())+1).Neg(), "I128.Add negative over range of I64")
 }
