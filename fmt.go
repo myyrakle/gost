@@ -30,6 +30,10 @@ func (self I64) Display() String {
 	return self.ToString()
 }
 
+func (self I128) Display() String {
+	return self.ToString()
+}
+
 func (self USize) Display() String {
 	return self.ToString()
 }
