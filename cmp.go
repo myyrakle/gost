@@ -230,6 +230,10 @@ func (self U64) Eq(rhs U64) Bool {
 	return self == rhs
 }
 
+func (self U128) Eq(rhs U128) Bool {
+	return self.high == rhs.high && self.low == rhs.low
+}
+
 func (self F32) Eq(rhs F32) Bool {
 	return self == rhs
 }
