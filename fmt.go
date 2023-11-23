@@ -54,6 +54,10 @@ func (self U64) Display() String {
 	return self.ToString()
 }
 
+func (self U128) Display() String {
+	return self.ToString()
+}
+
 func (self F32) Display() String {
 	return self.ToString()
 }
