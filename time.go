@@ -76,7 +76,7 @@ func (self Duration) SubsecNanos() U32 {
 	return self.nanoseconds
 }
 
-// Returns the total number of whole milliseconds contained by this Duration.
-func (self Duration) AsMillis() U64 {
-	return self.seconds*_MILLIS_PER_SEC + U64(self.nanoseconds/_NANOS_PER_MILLI)
-}
+// // Returns the total number of whole milliseconds contained by this Duration.
+// func (self Duration) AsMillis() U64 {
+// 	return self.seconds*_MILLIS_PER_SEC + U64(self.nanoseconds/_NANOS_PER_MILLI)
+// }
