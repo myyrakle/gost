@@ -126,6 +126,10 @@ func (self I64) Debug() String {
 	return String(fmt.Sprintf("I64(%s)", self.ToString()))
 }
 
+func (self I128) Debug() String {
+	return String(fmt.Sprintf("I128(%s)", self.ToString()))
+}
+
 func (self USize) Debug() String {
 	return String(fmt.Sprintf("USize(%s)", self.ToString()))
 }
@@ -144,6 +148,10 @@ func (self U32) Debug() String {
 
 func (self U64) Debug() String {
 	return String(fmt.Sprintf("U64(%s)", self.ToString()))
+}
+
+func (self U128) Debug() String {
+	return String(fmt.Sprintf("U128(%s)", self.ToString()))
 }
 
 func (self F32) Debug() String {
