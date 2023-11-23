@@ -470,5 +470,6 @@ func Test_SaturatingDiv_UnsignedInteger(t *testing.T) {
 func Test_U128_Add(t *testing.T) {
 	t.Parallel()
 
-	AssertEq(U128_FromU64(0).Add(U128_FromU64(0)), U128{0, 0}, "U128.Add")
+	AssertEq(U128_FromU64(10).Add(U128_FromU64(5)), U128_FromU64(15), "U128.Add")
+	AssertEq(U128_FromU64(U64_MAX).Add(U128_FromU64(1)), U128{high: 1, low: 0}, "U128.Add over range of U64")
 }
