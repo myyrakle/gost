@@ -22,3 +22,10 @@ func Test_I128_Shr(t *testing.T) {
 	AssertEq(I128_FromU64(U64_MAX).Shl(I128_FromI64(1)).Shr(I128_FromI64(1)), I128_FromU64(U64_MAX), "I128.Shr out of U64 range")
 	AssertEq(I128_FromU64(60).Shr(I128_FromI64(1)).ToString(), "30", "I128.Shr")
 }
+
+func Test_U128_Shr(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(U128_FromU64(U64_MAX).Shl(U128_FromU64(1)).Shr(U128_FromU64(1)), U128_FromU64(U64_MAX), "U128.Shr out of U64 range")
+	AssertEq(U128_FromU64(60).Shr(U128_FromU64(1)).ToString(), "30", "U128.Shr")
+}
