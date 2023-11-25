@@ -184,6 +184,12 @@ func (self I64) Sub(rhs I64) I64 {
 	return self - rhs
 }
 
+func (self I128) Sub(rhs I128) I128 {
+	rhs = rhs.Neg()
+
+	return self.Add(rhs)
+}
+
 func (self USize) Sub(rhs USize) USize {
 	return self - rhs
 }
@@ -202,6 +208,20 @@ func (self U32) Sub(rhs U32) U32 {
 
 func (self U64) Sub(rhs U64) U64 {
 	return self - rhs
+}
+
+func (self U128) Sub(rhs U128) U128 {
+	carry := U64(0)
+
+	if self.low < rhs.low {
+		carry = 1
+	}
+
+	self.low = self.low - rhs.low
+
+	self.high = self.high - rhs.high - carry
+
+	return self
 }
 
 func (self F32) Sub(rhs F32) F32 {

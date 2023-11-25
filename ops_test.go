@@ -484,3 +484,23 @@ func Test_I128_Add(t *testing.T) {
 	AssertEq(I128_FromI64(-10).Add(I128_FromI64(-5)), I128_FromI64(-15), "I128.Add negative")
 	AssertEq(I128_FromI64(I64_MIN).Add(I128_FromI64(-1)), I128_FromU64(U64(I64_MIN.Abs())+1).Neg(), "I128.Add negative over range of I64")
 }
+
+func Test_U128_Sub(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(U128_FromU64(10).Sub(U128_FromU64(5)), U128_FromU64(5), "U128.Sub")
+	AssertEq(U128_FromU64(5).Sub(U128_FromU64(10)).ToString(), "340282366920938463463374607431768211451", "U128.Sub underflow")
+}
+
+func Test_I128_Sub(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(I128_FromI64(10).Sub(I128_FromI64(5)), I128_FromI64(5), "I128.Sub 10-5")
+	AssertEq(I128_FromI64(5).Sub(I128_FromI64(10)), I128_FromI64(-5), "I128.Sub 5-10")
+
+	AssertEq(I128_FromI64(-10).Sub(I128_FromI64(-5)), I128_FromI64(-5), "I128.Sub -10-(-5)")
+	AssertEq(I128_FromI64(-5).Sub(I128_FromI64(10)), I128_FromI64(-15), "I128.Sub -5-10")
+
+	AssertEq(I128_MAX.Sub(I128_FromI64(-1)).ToString(), "-170141183460469231731687303715884105728", "I128.Sub overflow")
+	AssertEq(I128_MIN.Sub(I128_FromI64(1)).ToString(), "170141183460469231731687303715884105727", "I128.Sub underflow")
+}
