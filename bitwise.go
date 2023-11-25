@@ -110,6 +110,27 @@ func (lhs I64) Shr(rhs I64) I64 {
 	return I64(lhs >> lhs)
 }
 
+func (lhs I128) Shr(rhs I128) I128 {
+	hasCarry := false
+
+	low := lhs.low >> rhs.low
+	high := lhs.high >> rhs.low
+
+	// check if there is a carry
+	if lhs.high&1 == 1 {
+		hasCarry = true
+	}
+
+	if hasCarry {
+		low |= U64(uint64(1) << 63)
+	}
+
+	return I128{
+		high: high,
+		low:  low,
+	}
+}
+
 func (lhs USize) Shr(rhs USize) USize {
 	return USize(lhs >> lhs)
 }
