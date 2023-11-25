@@ -210,6 +210,20 @@ func (self U64) Sub(rhs U64) U64 {
 	return self - rhs
 }
 
+func (self U128) Sub(rhs U128) U128 {
+	carry := U64(0)
+
+	if self.low < rhs.low {
+		carry = 1
+	}
+
+	self.low = self.low - rhs.low
+
+	self.high = self.high - rhs.high - carry
+
+	return self
+}
+
 func (self F32) Sub(rhs F32) F32 {
 	return self - rhs
 }
