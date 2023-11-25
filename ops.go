@@ -184,6 +184,12 @@ func (self I64) Sub(rhs I64) I64 {
 	return self - rhs
 }
 
+func (self I128) Sub(rhs I128) I128 {
+	rhs = rhs.Neg()
+
+	return self.Add(rhs)
+}
+
 func (self USize) Sub(rhs USize) USize {
 	return self - rhs
 }
