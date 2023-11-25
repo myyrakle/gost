@@ -1,6 +1,7 @@
 package gost
 
 import (
+	"fmt"
 	"math/big"
 	"reflect"
 	"strconv"
@@ -44,20 +45,17 @@ func (self I64) ToString() String {
 func (self I128) ToString() String {
 	isNegative := self.high < 0
 
-	if isNegative {
-		self = self.Neg()
-	}
-
 	high := self.high
 	low := self.low
 
-	if high == 0 {
-		if isNegative {
-			return "-" + low.ToString()
-		} else {
-			return low.ToString()
-		}
+	if self.high == 0 {
+		fmt.Println("self.high == 0")
+		return low.ToString()
 	} else {
+		if isNegative {
+			self = self.Neg()
+		}
+
 		binaryString := ""
 
 		for i := 0; i < 64; i++ {
@@ -91,7 +89,7 @@ func (self U32) ToString() String {
 }
 
 func (self U64) ToString() String {
-	return String(strconv.Itoa(int(self)))
+	return String(strconv.FormatUint(uint64(self), 10))
 }
 
 func (self U128) ToString() String {
