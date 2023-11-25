@@ -1,9 +1,49 @@
 package gost
 
 type Shl[T any] interface {
-	Shl(lhs T) T
+	Shl(rhs T) T
 }
 
 type Shr[T any] interface {
-	Shr(lhs T) T
+	Shr(rhs T) T
+}
+
+func (lhs ISize) Shl(rhs ISize) ISize {
+	return ISize(lhs << lhs)
+}
+
+func (lhs I8) Shl(rhs I8) I8 {
+	return I8(lhs << lhs)
+}
+
+func (lhs I16) Shl(rhs I16) I16 {
+	return I16(lhs << lhs)
+}
+
+func (lhs I32) Shl(rhs I32) I32 {
+	return I32(lhs << lhs)
+}
+
+func (lhs I64) Shl(rhs I64) I64 {
+	return I64(lhs << lhs)
+}
+
+func (lhs USize) Shl(rhs USize) USize {
+	return USize(lhs << lhs)
+}
+
+func (lhs U8) Shl(rhs U8) U8 {
+	return U8(lhs << lhs)
+}
+
+func (lhs U16) Shl(rhs U16) U16 {
+	return U16(lhs << lhs)
+}
+
+func (lhs U32) Shl(rhs U32) U32 {
+	return U32(lhs << lhs)
+}
+
+func (lhs U64) Shl(rhs U64) U64 {
+	return U64(lhs << lhs)
 }
