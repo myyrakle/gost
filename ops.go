@@ -818,6 +818,10 @@ func (self *I64) MulAssign(rhs I64) {
 	*self *= rhs
 }
 
+func (self *I128) MulAssign(rhs I128) {
+	*self = self.Mul(rhs)
+}
+
 func (self *USize) MulAssign(rhs USize) {
 	*self *= rhs
 }
@@ -836,6 +840,10 @@ func (self *U32) MulAssign(rhs U32) {
 
 func (self *U64) MulAssign(rhs U64) {
 	*self *= rhs
+}
+
+func (self *U128) MulAssign(rhs U128) {
+	*self = self.Mul(rhs)
 }
 
 func (self *F32) MulAssign(rhs F32) {
