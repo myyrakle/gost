@@ -2845,6 +2845,11 @@ func (self I64) IsPositive() Bool {
 	return self > 0
 }
 
+// Returns true if self is positive and false if the number is zero or negative.
+func (self I128) IsPositive() Bool {
+	return self.high > 0
+}
+
 // Returns true if self is negative and false if the number is zero or positive.
 func (self ISize) IsNegative() Bool {
 	return self < 0
