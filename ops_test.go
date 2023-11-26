@@ -551,3 +551,30 @@ func Test_U128_Div(t *testing.T) {
 	AssertEq(U128_FromU64(U64_MAX).Mul(U128_FromU64(2)).Div(U128_FromU64(2)).ToString(), "18446744073709551615", "U128.Div 36893488147419103230/2")
 	AssertEq(U128_FromU64(U64_MAX).Div(U128_FromU64(2)).ToString(), "9223372036854775807", "U128.Div 18446744073709551615/2")
 }
+
+func Test_I128_Rem(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(I128_FromI64(10).Rem(I128_FromI64(5)), I128_FromI64(0), "I128.Rem 10%5")
+	AssertEq(I128_FromI64(5).Rem(I128_FromI64(10)), I128_FromI64(5), "I128.Rem 5%10")
+
+	AssertEq(I128_FromI64(-10).Rem(I128_FromI64(-5)), I128_FromI64(0), "I128.Rem -10%-5")
+	AssertEq(I128_FromI64(-5).Rem(I128_FromI64(10)), I128_FromI64(-5), "I128.Rem -5%10")
+
+	AssertEq(I128_FromI64(-10).Rem(I128_FromI64(5)), I128_FromI64(0), "I128.Rem -10%5")
+	AssertEq(I128_FromI64(5).Rem(I128_FromI64(-10)), I128_FromI64(-5), "I128.Rem 5%-10")
+}
+
+func Test_U128_Rem(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(U128_FromU64(10).Rem(U128_FromU64(5)), U128_FromU64(0), "U128.Rem 10%5")
+	AssertEq(U128_FromU64(5).Rem(U128_FromU64(10)), U128_FromU64(5), "U128.Rem 5%10")
+}
+
+func Test_I128_Neg(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(I128_FromI64(10).Neg().ToString(), "-10", "I128.Neg 10")
+	AssertEq(I128_FromI64(-10).Neg().ToString(), "10", "I128.Neg -10")
+}

@@ -600,10 +600,7 @@ func (self *VecDeque[T]) _Grow() {
 
 	self.buffer = newBuffer
 
-	fmt.Println("#$", self.buffer)
 	self._HandleCapacityIncrease(oldCapacity)
-
-	fmt.Println("%%%%", self.buffer)
 
 	if self._IsFull() {
 		panic("VecDeque._Grow: VecDeque is full")

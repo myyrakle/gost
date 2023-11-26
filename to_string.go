@@ -44,15 +44,15 @@ func (self I64) ToString() String {
 func (self I128) ToString() String {
 	isNegative := self.high < 0
 
-	high := self.high
-	low := self.low
-
 	if self.high == 0 {
-		return low.ToString()
+		return self.low.ToString()
 	} else {
 		if isNegative {
 			self = self.Neg()
 		}
+
+		high := self.high
+		low := self.low
 
 		binaryString := ""
 
