@@ -504,3 +504,13 @@ func Test_I128_Sub(t *testing.T) {
 	AssertEq(I128_MAX.Sub(I128_FromI64(-1)).ToString(), "-170141183460469231731687303715884105728", "I128.Sub overflow")
 	AssertEq(I128_MIN.Sub(I128_FromI64(1)).ToString(), "170141183460469231731687303715884105727", "I128.Sub underflow")
 }
+
+func Test_I128_Mul(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(I128_FromI64(10).Mul(I128_FromI64(5)), I128_FromI64(50), "I128.Mul 10*5")
+	AssertEq(I128_FromI64(5).Mul(I128_FromI64(10)), I128_FromI64(50), "I128.Mul 5*10")
+
+	AssertEq(I128_FromI64(-10).Mul(I128_FromI64(-5)), I128_FromI64(50), "I128.Mul -10*-5")
+	AssertEq(I128_FromI64(-5).Mul(I128_FromI64(10)), I128_FromI64(-50), "I128.Mul -5*10")
+}

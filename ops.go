@@ -269,6 +269,40 @@ func (self I64) Mul(rhs I64) I64 {
 	return self * rhs
 }
 
+func (self I128) Mul(rhs I128) I128 {
+	isNegative := false
+
+	if self.high < 0 {
+		isNegative = !isNegative
+		self = self.Neg()
+	}
+
+	if rhs.high < 0 {
+		isNegative = !isNegative
+		rhs = rhs.Neg()
+	}
+
+	result := I128{
+		high: 0,
+		low:  0,
+	}
+
+	for i := 0; i < 128; i++ {
+		if rhs.low&1 == 1 {
+			result = result.Add(self)
+		}
+
+		self = self.Shl(I128_FromI64(1))
+		rhs = rhs.Shr(I128_FromI64(1))
+	}
+
+	if isNegative {
+		result = result.Neg()
+	}
+
+	return result
+}
+
 func (self USize) Mul(rhs USize) USize {
 	return self * rhs
 }
