@@ -19,3 +19,26 @@ func Sleep(dur Duration) {
 
 	time.Sleep(duration)
 }
+
+type JoinHandle struct {
+	channel chan Unit
+}
+
+func (self JoinHandle) Join() Result[Unit] {
+	<-self.channel
+
+	return Ok(Unit{})
+}
+
+func Spawn(f func()) JoinHandle {
+	channel := make(chan Unit)
+
+	go func() {
+		f()
+		channel <- Unit{}
+	}()
+
+	return JoinHandle{
+		channel,
+	}
+}
