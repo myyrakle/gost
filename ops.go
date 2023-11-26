@@ -2730,6 +2730,14 @@ func (self I64) Abs() I64 {
 	return self
 }
 
+// Absolute value. Returns the absolute value of self.
+func (self I128) Abs() I128 {
+	if self.high < 0 {
+		return self.Neg()
+	}
+	return self
+}
+
 // Computes the absolute difference between self and other.
 // This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self ISize) AbsDiff(other ISize) USize {
