@@ -525,3 +525,19 @@ func Test_U128_Mul(t *testing.T) {
 
 	AssertEq(U128_FromU64(U64_MAX).Mul(U128_FromU64(2)).ToString(), "36893488147419103230", "U128.Mul 18446744073709551615*2")
 }
+
+func Test_I128_Div(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(I128_FromI64(10).Div(I128_FromI64(5)), I128_FromI64(2), "I128.Div 10/5")
+	AssertEq(I128_FromI64(5).Div(I128_FromI64(10)), I128_FromI64(0), "I128.Div 5/10")
+
+	AssertEq(I128_FromI64(-10).Div(I128_FromI64(-5)), I128_FromI64(2), "I128.Div -10/-5")
+	AssertEq(I128_FromI64(-5).Div(I128_FromI64(10)), I128_FromI64(0), "I128.Div -5/10")
+
+	AssertEq(I128_FromI64(-10).Div(I128_FromI64(5)), I128_FromI64(-2), "I128.Div -10/5")
+	AssertEq(I128_FromI64(5).Div(I128_FromI64(-10)), I128_FromI64(0), "I128.Div 5/-10")
+
+	AssertEq(I128_FromU64(U64_MAX).Mul(I128_FromI64(2)).Div(I128_FromI64(2)).ToString(), "18446744073709551615", "I128.Div 36893488147419103230/2")
+	AssertEq(I128_FromU64(U64_MAX).Div(I128_FromI64(2)).ToString(), "9223372036854775807", "I128.Div 18446744073709551615/2")
+}

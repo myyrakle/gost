@@ -1,7 +1,9 @@
 package gost
 
 import (
+	"encoding/binary"
 	"math"
+	"math/big"
 )
 
 // Add is a trait for types that support addition.
@@ -384,6 +386,56 @@ func (self I32) Div(rhs I32) I32 {
 
 func (self I64) Div(rhs I64) I64 {
 	return self / rhs
+}
+
+func (lhs I128) Div(rhs I128) I128 {
+	isNegative := false
+
+	if lhs.high < 0 {
+		isNegative = !isNegative
+		lhs = lhs.Neg()
+	}
+
+	if rhs.high < 0 {
+		isNegative = !isNegative
+		rhs = rhs.Neg()
+	}
+
+	if lhs.Cmp(rhs) == OrderingLess {
+		return I128{
+			high: 0,
+			low:  0,
+		}
+	}
+
+	// TODO: This is a hack, we should implement a proper division algorithm
+	bigLhs := big.NewInt(0)
+	bigRhs := big.NewInt(0)
+
+	bigLhs.SetString(string(lhs.ToString()), 10)
+	bigRhs.SetString(string(rhs.ToString()), 10)
+
+	bigLhs.Div(bigLhs, bigRhs)
+
+	result := I128{
+		high: 0,
+		low:  0,
+	}
+
+	buffer := make([]byte, 16)
+	bytes := bigLhs.FillBytes(buffer)
+
+	lowBytes := bytes[8:16]
+	highBytes := bytes[0:8]
+
+	result.high = I64(binary.BigEndian.Uint64(highBytes))
+	result.low = U64(binary.BigEndian.Uint64(lowBytes))
+
+	if isNegative {
+		result = result.Neg()
+	}
+
+	return result
 }
 
 func (self USize) Div(rhs USize) USize {

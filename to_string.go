@@ -1,7 +1,6 @@
 package gost
 
 import (
-	"fmt"
 	"math/big"
 	"reflect"
 	"strconv"
@@ -49,7 +48,6 @@ func (self I128) ToString() String {
 	low := self.low
 
 	if self.high == 0 {
-		fmt.Println("self.high == 0")
 		return low.ToString()
 	} else {
 		if isNegative {
