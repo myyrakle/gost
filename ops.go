@@ -668,6 +668,10 @@ func (self *I64) AddAssign(rhs I64) {
 	*self += rhs
 }
 
+func (self *I128) AddAssign(rhs I128) {
+	*self = self.Add(rhs)
+}
+
 func (self *USize) AddAssign(rhs USize) {
 	*self += rhs
 }
@@ -686,6 +690,10 @@ func (self *U32) AddAssign(rhs U32) {
 
 func (self *U64) AddAssign(rhs U64) {
 	*self += rhs
+}
+
+func (self *U128) AddAssign(rhs U128) {
+	*self = self.Add(rhs)
 }
 
 func (self *F32) AddAssign(rhs F32) {
