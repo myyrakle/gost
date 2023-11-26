@@ -65,6 +65,16 @@ func (self I64) Cmp(rhs I64) Ordering {
 	}
 }
 
+func (self I128) Cmp(rhs I128) Ordering {
+	if self.high < rhs.high {
+		return OrderingLess
+	} else if self.high > rhs.high {
+		return OrderingGreater
+	} else {
+		return self.low.Cmp(rhs.low)
+	}
+}
+
 func (self USize) Cmp(rhs USize) Ordering {
 	if self < rhs {
 		return OrderingLess
@@ -112,6 +122,16 @@ func (self U64) Cmp(rhs U64) Ordering {
 		return OrderingGreater
 	} else {
 		return OrderingEqual
+	}
+}
+
+func (self U128) Cmp(rhs U128) Ordering {
+	if self.high < rhs.high {
+		return OrderingLess
+	} else if self.high > rhs.high {
+		return OrderingGreater
+	} else {
+		return self.low.Cmp(rhs.low)
 	}
 }
 
