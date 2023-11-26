@@ -56,6 +56,10 @@ type RemAssign[T any] interface {
 	RemAssign(rhs T)
 }
 
+type Neg[T any] interface {
+	Neg() T
+}
+
 // Add implements
 func (self ISize) Add(rhs ISize) ISize {
 	return self + rhs
@@ -668,6 +672,10 @@ func (self *I64) AddAssign(rhs I64) {
 	*self += rhs
 }
 
+func (self *I128) AddAssign(rhs I128) {
+	*self = self.Add(rhs)
+}
+
 func (self *USize) AddAssign(rhs USize) {
 	*self += rhs
 }
@@ -686,6 +694,10 @@ func (self *U32) AddAssign(rhs U32) {
 
 func (self *U64) AddAssign(rhs U64) {
 	*self += rhs
+}
+
+func (self *U128) AddAssign(rhs U128) {
+	*self = self.Add(rhs)
 }
 
 func (self *F32) AddAssign(rhs F32) {
@@ -737,6 +749,10 @@ func (self *I64) SubAssign(rhs I64) {
 	*self -= rhs
 }
 
+func (self *I128) SubAssign(rhs I128) {
+	*self = self.Sub(rhs)
+}
+
 func (self *USize) SubAssign(rhs USize) {
 	*self -= rhs
 }
@@ -755,6 +771,10 @@ func (self *U32) SubAssign(rhs U32) {
 
 func (self *U64) SubAssign(rhs U64) {
 	*self -= rhs
+}
+
+func (self *U128) SubAssign(rhs U128) {
+	*self = self.Sub(rhs)
 }
 
 func (self *F32) SubAssign(rhs F32) {
@@ -802,6 +822,10 @@ func (self *I64) MulAssign(rhs I64) {
 	*self *= rhs
 }
 
+func (self *I128) MulAssign(rhs I128) {
+	*self = self.Mul(rhs)
+}
+
 func (self *USize) MulAssign(rhs USize) {
 	*self *= rhs
 }
@@ -820,6 +844,10 @@ func (self *U32) MulAssign(rhs U32) {
 
 func (self *U64) MulAssign(rhs U64) {
 	*self *= rhs
+}
+
+func (self *U128) MulAssign(rhs U128) {
+	*self = self.Mul(rhs)
 }
 
 func (self *F32) MulAssign(rhs F32) {
@@ -867,6 +895,10 @@ func (self *I64) DivAssign(rhs I64) {
 	*self /= rhs
 }
 
+func (self *I128) DivAssign(rhs I128) {
+	*self = self.Div(rhs)
+}
+
 func (self *USize) DivAssign(rhs USize) {
 	*self /= rhs
 }
@@ -885,6 +917,10 @@ func (self *U32) DivAssign(rhs U32) {
 
 func (self *U64) DivAssign(rhs U64) {
 	*self /= rhs
+}
+
+func (self *U128) DivAssign(rhs U128) {
+	*self = self.Div(rhs)
 }
 
 func (self *F32) DivAssign(rhs F32) {
@@ -932,6 +968,10 @@ func (self *I64) RemAssign(rhs I64) {
 	*self %= rhs
 }
 
+func (self *I128) RemAssign(rhs I128) {
+	*self = self.Rem(rhs)
+}
+
 func (self *USize) RemAssign(rhs USize) {
 	*self %= rhs
 }
@@ -950,6 +990,10 @@ func (self *U32) RemAssign(rhs U32) {
 
 func (self *U64) RemAssign(rhs U64) {
 	*self %= rhs
+}
+
+func (self *U128) RemAssign(rhs U128) {
+	*self = self.Rem(rhs)
 }
 
 func (self ISize) _HasOverflow_Add(rhs ISize) bool {
@@ -2686,6 +2730,14 @@ func (self I64) Abs() I64 {
 	return self
 }
 
+// Absolute value. Returns the absolute value of self.
+func (self I128) Abs() I128 {
+	if self.high < 0 {
+		return self.Neg()
+	}
+	return self
+}
+
 // Computes the absolute difference between self and other.
 // This function always returns the correct answer without overflow or panics by returning an unsigned integer.
 func (self ISize) AbsDiff(other ISize) USize {
@@ -2801,6 +2853,11 @@ func (self I64) IsPositive() Bool {
 	return self > 0
 }
 
+// Returns true if self is positive and false if the number is zero or negative.
+func (self I128) IsPositive() Bool {
+	return self.high > 0
+}
+
 // Returns true if self is negative and false if the number is zero or positive.
 func (self ISize) IsNegative() Bool {
 	return self < 0
@@ -2824,6 +2881,11 @@ func (self I32) IsNegative() Bool {
 // Returns true if self is negative and false if the number is zero or positive.
 func (self I64) IsNegative() Bool {
 	return self < 0
+}
+
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I128) IsNegative() Bool {
+	return self.high < 0
 }
 
 // Raises self to the power of exp, using exponentiation by squaring.
@@ -2964,6 +3026,26 @@ func (self U64) Pow(exp U32) U64 {
 		return (self * self).Pow(exp / 2)
 	}
 	return self * (self * self).Pow(exp/2)
+}
+
+func (self ISize) Neg(rhs ISize) ISize {
+	return -self
+}
+
+func (self I8) Neg(rhs I8) I8 {
+	return -self
+}
+
+func (self I16) Neg(rhs I16) I16 {
+	return -self
+}
+
+func (self I32) Neg(rhs I32) I32 {
+	return -self
+}
+
+func (self I64) Neg(rhs I64) I64 {
+	return -self
 }
 
 func (self I128) Neg() I128 {
