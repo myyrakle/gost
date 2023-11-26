@@ -964,6 +964,10 @@ func (self *I64) RemAssign(rhs I64) {
 	*self %= rhs
 }
 
+func (self *I128) RemAssign(rhs I128) {
+	*self = self.Rem(rhs)
+}
+
 func (self *USize) RemAssign(rhs USize) {
 	*self %= rhs
 }
@@ -982,6 +986,10 @@ func (self *U32) RemAssign(rhs U32) {
 
 func (self *U64) RemAssign(rhs U64) {
 	*self %= rhs
+}
+
+func (self *U128) RemAssign(rhs U128) {
+	*self = self.Rem(rhs)
 }
 
 func (self ISize) _HasOverflow_Add(rhs ISize) bool {
