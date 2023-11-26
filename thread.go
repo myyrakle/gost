@@ -32,6 +32,16 @@ func (self JoinHandle) Join() Result[Unit] {
 	return Ok(Unit{})
 }
 
+// Checks if the associated thread has finished running its main function.
+func (self JoinHandle) IsFinished() bool {
+	select {
+	case <-self.channel:
+		return true
+	default:
+		return false
+	}
+}
+
 // Spawns a new thread, returning a JoinHandle for it.
 func Spawn(f func()) JoinHandle {
 	channel := make(chan Unit)
