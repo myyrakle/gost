@@ -56,6 +56,10 @@ type RemAssign[T any] interface {
 	RemAssign(rhs T)
 }
 
+type Neg[T any] interface {
+	Neg() T
+}
+
 // Add implements
 func (self ISize) Add(rhs ISize) ISize {
 	return self + rhs
@@ -3004,6 +3008,26 @@ func (self U64) Pow(exp U32) U64 {
 		return (self * self).Pow(exp / 2)
 	}
 	return self * (self * self).Pow(exp/2)
+}
+
+func (self ISize) Neg(rhs ISize) ISize {
+	return -self
+}
+
+func (self I8) Neg(rhs I8) I8 {
+	return -self
+}
+
+func (self I16) Neg(rhs I16) I16 {
+	return -self
+}
+
+func (self I32) Neg(rhs I32) I32 {
+	return -self
+}
+
+func (self I64) Neg(rhs I64) I64 {
+	return -self
 }
 
 func (self I128) Neg() I128 {
