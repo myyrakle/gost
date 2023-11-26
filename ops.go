@@ -2870,6 +2870,11 @@ func (self I64) IsNegative() Bool {
 	return self < 0
 }
 
+// Returns true if self is negative and false if the number is zero or positive.
+func (self I128) IsNegative() Bool {
+	return self.high < 0
+}
+
 // Raises self to the power of exp, using exponentiation by squaring.
 func (self ISize) Pow(exp U32) ISize {
 	if exp == 0 {
