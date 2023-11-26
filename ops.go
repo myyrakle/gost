@@ -891,6 +891,10 @@ func (self *I64) DivAssign(rhs I64) {
 	*self /= rhs
 }
 
+func (self *I128) DivAssign(rhs I128) {
+	*self = self.Div(rhs)
+}
+
 func (self *USize) DivAssign(rhs USize) {
 	*self /= rhs
 }
@@ -909,6 +913,10 @@ func (self *U32) DivAssign(rhs U32) {
 
 func (self *U64) DivAssign(rhs U64) {
 	*self /= rhs
+}
+
+func (self *U128) DivAssign(rhs U128) {
+	*self = self.Div(rhs)
 }
 
 func (self *F32) DivAssign(rhs F32) {
