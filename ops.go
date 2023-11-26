@@ -458,6 +458,40 @@ func (self U64) Div(rhs U64) U64 {
 	return self / rhs
 }
 
+func (lhs U128) Div(rhs U128) U128 {
+	if lhs.Cmp(rhs) == OrderingLess {
+		return U128{
+			high: 0,
+			low:  0,
+		}
+	}
+
+	// TODO: This is a hack, we should implement a proper division algorithm
+	bigLhs := big.NewInt(0)
+	bigRhs := big.NewInt(0)
+
+	bigLhs.SetString(string(lhs.ToString()), 10)
+	bigRhs.SetString(string(rhs.ToString()), 10)
+
+	bigLhs.Div(bigLhs, bigRhs)
+
+	result := U128{
+		high: 0,
+		low:  0,
+	}
+
+	buffer := make([]byte, 16)
+	bytes := bigLhs.FillBytes(buffer)
+
+	lowBytes := bytes[8:16]
+	highBytes := bytes[0:8]
+
+	result.high = U64(binary.BigEndian.Uint64(highBytes))
+	result.low = U64(binary.BigEndian.Uint64(lowBytes))
+
+	return result
+}
+
 func (self F32) Div(rhs F32) F32 {
 	return self / rhs
 }
