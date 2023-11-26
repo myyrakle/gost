@@ -85,3 +85,8 @@ func (self Duration) AsMillis() U128 {
 func (self Duration) AsMicros() U128 {
 	return U128_FromU64(self.seconds).Mul(U128_FromU64(U64(_MICROS_PER_SEC))).Add(U128_FromU64(U64(self.nanoseconds / _NANOS_PER_MICRO)))
 }
+
+// Returns the total number of nanoseconds contained by this Duration.
+func (self Duration) AsNanos() U128 {
+	return U128_FromU64(self.seconds).Mul(U128_FromU64(U64(_NANOS_PER_SEC))).Add(U128_FromU64(U64(self.nanoseconds)))
+}
