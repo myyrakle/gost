@@ -51,6 +51,13 @@ func U128_FromU64(low U64) U128 {
 func I128_FromI64(low I64) I128 {
 	isNegative := low < 0
 
+	if low == 0 {
+		return I128{
+			high: 0,
+			low:  0,
+		}
+	}
+
 	if isNegative {
 		return I128{
 			high: 0,

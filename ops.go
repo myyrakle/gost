@@ -537,6 +537,61 @@ func (self I64) Rem(rhs I64) I64 {
 	return self % rhs
 }
 
+func (lhs I128) Rem(rhs I128) I128 {
+	isNegative := false
+
+	if lhs.high < 0 {
+		isNegative = !isNegative
+		lhs = lhs.Neg()
+	}
+
+	if rhs.high < 0 {
+		isNegative = !isNegative
+		rhs = rhs.Neg()
+	}
+
+	if lhs.Cmp(rhs) == OrderingLess {
+		if isNegative {
+			return lhs.Neg()
+		} else {
+			return lhs
+		}
+	}
+
+	// TODO: This is a hack, we should implement a proper division algorithm
+	bigLhs := big.NewInt(0)
+	bigRhs := big.NewInt(0)
+
+	bigLhs.SetString(string(lhs.ToString()), 10)
+	bigRhs.SetString(string(rhs.ToString()), 10)
+
+	bigLhs.Rem(bigLhs, bigRhs)
+
+	result := I128{
+		high: 0,
+		low:  0,
+	}
+
+	buffer := make([]byte, 16)
+	bytes := bigLhs.FillBytes(buffer)
+
+	lowBytes := bytes[8:16]
+	highBytes := bytes[0:8]
+
+	result.high = I64(binary.BigEndian.Uint64(highBytes))
+	result.low = U64(binary.BigEndian.Uint64(lowBytes))
+
+	if result.high == 0 && result.low == 0 {
+		return result
+	}
+
+	if isNegative {
+		result = result.Neg()
+	}
+
+	return result
+}
+
 func (self USize) Rem(rhs USize) USize {
 	return self % rhs
 }
@@ -555,6 +610,41 @@ func (self U32) Rem(rhs U32) U32 {
 
 func (self U64) Rem(rhs U64) U64 {
 	return self % rhs
+}
+
+func (lhs U128) Rem(rhs U128) U128 {
+	if lhs.Cmp(rhs) == OrderingLess {
+		return lhs
+	}
+
+	// TODO: This is a hack, we should implement a proper division algorithm
+	bigLhs := big.NewInt(0)
+	bigRhs := big.NewInt(0)
+
+	bigLhs.SetString(string(lhs.ToString()), 10)
+	bigRhs.SetString(string(rhs.ToString()), 10)
+
+	bigLhs.Rem(bigLhs, bigRhs)
+
+	result := U128{
+		high: 0,
+		low:  0,
+	}
+
+	buffer := make([]byte, 16)
+	bytes := bigLhs.FillBytes(buffer)
+
+	lowBytes := bytes[8:16]
+	highBytes := bytes[0:8]
+
+	result.high = U64(binary.BigEndian.Uint64(highBytes))
+	result.low = U64(binary.BigEndian.Uint64(lowBytes))
+
+	if result.high == 0 && result.low == 0 {
+		return result
+	}
+
+	return result
 }
 
 // AddAssign implements
