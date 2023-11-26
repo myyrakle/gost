@@ -323,6 +323,24 @@ func (self U64) Mul(rhs U64) U64 {
 	return self * rhs
 }
 
+func (self U128) Mul(rhs U128) U128 {
+	result := U128{
+		high: 0,
+		low:  0,
+	}
+
+	for i := 0; i < 128; i++ {
+		if rhs.low&1 == 1 {
+			result = result.Add(self)
+		}
+
+		self = self.Shl(U128_FromU64(1))
+		rhs = rhs.Shr(U128_FromU64(1))
+	}
+
+	return result
+}
+
 func (self F32) Mul(rhs F32) F32 {
 	return self * rhs
 }

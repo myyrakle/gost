@@ -514,3 +514,10 @@ func Test_I128_Mul(t *testing.T) {
 	AssertEq(I128_FromI64(-10).Mul(I128_FromI64(-5)), I128_FromI64(50), "I128.Mul -10*-5")
 	AssertEq(I128_FromI64(-5).Mul(I128_FromI64(10)), I128_FromI64(-50), "I128.Mul -5*10")
 }
+
+func Test_U128_Mul(t *testing.T) {
+	t.Parallel()
+
+	AssertEq(U128_FromU64(10).Mul(U128_FromU64(5)), U128_FromU64(50), "U128.Mul 10*5")
+	AssertEq(U128_FromU64(5).Mul(U128_FromU64(10)), U128_FromU64(50), "U128.Mul 5*10")
+}
