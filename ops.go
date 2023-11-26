@@ -745,6 +745,10 @@ func (self *I64) SubAssign(rhs I64) {
 	*self -= rhs
 }
 
+func (self *I128) SubAssign(rhs I128) {
+	*self = self.Sub(rhs)
+}
+
 func (self *USize) SubAssign(rhs USize) {
 	*self -= rhs
 }
@@ -763,6 +767,10 @@ func (self *U32) SubAssign(rhs U32) {
 
 func (self *U64) SubAssign(rhs U64) {
 	*self -= rhs
+}
+
+func (self *U128) SubAssign(rhs U128) {
+	*self = self.Sub(rhs)
 }
 
 func (self *F32) SubAssign(rhs F32) {
